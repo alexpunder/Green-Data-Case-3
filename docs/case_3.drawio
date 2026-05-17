@@ -1,0 +1,103 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Страница-1" id="GZFt9BuMfVdDJpfZAMqR">
+    <mxGraphModel dx="1030" dy="575" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-69" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="190" width="250" x="59" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-54" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="60" width="120" x="530" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-52" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="60" width="120" x="135" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-68" edge="1" parent="1" source="VM9DkRSZrWTvuYd_qvCB-51" style="edgeStyle=none;shape=flexArrow;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="VM9DkRSZrWTvuYd_qvCB-54">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="592" y="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-51" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="270" width="710" x="59" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-7" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Запрос&lt;/font&gt;" vertex="1">
+          <mxGeometry height="55" width="95" x="146.5" y="32.5" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-9" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" value="" vertex="1">
+          <mxGeometry height="80" width="60" x="100" y="575" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-59" edge="1" parent="1" source="VM9DkRSZrWTvuYd_qvCB-10" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="VM9DkRSZrWTvuYd_qvCB-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-10" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="Модель_1 (Генератор)" vertex="1">
+          <mxGeometry height="200" width="200" x="94" y="300" as="geometry">
+            <mxRectangle height="30" width="170" x="95" y="240" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-28" parent="VM9DkRSZrWTvuYd_qvCB-10" style="whiteSpace=wrap;html=1;align=center;" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Генерация скрипта:&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;- добавление в контекст DDL базы данных&lt;/div&gt;&lt;div style=&quot;&quot;&gt;-&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;добавление в контекст результат&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;RAG-поиск по документации&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="85" width="200" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-29" parent="VM9DkRSZrWTvuYd_qvCB-10" style="whiteSpace=wrap;html=1;" value="Исправление :&lt;div&gt;&lt;div&gt;- добавление в контекст DDL базы данных&lt;/div&gt;&lt;div&gt;- &lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;добавление в контекст результат &lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;RAG-поиск ошибок&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="90" width="200" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-11" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="Модель_2 (Критик)" vertex="1">
+          <mxGeometry height="200" width="200" x="539" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-30" parent="VM9DkRSZrWTvuYd_qvCB-11" style="whiteSpace=wrap;html=1;" value="Оценка скрипта:&lt;div&gt;- поиск по уязвимостям&lt;/div&gt;&lt;div&gt;- оптимизирован ли запрос&lt;/div&gt;&lt;div&gt;- формирование отчета о найденных ошибках&lt;/div&gt;" vertex="1">
+          <mxGeometry height="85" width="200" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-42" edge="1" parent="VM9DkRSZrWTvuYd_qvCB-11" source="VM9DkRSZrWTvuYd_qvCB-30" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="VM9DkRSZrWTvuYd_qvCB-30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-12" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" value="" vertex="1">
+          <mxGeometry height="80" width="60" x="210" y="575" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-16" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;N-итераций&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="100" x="364" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-22" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Ответ&lt;/font&gt;" vertex="1">
+          <mxGeometry height="55" width="95" x="542.5" y="32.5" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-25" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="SQL DB" vertex="1">
+          <mxGeometry height="30" width="60" x="100" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-26" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Vector DB" vertex="1">
+          <mxGeometry height="30" width="60" x="210" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-35" parent="1" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" value="RAG-поиск по документам" vertex="1">
+          <mxGeometry height="60" width="120" x="135" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-64" edge="1" parent="1" source="VM9DkRSZrWTvuYd_qvCB-43" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" target="VM9DkRSZrWTvuYd_qvCB-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-43" parent="1" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" value="RAG-поиск найденных ошибок" vertex="1">
+          <mxGeometry height="60" width="120" x="354" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-55" edge="1" parent="1" source="VM9DkRSZrWTvuYd_qvCB-52" style="edgeStyle=none;shape=flexArrow;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="VM9DkRSZrWTvuYd_qvCB-35">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-56" edge="1" parent="1" source="VM9DkRSZrWTvuYd_qvCB-35" style="edgeStyle=none;shape=flexArrow;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="195" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-57" parent="1" style="whiteSpace=wrap;html=1;" value="Повторная оценка скрипта:&lt;div&gt;- поиск по уязвимостям&lt;/div&gt;&lt;div&gt;- оптимизирован ли запрос&lt;/div&gt;&lt;div&gt;- формирование отчета о найденных ошибках&lt;/div&gt;" vertex="1">
+          <mxGeometry height="90" width="200" x="539" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-62" edge="1" parent="1" source="VM9DkRSZrWTvuYd_qvCB-29" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" target="VM9DkRSZrWTvuYd_qvCB-57">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-63" edge="1" parent="1" source="VM9DkRSZrWTvuYd_qvCB-30" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" target="VM9DkRSZrWTvuYd_qvCB-43">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-70" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="SQL DB - получение информации о структуре и схеме" vertex="1">
+          <mxGeometry height="70" width="180" x="330" y="575" as="geometry" />
+        </mxCell>
+        <mxCell id="VM9DkRSZrWTvuYd_qvCB-71" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Vector DB - хранение эмбедингов документов для быстрого поиска" vertex="1">
+          <mxGeometry height="70" width="180" x="324" y="645" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
