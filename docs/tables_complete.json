@@ -1,0 +1,3418 @@
+{
+  "acc_number": {
+    "create_table_sql": "CREATE TABLE public.acc_number (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    ord bigint,\n    parent_acc bigint,\n    account_name character varying(2000),\n    name__en character varying(2000)\n);",
+    "description": "ОСВ: Номер счета",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "ord": "Порядок",
+      "parent_acc": "Родительский счет",
+      "account_name": "Наименование счета/субсчета",
+      "name__en": "Name"
+    },
+    "foreign_keys": [
+      {
+        "column": "parent_acc",
+        "references_table": "acc_number",
+        "references_column": "id"
+      }
+    ]
+  },
+  "afhd_ac_trans_link": {
+    "create_table_sql": "CREATE TABLE public.afhd_ac_trans_link (\n    id bigint NOT NULL,\n    obj_owner_id bigint,\n    transaction_id bigint,\n    source_row_id bigint,\n    reclass_row_id bigint,\n    dummy_row_id bigint,\n    debit_credit_id bigint,\n    comp_sign_id bigint,\n    form_inst_id bigint,\n    form_section_id bigint,\n    consolidation_obj_id bigint,\n    statem_trans_id bigint,\n    multiply_val numeric,\n    account_date timestamp(6) without time zone,\n    after_amount numeric,\n    before_amount numeric,\n    is_excepted smallint,\n    is_intragroup smallint,\n    is_psb_trans smallint,\n    copy_source_ac_tr_l_id bigint,\n    link_turnover bigint,\n    tbs_item_id bigint,\n    multiplicator_sign_id bigint,\n    link_calc_turn_log_id bigint,\n    okved_activity_id bigint,\n    vat numeric,\n    balance_type_id bigint,\n    account_num_id bigint,\n    link_cnt bigint,\n    cnt_count character varying(2000),\n    contragent_name character varying(2000),\n    is_clean_apply smallint,\n    cnt_turnover_id bigint,\n    vat_calc numeric,\n    link_turnover_reserv bigint,\n    report_date timestamp(6) without time zone,\n    discount numeric,\n    cr_id bigint\n);",
+    "description": "АФХД. Промежуточный тип операции карточки счета  (декомпозиция)",
+    "column_comments": {
+      "id": "Код",
+      "obj_owner_id": "Ссылка на объект владелец",
+      "transaction_id": "Ссылка на операцию",
+      "source_row_id": "Статья (базовая)",
+      "reclass_row_id": "Статья (реклассификация)",
+      "dummy_row_id": "Статья (фиктивная)",
+      "debit_credit_id": "Дебет/Кредит",
+      "comp_sign_id": "Арифметический знак",
+      "form_inst_id": "Экземпляр формы отчетности",
+      "form_section_id": "Раздел формы отчетности",
+      "consolidation_obj_id": "Ссылка на объект консолидации",
+      "statem_trans_id": "Ссылка на транзакцию",
+      "multiply_val": "Мультипликатор",
+      "account_date": "Дата для учета",
+      "after_amount": "Сумма для учета (консолидация)",
+      "before_amount": "Сумма для учета (декомпозиция)",
+      "is_excepted": "Исключен",
+      "is_intragroup": "ВГО",
+      "is_psb_trans": "Операция проведена в ПСБ?",
+      "copy_source_ac_tr_l_id": "Ссылка на источник копирования",
+      "link_turnover": "Ссылка на проводку по контрагенту",
+      "tbs_item_id": "Ссылка на проводку \"Прочие субконто\"",
+      "multiplicator_sign_id": "Арифметический знак мультипликатора",
+      "link_calc_turn_log_id": "Ссылка на связь расчета и ОСВ",
+      "okved_activity_id": "Вид деятельности (по ОКВЭД)",
+      "vat": "НДС",
+      "balance_type_id": "Тип сальдо",
+      "account_num_id": "Номер счета",
+      "link_cnt": "Контрагент из проводки",
+      "cnt_count": "Контрагент",
+      "contragent_name": "Контрагент унифицированное название",
+      "is_clean_apply": "Применяется очистка внутригрупповых операций",
+      "cnt_turnover_id": "Ссылка на проводку \"Субконто счет\"",
+      "vat_calc": "Ставка НДС (для Выручки",
+      "link_turnover_reserv": "Ссылка на проводку \"Субконто контрагенты\" (для логики резервов)",
+      "report_date": "Дата отчетности",
+      "discount": "Дисконт",
+      "cr_id": "Ссылка на КЗ (полный анализ)"
+    },
+    "foreign_keys": [
+      {
+        "column": "obj_owner_id",
+        "references_table": "sys_object",
+        "references_column": "id"
+      },
+      {
+        "column": "account_num_id",
+        "references_table": "acc_number",
+        "references_column": "id"
+      },
+      {
+        "column": "consolidation_obj_id",
+        "references_table": "sys_object",
+        "references_column": "id"
+      },
+      {
+        "column": "cnt_turnover_id",
+        "references_table": "count_turnover",
+        "references_column": "id"
+      },
+      {
+        "column": "copy_source_ac_tr_l_id",
+        "references_table": "afhd_ac_trans_link",
+        "references_column": "id"
+      }
+    ]
+  },
+  "sys_obj_type": {
+    "create_table_sql": "CREATE TABLE public.sys_obj_type (\n    id bigint NOT NULL,\n    name character varying(2000) NOT NULL,\n    ident character varying(2000) NOT NULL,\n    table_name character varying(2000) NOT NULL,\n    parent_id bigint,\n    field_name_prefix character varying(2000),\n    is_hierarchy smallint,\n    is_system smallint,\n    type_id bigint NOT NULL,\n    org_id bigint NOT NULL,\n    status smallint NOT NULL,\n    create_date timestamp without time zone NOT NULL,\n    user_id bigint NOT NULL,\n    name__en character varying(2000),\n    name__ru character varying(2000),\n    full_access_mask bigint NOT NULL,\n    use_curmtx_rights smallint,\n    java_handler character varying(2000),\n    not_copy smallint,\n    created_emp_id bigint NOT NULL,\n    last_modified_user_id bigint NOT NULL,\n    last_modified_emp_id bigint NOT NULL,\n    last_modified_date timestamp without time zone NOT NULL,\n    obj_type_attr_id bigint,\n    is_time_depended smallint,\n    js_handler character varying(2000),\n    is_readonly_by_default smallint,\n    alg_saving_id bigint,\n    alg_saved_id bigint,\n    id_seq_name character varying(2000),\n    ext_types_multiselect smallint,\n    use_cache smallint,\n    hist_attr_force_create smallint,\n    link_access_attr_id bigint,\n    access_type_id bigint,\n    ext_types_widget_name character varying(2000),\n    ext_types_hide_btn smallint,\n    rf_connection bigint,\n    attr_with_name bigint,\n    alg_deleting_id bigint,\n    display_obj_inst bigint,\n    is_enabled_change_audit smallint,\n    allow_ignore_lifecycle smallint,\n    sys_content_type_id bigint,\n    init_cache smallint,\n    sys_obj_type_is_mdata smallint,\n    note character varying(2000),\n    note__ru character varying(2000),\n    note__en character varying(2000)\n);",
+    "description": "Тип объекта в Системе",
+    "column_comments": {
+      "id": "Код",
+      "name": "Наименование",
+      "ident": "Идентификатор",
+      "table_name": "Наименование таблицы",
+      "parent_id": "Родитель",
+      "field_name_prefix": "Префикс наименования поля",
+      "is_hierarchy": "Иерархический тип",
+      "is_system": "Системный объект",
+      "type_id": "Тип объекта",
+      "org_id": "Подразделение",
+      "status": "Статус",
+      "create_date": "Дата создания",
+      "user_id": "Пользователь",
+      "name__en": "Наименование",
+      "name__ru": "Наименование",
+      "full_access_mask": "Маска полных прав доступа",
+      "use_curmtx_rights": "Права по матрице курируемости",
+      "java_handler": "Сист. обработчик",
+      "not_copy": "Не копировать",
+      "created_emp_id": "Сотрудник",
+      "last_modified_user_id": "Пользователь",
+      "last_modified_emp_id": "Сотрудник",
+      "last_modified_date": "Дата последнего изменения",
+      "obj_type_attr_id": "Атрибут иерархии",
+      "is_time_depended": "Атрибуты могут зависеть от времени",
+      "js_handler": "JS обработчик",
+      "is_readonly_by_default": "Открывать объекты в режиме только чтение",
+      "alg_saving_id": "Жизненный цикл: перед сохранением",
+      "alg_saved_id": "Жизненный цикл: после сохранения",
+      "ext_types_multiselect": "Выбор нескольких расширений в рамках одного экземпляра",
+      "use_cache": "Использовать кэш",
+      "hist_attr_force_create": "Принудительное создание версий исторических атрибутов",
+      "link_access_attr_id": "Атрибут для наследования прав",
+      "access_type_id": "Вид контроля прав",
+      "ext_types_widget_name": "Заголовок потенциального типа в карточке",
+      "ext_types_hide_btn": "Скрывать кнопку Расширения в карточке объекта",
+      "rf_connection": "Соединение с внешней БД",
+      "attr_with_name": "Атрибут для наименования",
+      "alg_deleting_id": "Событие перед удалением",
+      "display_obj_inst": "Отображение экземпляра объекта",
+      "is_enabled_change_audit": "Записывать изменения в аудит",
+      "allow_ignore_lifecycle": "Возможно сохранение объекта без выполнения выражений/ЖЦ",
+      "sys_content_type_id": "Тип содержимого",
+      "init_cache": "Добавлять в кэш при инициализации",
+      "sys_obj_type_is_mdata": "Метадата",
+      "note": "Описание",
+      "note__ru": "Описание",
+      "note__en": "Описание"
+    },
+    "foreign_keys": [
+      {
+        "column": "parent_id",
+        "references_table": "sys_obj_type",
+        "references_column": "id"
+      }
+    ]
+  },
+  "sys_object": {
+    "create_table_sql": "CREATE TABLE public.sys_object (\n    id bigint NOT NULL,\n    name character varying(2000) NOT NULL,\n    type_id bigint NOT NULL,\n    org_id bigint NOT NULL,\n    status smallint NOT NULL,\n    create_date timestamp without time zone NOT NULL,\n    user_id bigint NOT NULL,\n    name__en character varying(2000),\n    name__ru character varying(2000),\n    created_emp_id bigint NOT NULL,\n    last_modified_user_id bigint NOT NULL,\n    last_modified_emp_id bigint NOT NULL,\n    last_modified_date timestamp without time zone NOT NULL,\n    is_system smallint\n);",
+    "description": "Объект",
+    "column_comments": {
+      "id": "Сист. Код",
+      "name": "Наименование",
+      "type_id": "Тип объекта",
+      "org_id": "Подразделение",
+      "status": "Сист. Статус",
+      "create_date": "Дата создания",
+      "user_id": "Сист. Пользователь",
+      "name__en": "Сист. Наименование",
+      "name__ru": "Сист. Наименование",
+      "created_emp_id": "Сотрудник",
+      "last_modified_user_id": "Пользователь",
+      "last_modified_emp_id": "Сист. Сотрудник",
+      "last_modified_date": "Сист. Дата последнего изменения",
+      "is_system": "Сист. Системный объект"
+    },
+    "foreign_keys": []
+  },
+  "application_obj": {
+    "create_table_sql": "CREATE TABLE public.application_obj (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    afl_doc_num character varying(2000),\n    afl_doc_data timestamp without time zone,\n    afp_state_id bigint,\n    initiator_id bigint,\n    emp_id bigint,\n    processing_steps_id bigint,\n    temp_cont_turn bigint,\n    cr_id bigint,\n    scp_tech_ctredit bigint,\n    scp_business_segment bigint,\n    client_type_id bigint,\n    gsl_data_cont_id bigint,\n    industry_code_id bigint,\n    scp_product_str character varying(2000),\n    is_state_program smallint,\n    cred_technology_str character varying(2000),\n    is_fin_activ_newsub smallint,\n    prelim_gsl_calc_id bigint\n);",
+    "description": "Заявка",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "afl_doc_num": "Номер документа",
+      "afl_doc_data": "Дата документа",
+      "afp_state_id": "Состояние",
+      "initiator_id": "Клиент",
+      "emp_id": "Ответственный менеджер",
+      "processing_steps_id": "Текущий этап обработки",
+      "temp_cont_turn": "Промежуточный контейнер загрузки ОСВ",
+      "cr_id": "Ссылка на КЗ",
+      "scp_tech_ctredit": "Технология кредитования",
+      "scp_business_segment": "Клиентский сегмент",
+      "client_type_id": "Тип клиента",
+      "gsl_data_cont_id": "Ссылка на контейнер данных ГСЛ",
+      "industry_code_id": "Отрасль клиента",
+      "scp_product_str": "Продукт (строка)",
+      "is_state_program": "Применение госпрограммы",
+      "cred_technology_str": "Технология кредитования (строка)",
+      "is_fin_activ_newsub": "Финансирование деятельности в НС",
+      "prelim_gsl_calc_id": "Ссылка на предварительный расчет"
+    },
+    "foreign_keys": [
+      {
+        "column": "afp_state_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_tech_ctredit",
+        "references_table": "scp_dict_tech_ctredit",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_business_segment",
+        "references_table": "business_segment",
+        "references_column": "id"
+      },
+      {
+        "column": "initiator_id",
+        "references_table": "sys_object",
+        "references_column": "id"
+      },
+      {
+        "column": "emp_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      }
+    ]
+  },
+  "business_segment": {
+    "create_table_sql": "CREATE TABLE public.business_segment (\n    id bigint NOT NULL,\n    name__en character varying(2000),\n    name__ru character varying(2000),\n    name character varying(2000) NOT NULL,\n    create_date timestamp without time zone NOT NULL,\n    type_id bigint NOT NULL,\n    status smallint NOT NULL,\n    org_id bigint NOT NULL,\n    user_id bigint NOT NULL,\n    last_modified_date timestamp without time zone NOT NULL,\n    last_modified_user_id bigint NOT NULL,\n    created_emp_id bigint NOT NULL,\n    last_modified_emp_id bigint NOT NULL,\n    is_system smallint,\n    ident character varying(2000),\n    type_int_code bigint\n);",
+    "description": "Сегмент бизнеса клиента",
+    "column_comments": {
+      "id": "Код",
+      "name__en": "Наименование",
+      "name__ru": "Наименование",
+      "name": "Наименование",
+      "create_date": "Дата создания",
+      "type_id": "Тип объекта",
+      "status": "Статус",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Дата последнего изменения",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "Системный объект",
+      "ident": "Идентификатор",
+      "type_int_code": "Код типа технологии"
+    },
+    "foreign_keys": []
+  },
+  "cb_interest_rate": {
+    "create_table_sql": "CREATE TABLE public.cb_interest_rate (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    date_start_cb timestamp(6) without time zone,\n    date_end_cb timestamp(6) without time zone,\n    grade_number_cb numeric\n);",
+    "description": "Процентная ставка ЦБ",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "date_start_cb": "Дата начала действия",
+      "date_end_cb": "Дата окончания действия",
+      "grade_number_cb": "Значение"
+    },
+    "foreign_keys": []
+  },
+  "corp_tech_application": {
+    "create_table_sql": "CREATE TABLE public.corp_tech_application (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    afl_doc_num character varying(2000),\n    afl_doc_data timestamp without time zone,\n    afp_state_id bigint,\n    initiator_id bigint,\n    emp_id bigint,\n    processing_steps_id bigint,\n    temp_cont_turn bigint,\n    cr_id bigint,\n    scp_tech_ctredit bigint,\n    scp_business_segment bigint,\n    client_type_id bigint,\n    is_without_pledge smallint,\n    lim_currency_id bigint,\n    req_type_id bigint,\n    credit_logic_id bigint,\n    gsl_limit numeric,\n    is_main_owner smallint,\n    risk_zone_id bigint,\n    scp_arm_manager_id bigint,\n    loan_terms bigint,\n    auto_check_status bigint,\n    lim_sum numeric,\n    third_parties text,\n    scp_proc_steds_id bigint,\n    is_active_get_gsl_part smallint,\n    is_na_active smallint,\n    deleg_region_id bigint,\n    client_list_changed smallint,\n    gsl_data_cont_id bigint,\n    scp_gsl_name_str character varying(2000),\n    ca_rout_office_id bigint,\n    is_form_bch_active smallint,\n    is_active_exp_sec smallint,\n    scp_hcm_decision_id bigint,\n    scp_appl_type_id bigint,\n    comment_txt text,\n    sec_conclusion_id bigint,\n    is_bch_validator_on smallint,\n    industry_code_id bigint,\n    scp_product_str character varying(2000),\n    is_state_program smallint,\n    cred_technology_str character varying(2000),\n    is_auto_check_errors smallint,\n    scp_type_restruct_id bigint,\n    interm_file_storage bigint,\n    suz_start_page_str character varying(2000),\n    is_legal_exp_launched smallint,\n    is_legal_exp_restart smallint,\n    scp_cheif_cm_id bigint,\n    collat_initiator_id bigint,\n    is_return_awp smallint,\n    iniciator_emp_id bigint,\n    scp_rejection_client_id bigint,\n    is_app_to_cred_depart smallint,\n    scp_rejection_comment text,\n    reason_refusal_id bigint,\n    cred_depart_opinion_txt text,\n    is_start_bp_fa smallint,\n    is_start_bp_request_fa smallint,\n    is_simplified_fa smallint,\n    is_tech_ham_task_comp smallint,\n    is_auto_sec_errors smallint,\n    pricing_id bigint,\n    calc_risk_date timestamp(6) without time zone,\n    collateral_cont_id bigint,\n    resp_cond_coord bigint,\n    is_fin_activ_newsub smallint,\n    prelim_gsl_calc_id bigint,\n    exp_fa_office_id bigint,\n    scp_conclusion_comment character varying(2000)\n);",
+    "description": "КТ. Заявка",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "afl_doc_num": "Номер документа",
+      "afl_doc_data": "Дата документа",
+      "afp_state_id": "Состояние",
+      "initiator_id": "Клиент",
+      "emp_id": "Ответственный менеджер",
+      "processing_steps_id": "Текущий этап обработки",
+      "temp_cont_turn": "Промежуточный контейнер загрузки ОСВ",
+      "cr_id": "Ссылка на КЗ",
+      "scp_tech_ctredit": "Технология кредитования",
+      "scp_business_segment": "Клиентский сегмент",
+      "client_type_id": "Тип клиента",
+      "is_without_pledge": "Без залога",
+      "lim_currency_id": "Валюта",
+      "req_type_id": "Класс заявки",
+      "credit_logic_id": "Логика кредитования",
+      "gsl_limit": "Сумма общего лимита",
+      "is_main_owner": "Основные собственники",
+      "risk_zone_id": "Результат проверки благонадежности и деловой репутации по заявке",
+      "scp_arm_manager_id": "Сотрудник АРМ",
+      "loan_terms": "Срок лимита",
+      "auto_check_status": "Статус автопроверок",
+      "lim_sum": "Сумма заявки",
+      "third_parties": "Третьи лица",
+      "scp_proc_steds_id": "Этап обработки",
+      "is_active_get_gsl_part": "Запущена сборка ГСЛ (тех)",
+      "is_na_active": "Интеграция с НА по получению кредитных обязательств активна",
+      "deleg_region_id": "Регион клиента",
+      "client_list_changed": "Состав клиентов был изменен",
+      "gsl_data_cont_id": "Ссылка на контейнер данных ГСЛ",
+      "scp_gsl_name_str": "Наименование ГСЛ",
+      "ca_rout_office_id": "Офис маршрутизации для КА",
+      "is_form_bch_active": "Запущен сбор БКИ (тех.)",
+      "is_active_exp_sec": "Заблокировано изменение участников (тех.)",
+      "scp_hcm_decision_id": "Вариант решения на задаче руководителя КМ",
+      "scp_appl_type_id": "Тип заявки",
+      "comment_txt": "Комментарий проверки СЭБ",
+      "sec_conclusion_id": "Вывод",
+      "is_bch_validator_on": "Запущен валидатор БКИ (тех)",
+      "industry_code_id": "Отрасль клиента",
+      "scp_product_str": "Продукт (строка)",
+      "is_state_program": "Применение госпрограммы",
+      "cred_technology_str": "Технология кредитования (строка)",
+      "is_auto_check_errors": "Наличие ошибок (предпроверки)",
+      "scp_type_restruct_id": "Тип реструктуризации",
+      "interm_file_storage": "Промежуточное хранение файла для загрузки",
+      "suz_start_page_str": "Ссылка на стартовую страницу СУЗ",
+      "is_legal_exp_launched": "Запущена экспертиза правоспособности (тех.)",
+      "is_legal_exp_restart": "Перезапуск экспертизы правоспособности (тех.)",
+      "scp_cheif_cm_id": "Руководитель КМ",
+      "collat_initiator_id": "Ответственный за проведение экспертизы залогов",
+      "is_return_awp": "Будет направлено АРМ",
+      "iniciator_emp_id": "Ответственный за проведение экспертизы правоспособности",
+      "scp_rejection_client_id": "Причина отказа Клиента",
+      "is_app_to_cred_depart": "Заявка передана в КП (тех.)",
+      "scp_rejection_comment": "Комментарий по отказу",
+      "reason_refusal_id": "Причина отказа Банка",
+      "cred_depart_opinion_txt": "Мнение кредитного подразделения",
+      "is_start_bp_fa": "Запуск БП из ФА (тех.)",
+      "is_start_bp_request_fa": "Запуск БП из доп. запроса ФА(тех.)",
+      "is_simplified_fa": "Упрощенный Финансовый анализ",
+      "is_tech_ham_task_comp": "Задача рук. КМ завершена (тех.)",
+      "is_auto_sec_errors": "Наличие ошибок (автосэб)",
+      "pricing_id": "Ценообразование",
+      "calc_risk_date": "Дата предварительной зоны риска",
+      "collateral_cont_id": "Контейнер с обеспечением",
+      "resp_cond_coord": "Голосующий (индивидуальные условия)",
+      "is_fin_activ_newsub": "Финансирование деятельности в НС",
+      "prelim_gsl_calc_id": "Ссылка на предварительный расчет",
+      "exp_fa_office_id": "Офис Экспертизы ФА",
+      "scp_conclusion_comment": "Вывод с комментарием для визуала заявки"
+    },
+    "foreign_keys": [
+      {
+        "column": "collat_initiator_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "auto_check_status",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "deleg_region_id",
+        "references_table": "dict_div_presence",
+        "references_column": "id"
+      },
+      {
+        "column": "credit_logic_id",
+        "references_table": "scp_techcred",
+        "references_column": "id"
+      },
+      {
+        "column": "iniciator_emp_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "exp_fa_office_id",
+        "references_table": "offices_psb",
+        "references_column": "id"
+      },
+      {
+        "column": "interm_file_storage",
+        "references_table": "fs_file",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_arm_manager_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "initiator_id",
+        "references_table": "sys_company",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_tech_ctredit",
+        "references_table": "scp_dict_tech_ctredit",
+        "references_column": "id"
+      },
+      {
+        "column": "emp_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "afp_state_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "resp_cond_coord",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_business_segment",
+        "references_table": "business_segment",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_cheif_cm_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "ca_rout_office_id",
+        "references_table": "offices_psb",
+        "references_column": "id"
+      }
+    ]
+  },
+  "count_turnover": {
+    "create_table_sql": "CREATE TABLE public.count_turnover (\n    id bigint NOT NULL,\n    link_cnt_owner bigint,\n    double_turn_balance smallint,\n    finish_period timestamp(6) without time zone,\n    count_months bigint,\n    name character varying(2000),\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    st_period timestamp(6) without time zone,\n    account_num_id bigint,\n    account_source character varying(2000),\n    turnover_debit numeric,\n    turnover_credit numeric,\n    is_check smallint,\n    period_st_end character varying(2000),\n    parent_link_count bigint,\n    output_balance_debit numeric,\n    output_balance_credit numeric,\n    input_balance_debit numeric,\n    input_balace_credit numeric,\n    link_cred_doc_tur bigint,\n    link_load_val_id bigint,\n    link_partic_gr bigint,\n    is_del smallint,\n    correct_type bigint,\n    tech_manual_vat smallint,\n    vat numeric,\n    bb_debet_id bigint,\n    bb_cred_id bigint,\n    bb_debet_reclass_id bigint,\n    bb_cred_reclass_id bigint,\n    out_bal_recl_debt numeric,\n    out_bal_recl_cred numeric,\n    bb_debet_input_id bigint,\n    bb_cred_input_id bigint\n);",
+    "description": "Субконто счет (примитив)",
+    "column_comments": {
+      "id": "Код",
+      "link_cnt_owner": "Владелец",
+      "double_turn_balance": "Дубликат",
+      "finish_period": "Конец периода",
+      "count_months": "Количество месяцев в периоде",
+      "name": "Наименование",
+      "name__ru": "Наименование",
+      "name__en": "Наименование",
+      "st_period": "Начало периода",
+      "account_num_id": "Номер счета",
+      "account_source": "Номер счета_источник",
+      "turnover_debit": "Оборот по Дебету",
+      "turnover_credit": "Оборот по Кредиту",
+      "is_check": "Обработан",
+      "period_st_end": "Период",
+      "parent_link_count": "Родительский номер счета",
+      "output_balance_debit": "Сальдо на конец периода (Дебет)",
+      "output_balance_credit": "Сальдо на конец периода (Кредит)",
+      "input_balance_debit": "Сальдо на начало периода (Дебет)",
+      "input_balace_credit": "Сальдо на начало периода (Кредит)",
+      "link_cred_doc_tur": "Ссылка на КЗ",
+      "link_load_val_id": "Ссылка на контейнер загрузки",
+      "link_partic_gr": "Ссылка на участника КЗ",
+      "is_del": "Удален",
+      "correct_type": "Тип ОСВ",
+      "tech_manual_vat": "Технический признак ручного НДС",
+      "vat": "НДС",
+      "bb_debet_id": "Статья (дебет)",
+      "bb_cred_id": "Статья (кредит)",
+      "bb_debet_reclass_id": "Статья (дебет) - рекласс",
+      "bb_cred_reclass_id": "Статья (кредит) - рекласс",
+      "out_bal_recl_debt": "Сальдо на конец периода с учетом реклассификации (Дебет)",
+      "out_bal_recl_cred": "Сальдо на конец периода с учетом реклассификации (Кредит)",
+      "bb_debet_input_id": "Статья (дебет",
+      "bb_cred_input_id": "Статья (кредит"
+    },
+    "foreign_keys": [
+      {
+        "column": "correct_type",
+        "references_table": "tbs_type",
+        "references_column": "id"
+      },
+      {
+        "column": "link_cnt_owner",
+        "references_table": "sys_company",
+        "references_column": "id"
+      },
+      {
+        "column": "link_partic_gr",
+        "references_table": "sys_object",
+        "references_column": "id"
+      },
+      {
+        "column": "link_cred_doc_tur",
+        "references_table": "sys_object",
+        "references_column": "id"
+      },
+      {
+        "column": "account_num_id",
+        "references_table": "acc_number",
+        "references_column": "id"
+      },
+      {
+        "column": "link_load_val_id",
+        "references_table": "sys_object",
+        "references_column": "id"
+      },
+      {
+        "column": "parent_link_count",
+        "references_table": "count_turnover",
+        "references_column": "id"
+      }
+    ]
+  },
+  "credit_contract": {
+    "create_table_sql": "CREATE TABLE public.credit_contract (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    afl_doc_num character varying(2000),\n    afl_doc_data timestamp without time zone,\n    afp_state_id bigint,\n    credit_contract_number character varying(2000),\n    loan_term bigint,\n    credit_amount numeric,\n    special_purpose character varying(2000),\n    quality_categor character varying(2000),\n    financial_position character varying(2000),\n    reserve_size numeric,\n    link_customer_id bigint,\n    aplication_id bigint,\n    cred_interest_rate numeric,\n    sel_curr bigint,\n    credit_start_date timestamp(6) without time zone,\n    credit_end_date timestamp(6) without time zone,\n    check_account character varying(2000),\n    days_delay_number character varying(2000),\n    loan_classified character varying(2000),\n    contract_group character varying(2000),\n    date_loan_debt numeric,\n    prof_judg_id bigint,\n    contract_type character varying(100),\n    credit_product character varying(100),\n    applic_ko_kbkp_id bigint,\n    is_closed smallint,\n    pledge_contract_id bigint,\n    wf_document_id bigint,\n    cr_status_id bigint,\n    is_guarantee smallint,\n    lname character varying(2000),\n    fname character varying(2000),\n    mname character varying(2000),\n    tabnum character varying(2000),\n    sys_employee_id bigint,\n    subsidy_prog_id bigint,\n    individ_guarantee smallint,\n    offer_ident character varying(2000),\n    number_kk character varying(2000),\n    protocol_date character varying(2000),\n    subsidy_prog_str character varying(2000),\n    bank_ident_number character varying(2000),\n    tech_link_etl_susp_id bigint,\n    suspension_na_id bigint,\n    tech_link_etl_state_id bigint,\n    appl_documentum_num character varying(2000),\n    supplement_tech bigint,\n    contracttype bigint,\n    tech_selected_rz_id bigint,\n    tech_selected_comm character varying(2000),\n    tech_selected_meas_id bigint,\n    yaig_base_code bigint,\n    hand_suspension smallint,\n    duration_over_on_date bigint,\n    close_contract character varying(2000),\n    fa_specialist character varying(2000),\n    uid_credit character varying(2000),\n    max_loan_amount_ever numeric,\n    exite_date timestamp(6) without time zone,\n    penalty_rate numeric,\n    is_tranche_exist smallint,\n    pers_emp_number character varying(2000)\n);",
+    "description": "Кредитный договор",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "afl_doc_num": "Номер документа",
+      "afl_doc_data": "Дата документа",
+      "afp_state_id": "Состояние",
+      "credit_contract_number": "Номер кредитного договора",
+      "loan_term": "Срок кредитования (мес.)",
+      "credit_amount": "Сумма кредита/лимита линии по договору (руб.)",
+      "special_purpose": "Целевое назначение кредита по договору",
+      "quality_categor": "Категория качества по ссуде/ Название ПОС",
+      "financial_position": "Финансовое положение (Хорошее",
+      "reserve_size": "Размер резерва (%)",
+      "link_customer_id": "Ссылка на клиента",
+      "aplication_id": "Ссылка на микро заявку",
+      "cred_interest_rate": "Процентная ставка (%)",
+      "sel_curr": "Валюта",
+      "credit_start_date": "Дата начало кредитования",
+      "credit_end_date": "Дата окончания кредитования",
+      "check_account": "Расчетный счет",
+      "days_delay_number": "Количество дней прострочки",
+      "loan_classified": "Классифайд кредитного договора",
+      "contract_group": "Контрактная группа",
+      "date_loan_debt": "Остаток ссудной задолженности на дату отчета",
+      "prof_judg_id": "Ссылка на индивид. профсуждение",
+      "contract_type": "Вид договора",
+      "credit_product": "Кредитный продукт",
+      "applic_ko_kbkp_id": "Ссылка на микрозаявку КО/КБКП",
+      "is_closed": "Договор закрыт",
+      "pledge_contract_id": "Ссылка на договор залога",
+      "wf_document_id": "Связь с объектами из ДО. Документ",
+      "cr_status_id": "Статус договора",
+      "is_guarantee": "Наличие поручительства",
+      "lname": "Фамилия сотрудника",
+      "fname": "Отчество cотрудника",
+      "mname": "Имя cотрудника",
+      "tabnum": "Табельный номер сотрудника",
+      "sys_employee_id": "Сотрудник",
+      "subsidy_prog_id": "Программа субсидирования",
+      "individ_guarantee": "Поручительство других лиц из онлайн заявки",
+      "offer_ident": "Идентификатор предложения в Цифровом профиле",
+      "number_kk": "Номер протокола КК",
+      "protocol_date": "Дата принятия решения уполномоченным органом",
+      "subsidy_prog_str": "Программа субсидирования (Строка)",
+      "bank_ident_number": "БИК",
+      "tech_link_etl_susp_id": "Приостановление(тех.)Ссылка на etl приостановление/восстановление КД в НА",
+      "suspension_na_id": "Состояние приостановления в НА",
+      "tech_link_etl_state_id": "Приостановление(тех.)Ссылка на etl по получению состояния статуса приостановления",
+      "appl_documentum_num": "Номер заявки в Documentum",
+      "supplement_tech": "Дополнительное соглашение(Тех.)",
+      "contracttype": "_Вид договора",
+      "tech_selected_rz_id": "Приостановление(тех.) выбранная зона",
+      "tech_selected_comm": "Приостановление(Тех.) Комментарий",
+      "tech_selected_meas_id": "Приостановление(тех.)Выбранная мера",
+      "yaig_base_code": "Код базы НА",
+      "hand_suspension": "Ручная(мера)",
+      "duration_over_on_date": "Общая длительность просрочки на текущую дату",
+      "close_contract": "Наличие закрытых договоров",
+      "fa_specialist": "ФИО специалиста проводившего ФА",
+      "uid_credit": "UID Кредитного договора",
+      "max_loan_amount_ever": "Сумма полного лимита",
+      "exite_date": "Дата выхода из программы субсидирования",
+      "penalty_rate": "%% ставка после выхода из программы субсидирования.",
+      "is_tranche_exist": "Были транши",
+      "pers_emp_number": "Табельный номер сотрудника"
+    },
+    "foreign_keys": [
+      {
+        "column": "afp_state_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "link_customer_id",
+        "references_table": "sys_company",
+        "references_column": "id"
+      },
+      {
+        "column": "sys_employee_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      }
+    ]
+  },
+  "dict_div_presence": {
+    "create_table_sql": "CREATE TABLE public.dict_div_presence (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    ord bigint,\n    nameregion character varying(2000),\n    coderegion character varying(2000),\n    div_presence smallint,\n    stop_region smallint,\n    stop_region_ko smallint,\n    stop_region_fact smallint,\n    name__en character varying(2000)\n);",
+    "description": "Справочник: регионы присутствия подразделений Банка",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "ord": "Порядок",
+      "nameregion": "Наименование региона",
+      "coderegion": "Код региона",
+      "div_presence": "Признак присутствия Банка",
+      "stop_region": "Стоп-регион для кредитования (ББКП)",
+      "stop_region_ko": "Стоп-регион для кредитования (КО)",
+      "stop_region_fact": "Стоп-регион для кредитования (Факторинг)",
+      "name__en": "Name"
+    },
+    "foreign_keys": []
+  },
+  "dict_product": {
+    "create_table_sql": "CREATE TABLE public.dict_product (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    collateral_id bigint,\n    guarantee_id bigint,\n    departure_id bigint,\n    attr_business_segment bigint,\n    interest_penalties_id bigint,\n    lending_type_id bigint,\n    volume_revenue_id bigint,\n    number_transactions_id bigint,\n    amount_tender_loan_id bigint,\n    payment_method_id bigint,\n    overdraft_limit_id bigint,\n    max_amount_id bigint,\n    payment_interest_id bigint,\n    possibility_delay smallint,\n    payment_account smallint,\n    early_rep_pos smallint,\n    necessity_insurance smallint,\n    payment_commission_id bigint,\n    installment_payment smallint,\n    rate_increase_1 smallint,\n    id_855918 smallint,\n    guarantee_1 smallint,\n    min_sum numeric,\n    type_of_guarantee_id bigint,\n    product_relevance smallint,\n    comissions_id bigint,\n    ident character varying(2000),\n    valid_decision bigint,\n    indefinite_period smallint,\n    form_issue_id bigint,\n    part_big_buyer numeric,\n    num_months_cashbox numeric,\n    num_months_income numeric,\n    count_income_month numeric,\n    limit_over numeric,\n    summ_tranche numeric,\n    summ_limit numeric,\n    term_limit_credit bigint,\n    max_sum_credit numeric,\n    min_sum_credit numeric,\n    forfeight_id bigint,\n    transfert_rate numeric,\n    debt_on_tranche bigint,\n    type_limit_over_id bigint,\n    tech_decision_id bigint,\n    credit_interest_rate numeric,\n    dynam_type_id bigint,\n    form_limit character varying(2000),\n    loan_terms bigint,\n    issue_limit_second character varying(10),\n    issue_limit_first character varying(10),\n    is_early_repay smallint,\n    max_loan_term numeric,\n    period_grace character varying(2000),\n    card_validity character varying(2000),\n    lp_product_code character varying(20),\n    dbo_product_code character varying(20),\n    cp_product_code character varying(20),\n    limit_term character varying(10),\n    finstar_product_code character varying(20),\n    factoring_product_code character varying(2000),\n    is_simplified_fa smallint,\n    is_package smallint,\n    name_contr_group character varying(2000),\n    is_insurance_available smallint,\n    is_amd_fill_mandatory smallint,\n    is_new_prod_for_ns smallint,\n    is_fin_activ_newsub smallint\n);",
+    "description": "Справочник: Продукт",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "collateral_id": "Необходимость обеспечения",
+      "guarantee_id": "Необходимость поручительства",
+      "departure_id": "Выезд на место бизнеса заемщика",
+      "attr_business_segment": "Сегмент бизнеса клиента",
+      "interest_penalties_id": "Возможность включения %",
+      "lending_type_id": "Гос контракт. Вид кредитования",
+      "volume_revenue_id": "Минимальный объем эквайринговой выручки",
+      "number_transactions_id": "Минимальное количество транзакций по картам",
+      "amount_tender_loan_id": "Максимальная сумма тендерного кредита",
+      "payment_method_id": "Наличие расчетного счета в \"Открытие\"",
+      "overdraft_limit_id": "Требование к лимиту овердрафта",
+      "max_amount_id": "Ограничение максимального лимита",
+      "payment_interest_id": "Порядок уплаты процентов",
+      "possibility_delay": "Возможность отсрочки по кредиту",
+      "payment_account": "Необходимость наличия расчетного счета в ПАО Банк \"ФК Открытие\"",
+      "early_rep_pos": "Возможность досрочного погашения",
+      "necessity_insurance": "Требуется страхование",
+      "payment_commission_id": "Срок уплаты комиссии",
+      "installment_payment": "Допускается рассрочка платежа",
+      "rate_increase_1": "Предусматривается повышение ставки",
+      "id_855918": "Требуется обеспечение",
+      "guarantee_1": "Требуется поручительство",
+      "min_sum": "Минимальная сумма",
+      "type_of_guarantee_id": "Вид гарантии",
+      "product_relevance": "Актуальность продукта",
+      "comissions_id": "Комиссии",
+      "ident": "Сист. Идентификатор",
+      "valid_decision": "Срок действия положительного решения (день)",
+      "indefinite_period": "Возможна выдача на неопределенный срок",
+      "form_issue_id": "Форма выдачи",
+      "part_big_buyer": "Доля крупнейшего покупателя",
+      "num_months_cashbox": "Количество месяцев ведения онлайн касс",
+      "num_months_income": "Количество месяцев по поступлениям на счет в ПСБ и (или) другие банки",
+      "count_income_month": "Количество поступлений на счет Клиента в каждом месяце",
+      "limit_over": "Лимит овердрафта",
+      "summ_tranche": "Сумма транша",
+      "summ_limit": "Сумма лимита",
+      "term_limit_credit": "Период выборки лимита кредитной линии",
+      "max_sum_credit": "Максимальная сумма кредитного продукта",
+      "min_sum_credit": "Минимальная сумма кредитного продукта",
+      "forfeight_id": "Неустойки",
+      "transfert_rate": "Ставка трансферта",
+      "debt_on_tranche": "Срок задолженности по одному траншу",
+      "type_limit_over_id": "Тип лимита овердрафта",
+      "tech_decision_id": "Технология принятия решения",
+      "credit_interest_rate": "Процентная ставка",
+      "dynam_type_id": "Тип динамики",
+      "form_limit": "Форма лимита",
+      "loan_terms": "Срок лимита",
+      "issue_limit_second": "Срок транша 2",
+      "issue_limit_first": "Срок транша 1",
+      "is_early_repay": "Возможно досрочное погашение(ЦКП)",
+      "max_loan_term": "Максимальный срок кредита (мес)",
+      "period_grace": "Грейс",
+      "card_validity": "Срок действия карты",
+      "lp_product_code": "Код продукта в LP",
+      "dbo_product_code": "Код продукта в ДБО",
+      "cp_product_code": "Код продукта в ЦП",
+      "limit_term": "Срок договора",
+      "finstar_product_code": "Код продукта в Финстар",
+      "factoring_product_code": "Код продукта факторинга",
+      "is_simplified_fa": "Упрощенный Финансовый анализ",
+      "is_package": "Пакетный продукт",
+      "name_contr_group": "Наименование контрактной группы",
+      "is_insurance_available": "Доступно страхование",
+      "is_amd_fill_mandatory": "Обязательное заполнение размера резерва и категории качества в РУМ",
+      "is_new_prod_for_ns": "Новый продукт для НС",
+      "is_fin_activ_newsub": "Финансирование деятельности в НС"
+    },
+    "foreign_keys": [
+      {
+        "column": "attr_business_segment",
+        "references_table": "business_segment",
+        "references_column": "id"
+      }
+    ]
+  },
+  "fs_file": {
+    "create_table_sql": "CREATE TABLE public.fs_file (\n    id bigint NOT NULL,\n    name character varying(2000) NOT NULL,\n    type_id bigint NOT NULL,\n    org_id bigint NOT NULL,\n    status smallint NOT NULL,\n    create_date timestamp without time zone NOT NULL,\n    user_id bigint NOT NULL,\n    ff_type_id bigint NOT NULL,\n    ff_storage_id bigint NOT NULL,\n    ff_inner_name character varying(2000) NOT NULL,\n    ff_body_size bigint NOT NULL,\n    ff_kind_id bigint NOT NULL,\n    ff_note character varying(2000),\n    ff_actual_end_date timestamp without time zone,\n    name__en character varying(2000),\n    name__ru character varying(2000),\n    created_emp_id bigint NOT NULL,\n    last_modified_user_id bigint NOT NULL,\n    last_modified_emp_id bigint NOT NULL,\n    last_modified_date timestamp without time zone NOT NULL,\n    is_system smallint,\n    ff_parent_object bigint,\n    ff_is_stored smallint,\n    ff_id_881754 timestamp(6) without time zone,\n    ff_id_881762 character varying(2000),\n    ff_id_881752 timestamp(6) without time zone,\n    ff_fs_is_preview_file smallint,\n    ff_fs_file_name character varying(2000),\n    ff_fv_date_from timestamp(6) without time zone,\n    ff_fv_date_to timestamp(6) without time zone,\n    ff_body_uuid character varying(2000)\n);",
+    "description": "Описание файла",
+    "column_comments": {
+      "id": "Код",
+      "name": "Name",
+      "type_id": "Тип объекта",
+      "org_id": "Подразделение",
+      "status": "Status",
+      "create_date": "Create date",
+      "user_id": "Пользователь",
+      "ff_type_id": "Тип файла",
+      "ff_storage_id": "Хранилище",
+      "ff_inner_name": "Внутреннее имя файла",
+      "ff_body_size": "Размер файла",
+      "ff_kind_id": "Классификация",
+      "ff_note": "Описание",
+      "ff_actual_end_date": "Срок актуальности",
+      "name__en": "Name",
+      "name__ru": "Name",
+      "created_emp_id": "Сотрудник",
+      "last_modified_user_id": "Пользователь",
+      "last_modified_emp_id": "Сотрудник",
+      "last_modified_date": "Last modified date",
+      "is_system": "System object",
+      "ff_parent_object": "Ссылка на родительский объект",
+      "ff_is_stored": "Файл сохранен в хранилище",
+      "ff_id_881754": "Дата размещения документа",
+      "ff_id_881762": "Родительская классификация",
+      "ff_id_881752": "Дата документа",
+      "ff_fs_is_preview_file": "Открыть на предпросмотр Edoc",
+      "ff_fs_file_name": "Наименование без расширения",
+      "ff_fv_date_from": "Дата начала действия",
+      "ff_fv_date_to": "Дата окончания действия",
+      "ff_body_uuid": "UUID для индикации о замене тела файла"
+    },
+    "foreign_keys": [
+      {
+        "column": "ff_parent_object",
+        "references_table": "sys_object",
+        "references_column": "id"
+      }
+    ]
+  },
+  "ic_application": {
+    "create_table_sql": "CREATE TABLE public.ic_application (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    afl_doc_num character varying(2000),\n    afl_doc_data timestamp without time zone,\n    afp_state_id bigint,\n    initiator_id bigint,\n    emp_id bigint,\n    processing_steps_id bigint,\n    temp_cont_turn bigint,\n    cr_id bigint,\n    scp_tech_ctredit bigint,\n    scp_business_segment bigint,\n    client_type_id bigint,\n    gsl_data_cont_id bigint,\n    scp_arm_manager_id bigint,\n    req_type_id bigint,\n    credit_logic_id bigint,\n    gsl_limit numeric,\n    pricing_id bigint,\n    scp_gsl_name_str character varying(2000),\n    resp_cond_coord bigint,\n    curator_head_id bigint,\n    resp_cond_coord_str character varying(2000),\n    is_auto_creation smallint,\n    industry_code_id bigint,\n    app_obj_id bigint,\n    deleg_region_id bigint,\n    scp_proc_steds_id bigint,\n    is_directed_to_process smallint,\n    scp_product_str character varying(2000),\n    is_state_program smallint,\n    cred_technology_str character varying(2000),\n    is_na_active smallint,\n    is_fin_activ_newsub smallint,\n    prelim_gsl_calc_id bigint,\n    scp_rejection_client_id bigint,\n    reason_refusal_id bigint,\n    is_ic_withdrawn smallint,\n    scp_rejection_comment text,\n    is_button_refuse smallint\n);",
+    "description": "ИУ. Заявка",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "afl_doc_num": "Номер документа",
+      "afl_doc_data": "Дата документа",
+      "afp_state_id": "Состояние",
+      "initiator_id": "Клиент",
+      "emp_id": "Ответственный менеджер",
+      "processing_steps_id": "Текущий этап обработки",
+      "temp_cont_turn": "Промежуточный контейнер загрузки ОСВ",
+      "cr_id": "Ссылка на КЗ",
+      "scp_tech_ctredit": "Технология кредитования",
+      "scp_business_segment": "Клиентский сегмент",
+      "client_type_id": "Тип клиента",
+      "gsl_data_cont_id": "Ссылка на контейнер данных ГСЛ",
+      "scp_arm_manager_id": "Сотрудник АРМ",
+      "req_type_id": "Класс заявки",
+      "credit_logic_id": "Логика кредитования",
+      "gsl_limit": "Общий лимит по ГСЛ",
+      "pricing_id": "Ценообразование",
+      "scp_gsl_name_str": "Наименование ГСЛ",
+      "resp_cond_coord": "Голосующий (индивидуальные условия)",
+      "curator_head_id": "Куратор ГО",
+      "resp_cond_coord_str": "_Голосующий (строка)",
+      "is_auto_creation": "Создана автоматически",
+      "industry_code_id": "Отрасль клиента",
+      "app_obj_id": "Ссылка на заявку СКП (для автоматически созданных)",
+      "deleg_region_id": "Регион клиента",
+      "scp_proc_steds_id": "Этап обработки",
+      "is_directed_to_process": "Направлена по процессу",
+      "scp_product_str": "Продукт (строка)",
+      "is_state_program": "Применение госпрограммы",
+      "cred_technology_str": "Технология кредитования (строка)",
+      "is_na_active": "Интеграция с НА по получению кредитных обязательств активна",
+      "is_fin_activ_newsub": "Финансирование деятельности в НС",
+      "prelim_gsl_calc_id": "Ссылка на предварительный расчет",
+      "scp_rejection_client_id": "Причина отказа Клиента",
+      "reason_refusal_id": "Причина отказа Банка",
+      "is_ic_withdrawn": "Отзыв Индивидуальных условий",
+      "scp_rejection_comment": "Комментарий по отказу",
+      "is_button_refuse": "Отказ по кнопке"
+    },
+    "foreign_keys": [
+      {
+        "column": "app_obj_id",
+        "references_table": "application_obj",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_arm_manager_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "credit_logic_id",
+        "references_table": "scp_techcred",
+        "references_column": "id"
+      },
+      {
+        "column": "deleg_region_id",
+        "references_table": "dict_div_presence",
+        "references_column": "id"
+      },
+      {
+        "column": "initiator_id",
+        "references_table": "sys_object",
+        "references_column": "id"
+      },
+      {
+        "column": "curator_head_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "resp_cond_coord",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_business_segment",
+        "references_table": "business_segment",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_tech_ctredit",
+        "references_table": "scp_dict_tech_ctredit",
+        "references_column": "id"
+      },
+      {
+        "column": "emp_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "afp_state_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      }
+    ]
+  },
+  "mler_application": {
+    "create_table_sql": "CREATE TABLE public.mler_application (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    afl_doc_num character varying(2000),\n    afl_doc_data timestamp without time zone,\n    afp_state_id bigint,\n    initiator_id bigint,\n    emp_id bigint,\n    processing_steps_id bigint,\n    temp_cont_turn bigint,\n    cr_id bigint,\n    scp_tech_ctredit bigint,\n    scp_business_segment bigint,\n    client_type_id bigint,\n    lim_sum numeric,\n    gsl_data_cont_id bigint,\n    scp_cheif_cm_id bigint,\n    mler_decis_id bigint,\n    mler_client_name character varying(2000),\n    is_out_app smallint,\n    chief_initiator_id bigint,\n    req_type_id bigint,\n    execut_admin_id bigint,\n    mler_signer_id bigint,\n    client_section_id bigint,\n    project_decis_id bigint,\n    date_amd_decision timestamp(6) without time zone,\n    num_amd_decision character varying(2000),\n    credit_logic_id bigint,\n    gsl_limit numeric,\n    loan_terms bigint,\n    decis_use_limit smallint,\n    signed_risks_date timestamp(6) without time zone,\n    deleg_region_id bigint,\n    decis_use_limit_text text,\n    is_decision_signed smallint,\n    is_decision_approved smallint,\n    scp_gsl_name_str character varying(2000),\n    scp_proc_steds_id bigint,\n    industry_code_id bigint,\n    scp_product_str character varying(2000),\n    is_state_program smallint,\n    cred_technology_str character varying(2000),\n    app_product_id bigint,\n    is_fin_activ_newsub smallint,\n    prelim_gsl_calc_id bigint\n);",
+    "description": "МЮЭР. Заявка",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "afl_doc_num": "Номер документа",
+      "afl_doc_data": "Дата документа",
+      "afp_state_id": "Состояние",
+      "initiator_id": "Клиент",
+      "emp_id": "Ответственный менеджер",
+      "processing_steps_id": "Текущий этап обработки",
+      "temp_cont_turn": "Промежуточный контейнер загрузки ОСВ",
+      "cr_id": "Ссылка на КЗ",
+      "scp_tech_ctredit": "Технология кредитования",
+      "scp_business_segment": "Клиентский сегмент",
+      "client_type_id": "Тип клиента",
+      "lim_sum": "Сумма заявки",
+      "gsl_data_cont_id": "Ссылка на контейнер данных ГСЛ",
+      "scp_cheif_cm_id": "Руководитель КМ",
+      "mler_decis_id": "Принятое решение",
+      "mler_client_name": "_Владелец лимита (не исп)",
+      "is_out_app": "Заявка есть в Гриндате",
+      "chief_initiator_id": "Руководитель инициатора",
+      "req_type_id": "Класс заявки",
+      "execut_admin_id": "Сотрудник СМБ ДРСМБ",
+      "mler_signer_id": "Подписант (УО)",
+      "client_section_id": "Сегмент в соответствии с ВКР",
+      "project_decis_id": "Ссылка на проект решения",
+      "date_amd_decision": "Дата решения",
+      "num_amd_decision": "Номер решения (строка)",
+      "credit_logic_id": "Логика кредитования",
+      "gsl_limit": "Сумма общего лимита",
+      "loan_terms": "Срок лимита",
+      "decis_use_limit": "Ограничение по применению Решения",
+      "signed_risks_date": "Дата подписания",
+      "deleg_region_id": "Регион клиента",
+      "decis_use_limit_text": "Ограничение по применению Решения (текст)",
+      "is_decision_signed": "Решение подписано",
+      "is_decision_approved": "Решение согласовано КМ",
+      "scp_gsl_name_str": "Владелец лимита",
+      "scp_proc_steds_id": "Этап обработки",
+      "industry_code_id": "Отрасль клиента",
+      "scp_product_str": "Продукт (строка)",
+      "is_state_program": "Применение госпрограммы",
+      "cred_technology_str": "Технология кредитования (строка)",
+      "app_product_id": "Продукт",
+      "is_fin_activ_newsub": "Финансирование деятельности в НС",
+      "prelim_gsl_calc_id": "Ссылка на предварительный расчет"
+    },
+    "foreign_keys": [
+      {
+        "column": "afp_state_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_tech_ctredit",
+        "references_table": "scp_dict_tech_ctredit",
+        "references_column": "id"
+      },
+      {
+        "column": "emp_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "deleg_region_id",
+        "references_table": "dict_div_presence",
+        "references_column": "id"
+      },
+      {
+        "column": "chief_initiator_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "execut_admin_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "initiator_id",
+        "references_table": "sys_company",
+        "references_column": "id"
+      },
+      {
+        "column": "app_product_id",
+        "references_table": "dict_product",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_business_segment",
+        "references_table": "business_segment",
+        "references_column": "id"
+      },
+      {
+        "column": "credit_logic_id",
+        "references_table": "scp_techcred",
+        "references_column": "id"
+      },
+      {
+        "column": "mler_signer_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_cheif_cm_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      }
+    ]
+  },
+  "ms_0golbfqyrdq4im6jf6ajivwy9": {
+    "create_table_sql": "CREATE TABLE public.ms_0golbfqyrdq4im6jf6ajivwy9 (\n    id bigint NOT NULL,\n    obj_id bigint NOT NULL\n);",
+    "description": "",
+    "column_comments": {
+      "id": "ID",
+      "obj_id": "Link to object"
+    },
+    "foreign_keys": [
+      {
+        "column": "obj_id",
+        "references_table": "business_segment",
+        "references_column": "id"
+      },
+      {
+        "column": "id",
+        "references_table": "scp_gov_program_dict",
+        "references_column": "id"
+      }
+    ]
+  },
+  "ms_0n8ohjyx7oszo6a47ca9g0s6f": {
+    "create_table_sql": "CREATE TABLE public.ms_0n8ohjyx7oszo6a47ca9g0s6f (\n    id bigint NOT NULL,\n    obj_id bigint NOT NULL\n);",
+    "description": "MultiSelect container: SCP_STATE_ID_MS. ObjType: КТ. Заявка",
+    "column_comments": {
+      "id": "ID",
+      "obj_id": "Link to object"
+    },
+    "foreign_keys": [
+      {
+        "column": "obj_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "id",
+        "references_table": "corp_tech_application",
+        "references_column": "id"
+      }
+    ]
+  },
+  "ms_0oc5mpme8nklimjy77sai9gf1": {
+    "create_table_sql": "CREATE TABLE public.ms_0oc5mpme8nklimjy77sai9gf1 (\n    id bigint NOT NULL,\n    obj_id bigint NOT NULL\n);",
+    "description": "",
+    "column_comments": {
+      "id": "ID",
+      "obj_id": "Link to object"
+    },
+    "foreign_keys": [
+      {
+        "column": "id",
+        "references_table": "scp_prod_comm_dict",
+        "references_column": "id"
+      },
+      {
+        "column": "obj_id",
+        "references_table": "dict_product",
+        "references_column": "id"
+      }
+    ]
+  },
+  "ms_1fd5jp86pabxu9na4knwphvyr": {
+    "create_table_sql": "CREATE TABLE public.ms_1fd5jp86pabxu9na4knwphvyr (\n    id bigint NOT NULL,\n    obj_id bigint NOT NULL\n);",
+    "description": "",
+    "column_comments": {
+      "id": "ID",
+      "obj_id": "Link to object"
+    },
+    "foreign_keys": [
+      {
+        "column": "obj_id",
+        "references_table": "dict_product",
+        "references_column": "id"
+      },
+      {
+        "column": "id",
+        "references_table": "scp_gov_program_dict",
+        "references_column": "id"
+      }
+    ]
+  },
+  "ms_333s6j5jn97srp008gyi3zueo": {
+    "create_table_sql": "CREATE TABLE public.ms_333s6j5jn97srp008gyi3zueo (\n    id bigint NOT NULL,\n    obj_id bigint NOT NULL\n);",
+    "description": "",
+    "column_comments": {
+      "id": "ID",
+      "obj_id": "Link to object"
+    },
+    "foreign_keys": [
+      {
+        "column": "obj_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "id",
+        "references_table": "mler_application",
+        "references_column": "id"
+      }
+    ]
+  },
+  "ms_39qrctc1n8efr9axiukjssgzl": {
+    "create_table_sql": "CREATE TABLE public.ms_39qrctc1n8efr9axiukjssgzl (\n    id bigint NOT NULL,\n    obj_id bigint NOT NULL\n);",
+    "description": "",
+    "column_comments": {
+      "id": "ID",
+      "obj_id": "Link to object"
+    },
+    "foreign_keys": [
+      {
+        "column": "id",
+        "references_table": "scp_prod_comm_dict",
+        "references_column": "id"
+      },
+      {
+        "column": "obj_id",
+        "references_table": "type_loan",
+        "references_column": "id"
+      }
+    ]
+  },
+  "ms_64cm5ded37z58x0fyt5lgvhc7": {
+    "create_table_sql": "CREATE TABLE public.ms_64cm5ded37z58x0fyt5lgvhc7 (\n    id bigint NOT NULL,\n    obj_id bigint NOT NULL\n);",
+    "description": "MultiSelect container: OFFICE_FIX_MS. ObjType: СКП. Справочник: Офисы РЦБ",
+    "column_comments": {
+      "id": "ID",
+      "obj_id": "Link to object"
+    },
+    "foreign_keys": [
+      {
+        "column": "obj_id",
+        "references_table": "offices_psb",
+        "references_column": "id"
+      },
+      {
+        "column": "id",
+        "references_table": "scp_dict_rsc_office",
+        "references_column": "id"
+      }
+    ]
+  },
+  "ms_965j58mgwkpomnuooc29dlq9f": {
+    "create_table_sql": "CREATE TABLE public.ms_965j58mgwkpomnuooc29dlq9f (\n    id bigint NOT NULL,\n    obj_id bigint NOT NULL\n);",
+    "description": "",
+    "column_comments": {
+      "id": "ID",
+      "obj_id": "Link to object"
+    },
+    "foreign_keys": [
+      {
+        "column": "id",
+        "references_table": "scp_gov_program_dict",
+        "references_column": "id"
+      },
+      {
+        "column": "obj_id",
+        "references_table": "scp_techcred",
+        "references_column": "id"
+      }
+    ]
+  },
+  "ms_9k60rv4p0oaf3c702f2l1gj77": {
+    "create_table_sql": "CREATE TABLE public.ms_9k60rv4p0oaf3c702f2l1gj77 (\n    id bigint NOT NULL,\n    obj_id bigint NOT NULL\n);",
+    "description": "",
+    "column_comments": {
+      "id": "ID",
+      "obj_id": "Link to object"
+    },
+    "foreign_keys": [
+      {
+        "column": "obj_id",
+        "references_table": "scp_dict_tech_ctredit",
+        "references_column": "id"
+      },
+      {
+        "column": "id",
+        "references_table": "scp_gov_program_dict",
+        "references_column": "id"
+      }
+    ]
+  },
+  "ms_d1oakp9uq175ak3dbhpzbu81d": {
+    "create_table_sql": "CREATE TABLE public.ms_d1oakp9uq175ak3dbhpzbu81d (\n    id bigint NOT NULL,\n    obj_id bigint NOT NULL\n);",
+    "description": "",
+    "column_comments": {
+      "id": "ID",
+      "obj_id": "Link to object"
+    },
+    "foreign_keys": [
+      {
+        "column": "id",
+        "references_table": "application_obj",
+        "references_column": "id"
+      },
+      {
+        "column": "obj_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      }
+    ]
+  },
+  "ms_dlggiqkhqj46rhq1lrgryim7c": {
+    "create_table_sql": "CREATE TABLE public.ms_dlggiqkhqj46rhq1lrgryim7c (\n    id bigint NOT NULL,\n    obj_id bigint NOT NULL\n);",
+    "description": "",
+    "column_comments": {
+      "id": "ID",
+      "obj_id": "Link to object"
+    },
+    "foreign_keys": [
+      {
+        "column": "obj_id",
+        "references_table": "scp_techcred",
+        "references_column": "id"
+      },
+      {
+        "column": "id",
+        "references_table": "dict_product",
+        "references_column": "id"
+      }
+    ]
+  },
+  "ms_dxsh6488ihf77xmsd43dwby6k": {
+    "create_table_sql": "CREATE TABLE public.ms_dxsh6488ihf77xmsd43dwby6k (\n    id bigint NOT NULL,\n    obj_id bigint NOT NULL\n);",
+    "description": "",
+    "column_comments": {
+      "id": "ID",
+      "obj_id": "Link to object"
+    },
+    "foreign_keys": [
+      {
+        "column": "obj_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "id",
+        "references_table": "scp_application",
+        "references_column": "id"
+      }
+    ]
+  },
+  "ms_e5lum3lbateqhx8wkgtstxdf9": {
+    "create_table_sql": "CREATE TABLE public.ms_e5lum3lbateqhx8wkgtstxdf9 (\n    id bigint NOT NULL,\n    obj_id bigint NOT NULL\n);",
+    "description": "",
+    "column_comments": {
+      "id": "ID",
+      "obj_id": "Link to object"
+    },
+    "foreign_keys": [
+      {
+        "column": "obj_id",
+        "references_table": "scp_dict_tech_ctredit",
+        "references_column": "id"
+      },
+      {
+        "column": "id",
+        "references_table": "dict_product",
+        "references_column": "id"
+      }
+    ]
+  },
+  "offices_psb": {
+    "create_table_sql": "CREATE TABLE public.offices_psb (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    parent_org_id bigint,\n    short_name__ru character varying(2000),\n    short_name__en character varying(2000),\n    short_name character varying(2000),\n    view_id bigint,\n    main_org bigint,\n    org_company bigint,\n    ident character varying(2000),\n    office_id character varying(2000),\n    office_name character varying(2000),\n    office_address character varying(2000),\n    office_code character varying(2000),\n    office_date_from timestamp(6) without time zone,\n    office_date_to timestamp(6) without time zone,\n    office_type character varying(2000),\n    office_status character varying(2000),\n    office_sign_active smallint,\n    psb_dep_org bigint,\n    rout_office_id bigint,\n    lvl_org bigint,\n    feat_org smallint,\n    is_region smallint,\n    work_org smallint,\n    etl_marker_org smallint,\n    id_parent_org bigint,\n    id_depart_org bigint,\n    id_parent_corr_org bigint\n);",
+    "description": "Офисы в ПСБ",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "parent_org_id": "Родительское подразделение",
+      "short_name__ru": "Краткое наименование",
+      "short_name__en": "Краткое наименование",
+      "short_name": "Краткое наименование",
+      "view_id": "Вид подразделения",
+      "main_org": "Обособленное подразделение",
+      "org_company": "Контрагент подразделения",
+      "ident": "Сист. Идентификатор",
+      "office_id": "ID офиса",
+      "office_name": "Наименование офиса",
+      "office_address": "Адрес офис",
+      "office_code": "Код региона офиса",
+      "office_date_from": "Дата открытия офиса",
+      "office_date_to": "Дата закрытия офиса",
+      "office_type": "Тип офиса",
+      "office_status": "Профиль обслуживания офиса",
+      "office_sign_active": "Признак действия офиса",
+      "psb_dep_org": "Организация",
+      "rout_office_id": "Офис для маршрутизации",
+      "lvl_org": "Уровень подразделения",
+      "feat_org": "Признак: 1 - ГО",
+      "is_region": "Признак МО",
+      "work_org": "Признак: 1 - работает; 0 - закрыто",
+      "etl_marker_org": "Маркер загрузки из внешней системы",
+      "id_parent_org": "Внешний ИД родителя",
+      "id_depart_org": "Внешний ИД Департамента",
+      "id_parent_corr_org": "ID ДО или филиала"
+    },
+    "foreign_keys": [
+      {
+        "column": "rout_office_id",
+        "references_table": "offices_psb",
+        "references_column": "id"
+      },
+      {
+        "column": "org_company",
+        "references_table": "sys_company",
+        "references_column": "id"
+      }
+    ]
+  },
+  "participant_app": {
+    "create_table_sql": "CREATE TABLE public.participant_app (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    app_obj_id bigint,\n    borrower_id bigint,\n    is_current smallint,\n    is_check_need smallint,\n    part_type_id bigint,\n    is_permanent_role smallint,\n    sec_date_check timestamp(6) without time zone,\n    sec_appeal_date timestamp(6) without time zone,\n    is_sec_appeal smallint,\n    is_antifrod_success smallint,\n    is_perm_role_for_head smallint,\n    emp_appeal_id bigint,\n    is_create_check smallint,\n    is_add_manual smallint,\n    check_role_part_str character varying(2000),\n    is_borrower smallint,\n    is_related_entity smallint,\n    is_affiliate smallint,\n    is_pledger smallint,\n    is_guarantor smallint,\n    return_code_txt text,\n    id_siam_str character varying(2000),\n    consentbkidate timestamp(6) without time zone,\n    is_bch_form_error smallint,\n    is_seller smallint,\n    scp_link_particip_id bigint,\n    particip_sec_id bigint,\n    is_guar_prov_balhold smallint,\n    is_state_affilation smallint,\n    sec_check_auto_date timestamp(6) without time zone,\n    bch_refuse smallint,\n    bch_record_link character varying(2000),\n    app_obj_person_conn_id bigint,\n    name__en character varying(2000),\n    obj_owner_id bigint,\n    is_director smallint,\n    is_actual_owner smallint,\n    is_founder smallint,\n    is_legal_person smallint,\n    bki_status character varying(2000)\n);",
+    "description": "Участники сделки",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "app_obj_id": "Ссылка на заявку",
+      "borrower_id": "Ссылка на лицо",
+      "is_current": "Действующий",
+      "is_check_need": "Необходимость проверки",
+      "part_type_id": "Тип участника сделки",
+      "is_permanent_role": "Неизменяемость роли для КМ (тех.)",
+      "sec_date_check": "Дата проверки СЭБ (итоговая)",
+      "sec_appeal_date": "Дата апелляции",
+      "is_sec_appeal": "Апелляция",
+      "is_antifrod_success": "Успешность проверки антифрод",
+      "is_perm_role_for_head": "Неизменяемость роли для Рук-ля КМ (тех.)",
+      "emp_appeal_id": "Ответственный за апелляцию",
+      "is_create_check": "Создать автопроверки (тех.)",
+      "is_add_manual": "Добавлен вручную",
+      "check_role_part_str": "Проверяемые роли (строковый)",
+      "is_borrower": "Заемщик",
+      "is_related_entity": "Лицо",
+      "is_affiliate": "Аффилированное лицо",
+      "is_pledger": "Залогодатель",
+      "is_guarantor": "Поручитель",
+      "return_code_txt": "Текст ошибки",
+      "id_siam_str": "Идентификатор отчета",
+      "consentbkidate": "Дата согласия БКИ",
+      "is_bch_form_error": "Ошибки при формировании БКИ (тех.)",
+      "is_seller": "Продавец",
+      "scp_link_particip_id": "Ссылка на участника ГСЛ",
+      "particip_sec_id": "Ссылка на экспертизу СЭБ по участнику",
+      "is_guar_prov_balhold": "Является балансодержателем или держателем основной выручки",
+      "is_state_affilation": "Заёмщик является унитарным предприятием или государственная структура имеет контрольный пакет",
+      "sec_check_auto_date": "Дата завершения автопроверок",
+      "bch_refuse": "Отказ от БКИ",
+      "bch_record_link": "Ссылка на отчет БКИ",
+      "app_obj_person_conn_id": "Ссылка на заявку (для связанных ФЛ)",
+      "name__en": "Name",
+      "obj_owner_id": "Ссылка на объект владелец",
+      "is_director": "ЕИО",
+      "is_actual_owner": "Фактический собственник",
+      "is_founder": "Учредитель",
+      "is_legal_person": "ЮЛ",
+      "bki_status": "Состояние БКИ"
+    },
+    "foreign_keys": [
+      {
+        "column": "emp_appeal_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "borrower_id",
+        "references_table": "sys_company",
+        "references_column": "id"
+      },
+      {
+        "column": "app_obj_person_conn_id",
+        "references_table": "application_obj",
+        "references_column": "id"
+      },
+      {
+        "column": "app_obj_id",
+        "references_table": "application_obj",
+        "references_column": "id"
+      },
+      {
+        "column": "particip_sec_id",
+        "references_table": "scp_part_sec_expertise",
+        "references_column": "id"
+      },
+      {
+        "column": "obj_owner_id",
+        "references_table": "sys_object",
+        "references_column": "id"
+      }
+    ]
+  },
+  "prod_change_params": {
+    "create_table_sql": "CREATE TABLE public.prod_change_params (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    product_pricing_id bigint,\n    change_param_dict_id bigint,\n    scp_new_cond character varying(2000),\n    scp_old_cond_val character varying(2000),\n    scp_old_cond character varying(2000),\n    scp_new_cond_val character varying(2000),\n    value_comment character varying(2000),\n    link_card_obj_id bigint,\n    com_val_proc numeric,\n    payment_schedule_id bigint,\n    pay_reward_cond_id bigint,\n    sum_pay_type_id bigint,\n    comm_date_pay_id bigint,\n    bank_val_sum numeric,\n    new_bank_val_sum numeric,\n    new_pay_reward_cond_id bigint,\n    new_com_val_proc numeric,\n    scp_comiss_size_str character varying(2000),\n    new_comiss_size_str character varying(2000),\n    is_add_manual smallint,\n    is_auto_creation smallint\n);",
+    "description": "СКП. Изменяемые параметры продукта",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "product_pricing_id": "Ценообразование по продукту",
+      "change_param_dict_id": "Изменяемый параметр",
+      "scp_new_cond": "Предлагаемые условия",
+      "scp_old_cond_val": "Предлагаемые условия",
+      "scp_old_cond": "Текущие условия",
+      "scp_new_cond_val": "Текущие условия",
+      "value_comment": "Комментарий к значению",
+      "link_card_obj_id": "Ссылка на объект",
+      "com_val_proc": "Размер  (%) текущий",
+      "payment_schedule_id": "Порядок выплаты",
+      "pay_reward_cond_id": "Условие уплаты вознаграждения за предоставление банковской гарантии (текущее)",
+      "sum_pay_type_id": "Вид суммы для уплаты комиссии",
+      "comm_date_pay_id": "Дата уплаты комиссии",
+      "bank_val_sum": "Размер (руб) текущий",
+      "new_bank_val_sum": "Размер (руб) предлагаемый",
+      "new_pay_reward_cond_id": "Условие уплаты вознаграждения за предоставление банковской гарантии (новое)",
+      "new_com_val_proc": "Размер (%) предлагаемый",
+      "scp_comiss_size_str": "_/годовых",
+      "new_comiss_size_str": "_/годовых (предл)",
+      "is_add_manual": "Добавлен вручную",
+      "is_auto_creation": "Создан автоматически"
+    },
+    "foreign_keys": [
+      {
+        "column": "link_card_obj_id",
+        "references_table": "sys_object",
+        "references_column": "id"
+      },
+      {
+        "column": "product_pricing_id",
+        "references_table": "product_pricing",
+        "references_column": "id"
+      }
+    ]
+  },
+  "prod_commissions": {
+    "create_table_sql": "CREATE TABLE public.prod_commissions (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    prod_comm_dict_id bigint,\n    scp_comiss_size_str character varying(2000),\n    scp_payment_shedule_str character varying(2000),\n    com_val_proc numeric,\n    value_comment character varying(2000),\n    link_card_obj_id bigint,\n    is_for_state_program smallint,\n    comm_date_pay_id bigint,\n    sum_pay_type_id bigint,\n    payment_schedule_id bigint,\n    is_from_pricing smallint,\n    is_add_manual smallint,\n    is_current_conds smallint,\n    commission_out_of_dict smallint,\n    bank_val_sum numeric\n);",
+    "description": "СКП. Комиссии продукта",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "prod_comm_dict_id": "Комиссия",
+      "scp_comiss_size_str": "Размер комиссии (строка)",
+      "scp_payment_shedule_str": "Порядок выплаты",
+      "com_val_proc": "Размер комиссии (%)",
+      "value_comment": "Комментарий к значению",
+      "link_card_obj_id": "Ссылка на объект",
+      "is_for_state_program": "Комиссия для госпрограммы",
+      "comm_date_pay_id": "Дата уплаты комиссии",
+      "sum_pay_type_id": "Вид суммы для уплаты комиссии",
+      "payment_schedule_id": "Порядок выплаты",
+      "is_from_pricing": "Добавлен из ЦО",
+      "is_add_manual": "Добавлена вручную",
+      "is_current_conds": "Скопировано с предыдущего ЦО",
+      "commission_out_of_dict": "Комиссии нет в справочнике",
+      "bank_val_sum": "Размер (руб)"
+    },
+    "foreign_keys": [
+      {
+        "column": "link_card_obj_id",
+        "references_table": "sys_object",
+        "references_column": "id"
+      },
+      {
+        "column": "prod_comm_dict_id",
+        "references_table": "scp_prod_comm_dict",
+        "references_column": "id"
+      }
+    ]
+  },
+  "prod_guarantees": {
+    "create_table_sql": "CREATE TABLE public.prod_guarantees (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    link_card_obj_id bigint,\n    prod_guarant_dict_id bigint,\n    bank_val_proc numeric,\n    bank_val_sum numeric,\n    guarantee_type_id bigint,\n    is_from_pricing smallint,\n    is_current_conds smallint\n);",
+    "description": "СКП. Гарантии продукта",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "link_card_obj_id": "Ссылка на объект",
+      "prod_guarant_dict_id": "Гарантия",
+      "bank_val_proc": "Размер (% годовых)",
+      "bank_val_sum": "Размер (руб)",
+      "guarantee_type_id": "Вид гарантии",
+      "is_from_pricing": "Добавлен из ЦО",
+      "is_current_conds": "Скопировано с предыдущего ЦО"
+    },
+    "foreign_keys": [
+      {
+        "column": "link_card_obj_id",
+        "references_table": "sys_object",
+        "references_column": "id"
+      },
+      {
+        "column": "prod_guarant_dict_id",
+        "references_table": "scp_prod_guarant_dict",
+        "references_column": "id"
+      }
+    ]
+  },
+  "product_pricing": {
+    "create_table_sql": "CREATE TABLE public.product_pricing (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    pricing_card_id bigint,\n    owner_object_id bigint,\n    scp_is_individual smallint,\n    scp_calc_rate_val numeric,\n    scp_min_margin_val numeric,\n    offer_margin_over numeric,\n    rate_type_id bigint,\n    scp_sublimit_srok numeric,\n    scp_sublimit_sum numeric,\n    draft_decision_id bigint,\n    is_inactive smallint,\n    product_pricing_id bigint,\n    is_state_program smallint,\n    tranche_term numeric,\n    tranche_term_days numeric,\n    g_rate_principal numeric,\n    cr_amount numeric,\n    tender_guarantees character varying(2000),\n    execution_guarantee character varying(2000),\n    scp_min_insec_margin numeric,\n    term_days numeric,\n    pay_reward_cond_id bigint,\n    amdp_parent_product_id bigint,\n    el_individual numeric,\n    is_param_calc smallint,\n    cr_limit_guar numeric,\n    clc_grade_id bigint,\n    pricing_compare_id bigint,\n    scp_modif_lim_quest_id bigint,\n    clc_zone_id bigint,\n    scp_sublimit_sum_prev numeric,\n    gsl_limit numeric,\n    type_loan_id bigint,\n    app_product_id bigint,\n    product_compound_id bigint,\n    scp_min_margin_from numeric,\n    scp_min_margin numeric,\n    min_insec_margin_from numeric,\n    min_insec_margin_to numeric,\n    scp_calc_rate_val_from numeric,\n    scp_calc_rate_val_to numeric,\n    is_marge_range smallint,\n    scp_min_margin_val_from smallint,\n    offer_margin_over_from numeric,\n    offer_margin_over_to numeric,\n    fix_spread_value numeric,\n    change_initiator_id bigint,\n    product_pricing_cast_id bigint,\n    is_out_app smallint,\n    sublimit_sum numeric,\n    is_umb_surety smallint,\n    cl_group_id bigint\n);",
+    "description": "СКП. Ценообразование по продукту",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "pricing_card_id": "Карточка ценообразования (цо)",
+      "owner_object_id": "Объект ценообразования (ЦО)",
+      "scp_is_individual": "Индивидуальные ценовые условия",
+      "scp_calc_rate_val": "Справочно: расчетная ставка",
+      "scp_min_margin_val": "Минимальная маржа",
+      "offer_margin_over": "Предлагаемая маржа",
+      "rate_type_id": "Тип ставки",
+      "scp_sublimit_srok": "Срок",
+      "scp_sublimit_sum": "Сумма",
+      "draft_decision_id": "Ссылка Проект решения (цо)",
+      "is_inactive": "Недействующий (цо)",
+      "product_pricing_id": "Входит в продукт (цо)",
+      "is_state_program": "Применение госпрограммы",
+      "tranche_term": "Срок транша (мес.)",
+      "tranche_term_days": "Срок транша (дни)",
+      "g_rate_principal": "Процентная ставка",
+      "cr_amount": "Сумма банковской гарантии",
+      "tender_guarantees": "Тендерные гарантии (цо)",
+      "execution_guarantee": "_Гарантии исполнения контракта",
+      "scp_min_insec_margin": "Минимальная маржа на период необеспеченности",
+      "term_days": "Срок",
+      "pay_reward_cond_id": "Условие уплаты вознаграждения за предоставление банковской гарантии",
+      "amdp_parent_product_id": "Ссылка на продукт РУМ (ЦО)",
+      "el_individual": "_EL индивидуальный (цо)",
+      "is_param_calc": "Параметры рассчитаны",
+      "cr_limit_guar": "Сумма лимита ответственности Гаранта",
+      "clc_grade_id": "Посчитанный из АСПР грейд",
+      "pricing_compare_id": "Ссылка на технический тип",
+      "scp_modif_lim_quest_id": "Ссылка на вопрос по пересмотру лимита (цо)",
+      "clc_zone_id": "Посчитанная из АСПР зона",
+      "scp_sublimit_sum_prev": "_Сумма (текущие условия) (цо)",
+      "gsl_limit": "Сумма общего лимита",
+      "type_loan_id": "Форма предоставления продукта",
+      "app_product_id": "Продукт",
+      "product_compound_id": "Состав продукта",
+      "scp_min_margin_from": "_Минимальная маржа ОТ",
+      "scp_min_margin": "_Минимальная маржа ДО",
+      "min_insec_margin_from": "_Минимальная маржа на период необеспеченности ОТ",
+      "min_insec_margin_to": "_Минимальная маржа на период необеспеченности ДО",
+      "scp_calc_rate_val_from": "_Справочно: расчетная ставка ОТ",
+      "scp_calc_rate_val_to": "_Справочно: расчетная ставка ДО",
+      "is_marge_range": "Применить диапазон по марже",
+      "scp_min_margin_val_from": "_Минимальная маржа ОТ",
+      "offer_margin_over_from": "_Предлагаемая маржа для овердрафта ОТ",
+      "offer_margin_over_to": "_Предлагаемая маржа для овердрафта ДО",
+      "fix_spread_value": "Спред за фиксацию",
+      "change_initiator_id": "Инициатор изменений",
+      "product_pricing_cast_id": "Ссылка на слепок ЦО",
+      "is_out_app": "Заявки нет в Гриндате",
+      "sublimit_sum": "Сумма сублимита",
+      "is_umb_surety": "Зонтичное поручительство/Обеспечение 1",
+      "cl_group_id": "Группа клиента"
+    },
+    "foreign_keys": [
+      {
+        "column": "app_product_id",
+        "references_table": "dict_product",
+        "references_column": "id"
+      },
+      {
+        "column": "product_pricing_id",
+        "references_table": "product_pricing",
+        "references_column": "id"
+      },
+      {
+        "column": "owner_object_id",
+        "references_table": "sys_object",
+        "references_column": "id"
+      },
+      {
+        "column": "type_loan_id",
+        "references_table": "type_loan",
+        "references_column": "id"
+      },
+      {
+        "column": "amdp_parent_product_id",
+        "references_table": "scp_amd_product",
+        "references_column": "id"
+      }
+    ]
+  },
+  "scp_amd_product": {
+    "create_table_sql": "CREATE TABLE public.scp_amd_product (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    app_product_id bigint,\n    loan_type_id bigint,\n    scp_sublimit_val bigint,\n    scp_general_amount numeric,\n    amdp_parent_product_id bigint,\n    product_term bigint,\n    product_limitation bigint,\n    product_compound_id bigint,\n    type_gov_prog_id bigint,\n    is_inactive smallint,\n    blanc_deal_asmt_result bigint,\n    is_blanc_credit smallint,\n    monthly_contribution numeric,\n    loan_type_afhd_id bigint,\n    repayment_type_id bigint,\n    rate_increase_blanc numeric,\n    amount_blanc_deal numeric,\n    amount_blanc_deal_clt numeric,\n    allowed_blanc_amo_prod numeric,\n    is_contract_logic_p smallint,\n    draft_dec_id bigint,\n    is_oth_bank_guar_psb smallint,\n    contr_cont_id bigint,\n    is_add_req_bank_guar smallint,\n    security_part_id bigint,\n    is_requirements_meets smallint,\n    is_sdo smallint,\n    comp_type_gov_prog_id bigint,\n    clc_grade_id bigint,\n    exp_limit_credit_rub numeric,\n    el_individual numeric,\n    clc_zone_id bigint,\n    ident_viol_req character varying(2000),\n    seq_subproduct_numb character varying(2000),\n    scp_loan_sign bigint,\n    borr_restr_seq_num bigint,\n    curr_loan_debt bigint,\n    amount_loan_debt numeric,\n    product_risk_asses_id bigint,\n    test_amd_proj_link bigint,\n    scp_prod_quest_id bigint,\n    amd_proj_link bigint,\n    prod_term_date timestamp(6) without time zone,\n    scp_loan_sign_id bigint,\n    amd_prod_link_id bigint,\n    cl_group_id bigint,\n    question_structure text,\n    is_over_limit smallint\n);",
+    "description": "СКП. РУМ. Продукт РУМ",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "app_product_id": "Продукт",
+      "loan_type_id": "Форма предоставления",
+      "scp_sublimit_val": "Валюта",
+      "scp_general_amount": "Сумма",
+      "amdp_parent_product_id": "Ссылка на материнский продукт",
+      "product_term": "Срок продукта (месяцев)",
+      "product_limitation": "Срок продукта не более (дней)",
+      "product_compound_id": "Состав продукта",
+      "type_gov_prog_id": "Программа господдержки",
+      "is_inactive": "Недействующий",
+      "blanc_deal_asmt_result": "Результат оценки допустимой бланко-части по сделке",
+      "is_blanc_credit": "Бланковое кредитование",
+      "monthly_contribution": "Ежемесячный взнос",
+      "loan_type_afhd_id": "Форма предоставления (для АФХД)",
+      "repayment_type_id": "Форма погашения",
+      "rate_increase_blanc": "Увеличение ставки для бланкового кредитования",
+      "amount_blanc_deal": "Сумма бланкочасти рассчитанная по сделке исходя из указанного обеспечения",
+      "amount_blanc_deal_clt": "Сумма БЧ по сделке",
+      "allowed_blanc_amo_prod": "Допустимая сумма БЧ на продукт",
+      "is_contract_logic_p": "Контрактная логика",
+      "draft_dec_id": "_Ссылка на вопрос (принятие решения)",
+      "is_oth_bank_guar_psb": "Существуют ли другие БГ в ПСБ?",
+      "contr_cont_id": "Ссылка на контейнер контрактов",
+      "is_add_req_bank_guar": "В контракте есть требования по другим БГ? / Есть ли БГ исполнения обязательств/возврата аванса?",
+      "security_part_id": "Ссылка на обеспечительную часть продукта",
+      "is_requirements_meets": "Соответствие требованиям",
+      "is_sdo": "Относится к ГОЗ",
+      "comp_type_gov_prog_id": "Программа господдержки (для сравнения)",
+      "clc_grade_id": "Посчитанный из АСПР грейд",
+      "exp_limit_credit_rub": "Расчетный лимит кредитования (руб.)",
+      "el_individual": "EL индивидуальный",
+      "clc_zone_id": "Посчитанная из АСПР зона",
+      "ident_viol_req": "Выявленные нарушения требований",
+      "seq_subproduct_numb": "Порядковый номер продукта в госзаказе",
+      "scp_loan_sign": "Признак ссуды",
+      "borr_restr_seq_num": "Порядковый номер реструктуризации Заемщика",
+      "curr_loan_debt": "Валюта ОСЗ",
+      "amount_loan_debt": "Остаток ссудной задолженности",
+      "product_risk_asses_id": "Оценка риска по продукту",
+      "test_amd_proj_link": "УДАЛИТЬ_Ссылка на проект решения",
+      "scp_prod_quest_id": "Ссылка на вопрос (структура вопросов)",
+      "amd_proj_link": "Ссылка на проект решения (ЛС логика)",
+      "prod_term_date": "Срок продукта (дата)",
+      "scp_loan_sign_id": "Признак ссуды для внесения в ИСУБД Новая Афина",
+      "amd_prod_link_id": "Ссылка на продукт РУМ (тех.)",
+      "cl_group_id": "Группа клиента",
+      "question_structure": "Комментарий",
+      "is_over_limit": "Вне лимита"
+    },
+    "foreign_keys": [
+      {
+        "column": "app_product_id",
+        "references_table": "dict_product",
+        "references_column": "id"
+      },
+      {
+        "column": "loan_type_id",
+        "references_table": "type_loan",
+        "references_column": "id"
+      },
+      {
+        "column": "test_amd_proj_link",
+        "references_table": "scp_project_ans",
+        "references_column": "id"
+      },
+      {
+        "column": "draft_dec_id",
+        "references_table": "scp_decision_quest",
+        "references_column": "id"
+      },
+      {
+        "column": "loan_type_afhd_id",
+        "references_table": "type_loan",
+        "references_column": "id"
+      },
+      {
+        "column": "amd_prod_link_id",
+        "references_table": "scp_amd_product",
+        "references_column": "id"
+      },
+      {
+        "column": "amdp_parent_product_id",
+        "references_table": "scp_amd_product",
+        "references_column": "id"
+      }
+    ]
+  },
+  "scp_application": {
+    "create_table_sql": "CREATE TABLE public.scp_application (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    afl_doc_num character varying(2000),\n    afl_doc_data timestamp without time zone,\n    afp_state_id bigint,\n    initiator_id bigint,\n    req_type_id bigint,\n    lim_sum numeric,\n    loan_terms bigint,\n    lim_currency_id bigint,\n    gsl_limit numeric,\n    credit_logic_id bigint,\n    lending_tech_id bigint,\n    emp_id bigint,\n    processing_steps_id bigint,\n    scp_curr_emp character varying(2000),\n    temp_cont_turn bigint,\n    risk_zone_id bigint,\n    calc_risk_date timestamp(6) without time zone,\n    is_active_exp_sec smallint,\n    cr_id bigint,\n    scp_appl_type_id bigint,\n    deleg_region_id bigint,\n    scp_hcm_decision_id bigint,\n    is_active_get_gsl_part smallint,\n    scp_tech_ctredit bigint,\n    scp_business_segment bigint,\n    is_start_bp_fa smallint,\n    is_tech_ham_task_comp smallint,\n    is_collat_exp_launched smallint,\n    is_simplified_fa smallint,\n    is_start_bp_request_fa smallint,\n    auto_check_status bigint,\n    client_type_id bigint,\n    gsl_title character varying(2000),\n    other_parts character varying(2000),\n    is_without_pledge smallint,\n    is_main_owner smallint,\n    third_parties text,\n    decis_level_id bigint,\n    ca_decis_level_id bigint,\n    is_legal_exp_launched smallint,\n    voting_fm_id bigint,\n    voting_km_id bigint,\n    is_legal_exp_restart smallint,\n    scp_gsl_name_str character varying(2000),\n    pricing_id bigint,\n    price_calc_completed smallint,\n    resp_cond_coord bigint,\n    curator_head_id bigint,\n    is_lspr_level smallint,\n    collateral_cont_id bigint,\n    clc_grade_id bigint,\n    scp_arm_manager_id bigint,\n    scp_proc_steds_id bigint,\n    is_auto_sec_errors smallint,\n    is_auto_check_errors smallint,\n    is_na_active smallint,\n    reason_refusal_id bigint,\n    is_form_bch_active smallint,\n    is_bch_validator_on smallint,\n    suz_start_page_str character varying(2000),\n    is_active_get_arbitr smallint,\n    scp_cheif_cm_id bigint,\n    scp_rejection_comment text,\n    scp_rejection_client_id bigint,\n    ca_rout_office_id bigint,\n    is_test smallint,\n    client_list_changed smallint,\n    tranche_term numeric,\n    is_app_to_cred_depart smallint,\n    scp_type_restruct_id bigint,\n    is_need_agr_cd_co smallint,\n    is_ca_notif smallint,\n    scp_bg_owner_lidm bigint,\n    is_check_list_cont_dev smallint,\n    is_active_get_dp smallint,\n    scp_bg_current_gr_limit numeric,\n    scp_bg_total_prod_limit numeric,\n    is_min_level_changed smallint,\n    interm_file_storage bigint,\n    is_proj_verif_finished smallint,\n    gsl_data_cont_id bigint,\n    industry_code_id bigint,\n    is_cov_bank_garant smallint,\n    scp_product_str character varying(2000),\n    is_state_program smallint,\n    cred_technology_str character varying(2000),\n    is_not_red_zona_bool smallint,\n    is_not_red_zone bigint,\n    is_fin_activ_newsub smallint,\n    prelim_gsl_calc_id bigint\n);",
+    "description": "СКП. Заявка",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "afl_doc_num": "Номер документа",
+      "afl_doc_data": "Дата документа",
+      "afp_state_id": "Состояние",
+      "initiator_id": "Клиент",
+      "req_type_id": "Класс заявки",
+      "lim_sum": "Сумма заявки",
+      "loan_terms": "Срок лимита",
+      "lim_currency_id": "Валюта",
+      "gsl_limit": "Сумма общего лимита",
+      "credit_logic_id": "Логика кредитования",
+      "lending_tech_id": "_Технология кредитования",
+      "emp_id": "Ответственный менеджер",
+      "processing_steps_id": "Текущий этап обработки",
+      "scp_curr_emp": "Текущие исполнители",
+      "temp_cont_turn": "Промежуточный контейнер загрузки ОСВ",
+      "risk_zone_id": "Результат проверки благонадежности и деловой репутации по заявке",
+      "calc_risk_date": "Дата предварительной зоны риска",
+      "is_active_exp_sec": "Заблокировано изменение участников (тех.)",
+      "cr_id": "Ссылка на КЗ",
+      "scp_appl_type_id": "Тип заявки",
+      "deleg_region_id": "Регион клиента",
+      "scp_hcm_decision_id": "Вариант решения на задаче руководителя КМ",
+      "is_active_get_gsl_part": "Запущена сборка ГСЛ (тех)",
+      "scp_tech_ctredit": "Технология кредитования",
+      "scp_business_segment": "Клиентский сегмент",
+      "is_start_bp_fa": "Запуск БП из ФА (тех.)",
+      "is_tech_ham_task_comp": "Задача рук. КМ завершена (тех.)",
+      "is_collat_exp_launched": "Запущена залоговая экспертиза (тех.)",
+      "is_simplified_fa": "Упрощенный Финансовый анализ",
+      "is_start_bp_request_fa": "Запуск БП из доп. запроса ФА(тех.)",
+      "auto_check_status": "Статус автопроверок",
+      "client_type_id": "Тип клиента",
+      "gsl_title": "_Наименование ГСЛ",
+      "other_parts": "Третьи лица",
+      "is_without_pledge": "Без залога",
+      "is_main_owner": "Основные собственники",
+      "third_parties": "Третьи лица",
+      "decis_level_id": "Минимальный уровень принятия решения",
+      "ca_decis_level_id": "Уровень принятия решения - КА",
+      "is_legal_exp_launched": "Запущена экспертиза правоспособности (тех.)",
+      "voting_fm_id": "Голосующий ФМ",
+      "voting_km_id": "Голосующий КМ",
+      "is_legal_exp_restart": "Перезапуск экспертизы правоспособности (тех.)",
+      "scp_gsl_name_str": "Наименование ГСЛ",
+      "pricing_id": "Ценообразование",
+      "price_calc_completed": "Расчет ценовых параметров завершен",
+      "resp_cond_coord": "Голосующий (индивидуальные условия)",
+      "curator_head_id": "Куратор ГО",
+      "is_lspr_level": "Принятие решения в рамках ЛСПР Руководителей ПС",
+      "collateral_cont_id": "Контейнер с обеспечением",
+      "clc_grade_id": "Посчитанный из АСПР грейд",
+      "scp_arm_manager_id": "Сотрудник АРМ",
+      "scp_proc_steds_id": "Этап обработки",
+      "is_auto_sec_errors": "Наличие ошибок (автосэб)",
+      "is_auto_check_errors": "Наличие ошибок (предпроверки)",
+      "is_na_active": "Интеграция с НА по получению кредитных обязательств активна",
+      "reason_refusal_id": "Причина отказа Банка",
+      "is_form_bch_active": "Запущен сбор БКИ (тех.)",
+      "is_bch_validator_on": "Запущен валидатор БКИ (тех)",
+      "suz_start_page_str": "Ссылка на стартовую страницу СУЗ",
+      "is_active_get_arbitr": "Запущена сборка арбитражей (тех.)",
+      "scp_cheif_cm_id": "Руководитель КМ",
+      "scp_rejection_comment": "Комментарий по отказу",
+      "scp_rejection_client_id": "Причина отказа Клиента",
+      "ca_rout_office_id": "Офис маршрутизации для КА",
+      "is_test": "Тестовая",
+      "client_list_changed": "Состав клиентов был изменен",
+      "tranche_term": "Срок транша (мес.)",
+      "is_app_to_cred_depart": "Заявка передана в КП (тех.)",
+      "scp_type_restruct_id": "Тип реструктуризации",
+      "is_need_agr_cd_co": "Требуется согласование ДК ГО",
+      "is_ca_notif": "КА уведомлен",
+      "scp_bg_owner_lidm": "Владелец ЛСПР",
+      "is_check_list_cont_dev": "_Чек-лист содержит отклонения",
+      "is_active_get_dp": "Запущено обновление из ЦП",
+      "scp_bg_current_gr_limit": "_Текущий лимит кредитования по ГСЛ",
+      "scp_bg_total_prod_limit": "_Общий лимит по продукту",
+      "is_min_level_changed": "Изменение мин. уровня Заявки СКП (тех.)",
+      "interm_file_storage": "Промежуточное хранение файла для загрузки анкет",
+      "is_proj_verif_finished": "Сверка проектов решения завершена",
+      "gsl_data_cont_id": "Ссылка на контейнер данных ГСЛ",
+      "industry_code_id": "Отрасль клиента",
+      "is_cov_bank_garant": "Покрытая Банковская гарантия",
+      "scp_product_str": "Продукт (строка)",
+      "is_state_program": "Применение госпрограммы",
+      "cred_technology_str": "Технология кредитования (строка)",
+      "is_not_red_zona_bool": "Тех. Клиент отсутствует в «красной зоне» согласно данным EWS",
+      "is_not_red_zone": "Клиент отсутствует в «Красной зоне» согласно данным EWS",
+      "is_fin_activ_newsub": "Финансирование деятельности в НС",
+      "prelim_gsl_calc_id": "Ссылка на предварительный расчет"
+    },
+    "foreign_keys": [
+      {
+        "column": "credit_logic_id",
+        "references_table": "scp_techcred",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_business_segment",
+        "references_table": "business_segment",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_tech_ctredit",
+        "references_table": "scp_dict_tech_ctredit",
+        "references_column": "id"
+      },
+      {
+        "column": "ca_rout_office_id",
+        "references_table": "offices_psb",
+        "references_column": "id"
+      },
+      {
+        "column": "resp_cond_coord",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "voting_km_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "emp_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_cheif_cm_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "lending_tech_id",
+        "references_table": "scp_dict_tech_ctredit",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_bg_owner_lidm",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "deleg_region_id",
+        "references_table": "dict_div_presence",
+        "references_column": "id"
+      },
+      {
+        "column": "initiator_id",
+        "references_table": "sys_company",
+        "references_column": "id"
+      },
+      {
+        "column": "curator_head_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "interm_file_storage",
+        "references_table": "fs_file",
+        "references_column": "id"
+      },
+      {
+        "column": "voting_fm_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "auto_check_status",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "afp_state_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_arm_manager_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      }
+    ]
+  },
+  "scp_collateral_app": {
+    "create_table_sql": "CREATE TABLE public.scp_collateral_app (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    app_obj_id bigint,\n    exp_obj_id bigint,\n    out_collateral_id bigint,\n    collateral_link character varying(2000),\n    coll_appl_type_id bigint,\n    na_pledge_type_id bigint,\n    pledge_addr_str character varying(2000),\n    security_quality_id bigint,\n    quality_group_id bigint,\n    liquidity_level_id bigint,\n    attr_market_val numeric,\n    attr_fair_val numeric,\n    attr_collateral_val numeric,\n    collat_obj_name character varying(2000),\n    emp_id bigint,\n    ca_exp_emp_id bigint,\n    cur_upd_appl_id bigint,\n    parent_collat_app_id bigint,\n    collateral_discount numeric,\n    discount_rate numeric,\n    appl_state_id bigint,\n    is_pres_spouse_cons smallint,\n    is_pres_guar_pled smallint,\n    necessity_insurance smallint,\n    subs_pledge_id character varying(2000),\n    total_struct_share numeric,\n    is_current_concl smallint,\n    conclus_txt text,\n    pledge_concl_state_id bigint,\n    is_export_suz smallint,\n    pledge_conclus_date timestamp(6) without time zone,\n    concl_validity_date timestamp(6) without time zone,\n    perform_hr_face_id bigint,\n    pledge_subject_id bigint,\n    collat_common_obj_id bigint,\n    collat_subj_count bigint,\n    scp_arm_chief_id bigint,\n    cp_arm_manager_id bigint,\n    scp_info_comment_txt text,\n    scp_info_proj_fin smallint,\n    scp_info_adress_str character varying(2000),\n    scp_info_sec_cost numeric,\n    scp_info_type_na_id bigint,\n    scp_info_cred_summ numeric,\n    scp_info_type_prod_id bigint,\n    scp_info_pledger_id bigint,\n    scp_project_fin_id bigint,\n    scp_fin_proj_id bigint,\n    scp_quest_dec_id bigint,\n    add_comm_concl_txt text,\n    coll_link_str character varying(2000),\n    scp_file_req_timest timestamp(6) without time zone,\n    scp_info_vnd_id bigint,\n    quest_decis_id bigint,\n    testnumber numeric\n);",
+    "description": "СКП. Залоговая заявка",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "app_obj_id": "Ссылка на заявку",
+      "exp_obj_id": "Ссылка на экспертизу",
+      "out_collateral_id": "ID заявки в СУЗ",
+      "collateral_link": "Ссылка на СУЗ",
+      "coll_appl_type_id": "Тип заявки",
+      "na_pledge_type_id": "Тип залога (Новая Афина)",
+      "pledge_addr_str": "Адрес объекта залога",
+      "security_quality_id": "Категория качества обеспечения",
+      "quality_group_id": "Группа качества",
+      "liquidity_level_id": "Уровень ликвидности",
+      "attr_market_val": "Рыночная стоимость",
+      "attr_fair_val": "Справедливая стоимость",
+      "attr_collateral_val": "Залоговая стоимость",
+      "collat_obj_name": "Наименование объекта",
+      "emp_id": "Ответственный менеджер",
+      "ca_exp_emp_id": "Ответственный за проведение экспертизы КА",
+      "cur_upd_appl_id": "Ссылка на текущую актуализацию",
+      "parent_collat_app_id": "Ссылка на заявку-родителя (для актуализации)",
+      "collateral_discount": "Коэффициент учитывающий расходы на реализацию",
+      "discount_rate": "коэффициент для определения справедливой стоимости",
+      "appl_state_id": "Состояние заявки",
+      "is_pres_spouse_cons": "Предоставление согласия супруги(а) для ФЛ/ИП",
+      "is_pres_guar_pled": "Наличие поручительства залогодателя",
+      "necessity_insurance": "Страхование",
+      "subs_pledge_id": "Последующий залог",
+      "total_struct_share": "Доля в общей структуре залогового обеспечения",
+      "is_current_concl": "Действующее заключение из СУЗ",
+      "conclus_txt": "Итоговый вывод из Залогового Заключения",
+      "pledge_concl_state_id": "Состояние Залогового Заключения",
+      "is_export_suz": "Экспортированное заключение из СУЗ",
+      "pledge_conclus_date": "Дата подготовки заключения",
+      "concl_validity_date": "Срок действия оценки/заключения",
+      "perform_hr_face_id": "Исполнитель Залогового Заключения",
+      "pledge_subject_id": "Вид объекта залога (ЦБ)",
+      "collat_common_obj_id": "Номер объекта залога",
+      "collat_subj_count": "Количество предметов залога",
+      "scp_arm_chief_id": "Руководитель АРМ",
+      "cp_arm_manager_id": "Сотрудник АРМ",
+      "scp_info_comment_txt": "Комментарий (инфо)",
+      "scp_info_proj_fin": "Проектное финансирование (инфо)",
+      "scp_info_adress_str": "Адрес местонахождения (инфо)",
+      "scp_info_sec_cost": "Предполагаемая стоимость обеспечения (рубль)",
+      "scp_info_type_na_id": "Вид предмета залога (из НА) (инфо)",
+      "scp_info_cred_summ": "Сумма кредита (инфо)",
+      "scp_info_type_prod_id": "Вид кредитного продукта (инфо)",
+      "scp_info_pledger_id": "Наименование Залогодателя (ИНН для ЮЛ) (инфо)",
+      "scp_project_fin_id": "Проектное финансирование (инфо)",
+      "scp_fin_proj_id": "Проектное финансирование (инфо)",
+      "scp_quest_dec_id": "Вид кредитного продукта (инфо)",
+      "add_comm_concl_txt": "Дополнительные комментарии/выводы",
+      "coll_link_str": "Ссылка на СУЗ (без гиперссылки)",
+      "scp_file_req_timest": "Дата и время запроса файлов",
+      "scp_info_vnd_id": "Классификация по ВНД",
+      "quest_decis_id": "Вид кредитного продукта (инфо)",
+      "testnumber": "Тест_атрибут"
+    },
+    "foreign_keys": [
+      {
+        "column": "perform_hr_face_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "pledge_concl_state_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "cp_arm_manager_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_info_type_prod_id",
+        "references_table": "dict_product",
+        "references_column": "id"
+      },
+      {
+        "column": "cur_upd_appl_id",
+        "references_table": "scp_collateral_app",
+        "references_column": "id"
+      },
+      {
+        "column": "app_obj_id",
+        "references_table": "application_obj",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_info_pledger_id",
+        "references_table": "sys_company",
+        "references_column": "id"
+      },
+      {
+        "column": "emp_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_quest_dec_id",
+        "references_table": "scp_decision_quest",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_arm_chief_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "ca_exp_emp_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "parent_collat_app_id",
+        "references_table": "scp_collateral_app",
+        "references_column": "id"
+      }
+    ]
+  },
+  "scp_decision_quest": {
+    "create_table_sql": "CREATE TABLE public.scp_decision_quest (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    app_obj_id bigint,\n    scp_sublimit_sum numeric,\n    scp_sublimit_purpose bigint,\n    app_product_id bigint,\n    scp_sublimit_srok numeric,\n    scp_sublimit_val bigint,\n    scp_subl_bor bigint,\n    annotation text,\n    question_structure text,\n    scp_dec_quest_id bigint,\n    scp_gov_program_id bigint,\n    source_financing_id bigint,\n    credit_purpose_id bigint,\n    est_credit_limit numeric,\n    is_inactive smallint,\n    is_state_program smallint,\n    type_loan_id bigint,\n    is_afhd smallint,\n    rate_type_id bigint,\n    product_compound_id bigint,\n    amdp_parent_product_id bigint,\n    scp_state_id bigint,\n    scp_project_ans_link bigint,\n    is_product_recalc smallint,\n    ord bigint,\n    sys_file_id bigint,\n    appr_sum numeric,\n    product_compound_str character varying(2000),\n    loan_type_id bigint,\n    part_excl_ship_debitor bigint,\n    attr_business_segment bigint,\n    scp_num_subl bigint,\n    sublimit_sum numeric,\n    subl_num character varying(2000),\n    is_ca_change_class smallint,\n    credit_report_class bigint,\n    tech_atr_bool smallint,\n    copy_source_quest_id bigint\n);",
+    "description": "СКП. Вопросы на принятие решения",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "app_obj_id": "Ссылка на заявку",
+      "scp_sublimit_sum": "Сумма",
+      "scp_sublimit_purpose": "_Целевое использование",
+      "app_product_id": "Продукт",
+      "scp_sublimit_srok": "Срок",
+      "scp_sublimit_val": "Валюта",
+      "scp_subl_bor": "Заемщик",
+      "annotation": "Комментарий",
+      "question_structure": "Суть вопроса",
+      "scp_dec_quest_id": "Материнский продукт",
+      "scp_gov_program_id": "_Госпрограмма",
+      "source_financing_id": "Источник финансирования",
+      "credit_purpose_id": "_Цель кредитования",
+      "est_credit_limit": "Расчетный лимит кредитования (руб.)",
+      "is_inactive": "Недействующий",
+      "is_state_program": "Применение госпрограммы",
+      "type_loan_id": "Форма предоставления продукта",
+      "is_afhd": "АФХД готовится в GD",
+      "rate_type_id": "Тип ставки",
+      "product_compound_id": "Состав продукта",
+      "amdp_parent_product_id": "Ссылка на продукт РУМ",
+      "scp_state_id": "Состояние",
+      "scp_project_ans_link": "Ссылка на проект решения",
+      "is_product_recalc": "Требуется пересчет продукта на заявке",
+      "ord": "Порядок",
+      "sys_file_id": "Прикрепленные файлы",
+      "appr_sum": "Утвержденная сумма",
+      "product_compound_str": "Продукт+состав",
+      "loan_type_id": "_Форма предоставления",
+      "part_excl_ship_debitor": "Вид продукта",
+      "attr_business_segment": "_Сегмент бизнеса клиента",
+      "scp_num_subl": "Номер продукта",
+      "sublimit_sum": "Сумма сублимита",
+      "subl_num": "Номер продукта (строка)",
+      "is_ca_change_class": "КА изменил вид анализа",
+      "credit_report_class": "Вид анализа",
+      "tech_atr_bool": "Тех атр. отображение подсказки",
+      "copy_source_quest_id": "Ссылка на вопрос - источник копирования"
+    },
+    "foreign_keys": [
+      {
+        "column": "scp_gov_program_id",
+        "references_table": "scp_gov_program_dict",
+        "references_column": "id"
+      },
+      {
+        "column": "type_loan_id",
+        "references_table": "type_loan",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_project_ans_link",
+        "references_table": "scp_project_ans",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_dec_quest_id",
+        "references_table": "scp_decision_quest",
+        "references_column": "id"
+      },
+      {
+        "column": "app_product_id",
+        "references_table": "dict_product",
+        "references_column": "id"
+      },
+      {
+        "column": "loan_type_id",
+        "references_table": "type_loan",
+        "references_column": "id"
+      },
+      {
+        "column": "sys_file_id",
+        "references_table": "fs_file",
+        "references_column": "id"
+      },
+      {
+        "column": "amdp_parent_product_id",
+        "references_table": "scp_amd_product",
+        "references_column": "id"
+      },
+      {
+        "column": "app_obj_id",
+        "references_table": "application_obj",
+        "references_column": "id"
+      },
+      {
+        "column": "attr_business_segment",
+        "references_table": "business_segment",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_state_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_subl_bor",
+        "references_table": "sys_company",
+        "references_column": "id"
+      }
+    ]
+  },
+  "scp_dict_product_na": {
+    "create_table_sql": "CREATE TABLE public.scp_dict_product_na (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    ord bigint,\n    ident character varying(2000),\n    contract_group character varying(2000),\n    credit_product character varying(100),\n    app_product_id bigint,\n    yaig_product_id bigint,\n    contr_group_id bigint\n);",
+    "description": "СКП. Справочник: Продукт из НА",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "ord": "Порядок",
+      "ident": "Идентификатор",
+      "contract_group": "Группа договоров в НА",
+      "credit_product": "Программа кредитования в НА",
+      "app_product_id": "Продукт в ГД",
+      "yaig_product_id": "Продукт из УАиГ",
+      "contr_group_id": "Контрактная группа из УАиГ"
+    },
+    "foreign_keys": [
+      {
+        "column": "app_product_id",
+        "references_table": "dict_product",
+        "references_column": "id"
+      },
+      {
+        "column": "yaig_product_id",
+        "references_table": "yaig_product_dict",
+        "references_column": "id"
+      }
+    ]
+  },
+  "scp_dict_rsc_office": {
+    "create_table_sql": "CREATE TABLE public.scp_dict_rsc_office (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    ord bigint,\n    ident character varying(2000),\n    rsc_office_id bigint\n);",
+    "description": "СКП. Справочник: Офисы РЦБ",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "ord": "Порядок",
+      "ident": "Идентификатор",
+      "rsc_office_id": "Офис РЦБ"
+    },
+    "foreign_keys": [
+      {
+        "column": "rsc_office_id",
+        "references_table": "offices_psb",
+        "references_column": "id"
+      }
+    ]
+  },
+  "scp_dict_tech_ctredit": {
+    "create_table_sql": "CREATE TABLE public.scp_dict_tech_ctredit (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    ord bigint,\n    ident character varying(2000),\n    type_int_code bigint,\n    name__en character varying(2000),\n    is_available smallint\n);",
+    "description": "СКП. Справочник: технология кредитования",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "ord": "Порядок",
+      "ident": "Идентификатор",
+      "type_int_code": "Код типа технологии",
+      "name__en": "Name",
+      "is_available": "Доступен для выбора"
+    },
+    "foreign_keys": []
+  },
+  "scp_gov_program_dict": {
+    "create_table_sql": "CREATE TABLE public.scp_gov_program_dict (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    ord bigint,\n    ident character varying(2000),\n    scp_max_margin_val numeric,\n    scp_max_pref_rate_val numeric,\n    scp_subsidy_rate_val numeric,\n    type_gov_prog_id bigint,\n    upp_gov_prog_dict_id bigint,\n    date_end_cb timestamp(6) without time zone,\n    scp_fund_rate_val numeric\n);",
+    "description": "СКП. Госпрограмма по вопросу на принятие решения",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "ord": "Порядок",
+      "ident": "Идентификатор",
+      "scp_max_margin_val": "Маржа",
+      "scp_max_pref_rate_val": "Ставка клиента",
+      "scp_subsidy_rate_val": "Субсидия",
+      "type_gov_prog_id": "Вид госпрограммы",
+      "upp_gov_prog_dict_id": "Верхнеуровневая программа",
+      "date_end_cb": "Дата окончания действия",
+      "scp_fund_rate_val": "Ставка фондирования"
+    },
+    "foreign_keys": [
+      {
+        "column": "upp_gov_prog_dict_id",
+        "references_table": "scp_gov_program_dict",
+        "references_column": "id"
+      }
+    ]
+  },
+  "scp_part_sec_expertise": {
+    "create_table_sql": "CREATE TABLE public.scp_part_sec_expertise (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    afl_doc_num character varying(2000),\n    afl_doc_data timestamp without time zone,\n    afp_state_id bigint,\n    emp_id bigint,\n    sec_date_check timestamp(6) without time zone,\n    revoke_reason character varying(2000),\n    expertise_obj_id bigint,\n    deleg_region_id bigint,\n    risk_zone_id bigint,\n    sec_expertise_id bigint,\n    sec_ch_res_list bigint,\n    ses_resp_user_id bigint,\n    check_completed smallint,\n    ses_conf_user_id bigint,\n    check_button_vis smallint,\n    repeat_check bigint,\n    finish_task_date timestamp(6) without time zone,\n    psb_office_id bigint,\n    sec_check_auto_date timestamp(6) without time zone,\n    ident character varying(2000),\n    sf_exp_term_date timestamp(6) without time zone,\n    end_date timestamp(6) without time zone,\n    reason_revision_str character varying(2000),\n    reason_restart_str character varying(2000),\n    reason_cancel_str character varying(2000),\n    csd_expertise_obj_id bigint,\n    sf_sec_rs_emp_id bigint\n);",
+    "description": "СКП. Экспертиза СЭБ участника сделки",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "afl_doc_num": "Номер документа",
+      "afl_doc_data": "Дата документа",
+      "afp_state_id": "Состояние",
+      "emp_id": "Ответственный менеджер",
+      "sec_date_check": "Дата проверки (итоговая)",
+      "revoke_reason": "Причина отзыва",
+      "expertise_obj_id": "Объект экспертизы",
+      "deleg_region_id": "Регион назначения",
+      "risk_zone_id": "Зона риска",
+      "sec_expertise_id": "Экспертиза СЭБ",
+      "sec_ch_res_list": "Результаты проверки",
+      "ses_resp_user_id": "Пользователь для покраски (технический)",
+      "check_completed": "Проверка произведена",
+      "ses_conf_user_id": "Пользователь для подтверждения проверки (технический)",
+      "check_button_vis": "Видимость кнопки подтверждения проверки",
+      "repeat_check": "Повторные проверки",
+      "finish_task_date": "Дата и время завершения задачи",
+      "psb_office_id": "Офис ПСБ",
+      "sec_check_auto_date": "Дата завершения автопроверок",
+      "ident": "Сист. Идентификатор",
+      "sf_exp_term_date": "Срок действия",
+      "end_date": "Дата завершения экспертизы",
+      "reason_revision_str": "Причина доработки",
+      "reason_restart_str": "Причина перезапуска",
+      "reason_cancel_str": "Причина отмены",
+      "csd_expertise_obj_id": "Объект экспертизы (КОД)",
+      "sf_sec_rs_emp_id": "Ответственный РС (ФС)"
+    },
+    "foreign_keys": [
+      {
+        "column": "sf_sec_rs_emp_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "sec_ch_res_list",
+        "references_table": "scp_sec_check_res",
+        "references_column": "id"
+      },
+      {
+        "column": "emp_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "psb_office_id",
+        "references_table": "offices_psb",
+        "references_column": "id"
+      },
+      {
+        "column": "sec_expertise_id",
+        "references_table": "scp_sec_expertise",
+        "references_column": "id"
+      },
+      {
+        "column": "deleg_region_id",
+        "references_table": "dict_div_presence",
+        "references_column": "id"
+      },
+      {
+        "column": "afp_state_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "expertise_obj_id",
+        "references_table": "participant_app",
+        "references_column": "id"
+      }
+    ]
+  },
+  "scp_prod_comm_dict": {
+    "create_table_sql": "CREATE TABLE public.scp_prod_comm_dict (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    ord bigint,\n    ident character varying(2000),\n    scp_payment_shedule_str character varying(2000),\n    scp_comiss_size_str character varying(2000),\n    value_comment character varying(2000),\n    fare_description character varying(2000),\n    is_ho_application smallint,\n    com_val_proc numeric,\n    is_for_state_program smallint,\n    gov_prog_value bigint,\n    payment_schedule_id bigint,\n    new_com_val_proc numeric,\n    scp_gov_program_id bigint,\n    is_corp_tech_bool smallint,\n    is_product_log_bool smallint,\n    is_actual_comission smallint,\n    is_apk_tech_bool smallint,\n    change_comiss_dict_id bigint,\n    bank_val_sum numeric\n);",
+    "description": "СКП. Справочник: комиссии продуктов СКП",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "ord": "Порядок",
+      "ident": "Идентификатор",
+      "scp_payment_shedule_str": "Порядок выплаты",
+      "scp_comiss_size_str": "Размер комиссии",
+      "value_comment": "Комментарий к значению",
+      "fare_description": "Описание тарифа",
+      "is_ho_application": "Заявка ГО",
+      "com_val_proc": "Значение комиссии (%)",
+      "is_for_state_program": "Комиссия для госпрограммы",
+      "gov_prog_value": "Тип значения по госпрограмме",
+      "payment_schedule_id": "Порядок выплаты",
+      "new_com_val_proc": "_Размер (%) предлагаемый",
+      "scp_gov_program_id": "Госпрограмма (справочные значения)",
+      "is_corp_tech_bool": "Корп. технология",
+      "is_product_log_bool": "Продуктовая логика МСБ",
+      "is_actual_comission": "Актуальность комиссии",
+      "is_apk_tech_bool": "Технология кредитования АПК",
+      "change_comiss_dict_id": "Вид диапазона",
+      "bank_val_sum": "Размер (руб)"
+    },
+    "foreign_keys": [
+      {
+        "column": "scp_gov_program_id",
+        "references_table": "scp_gov_program_dict",
+        "references_column": "id"
+      }
+    ]
+  },
+  "scp_prod_guar_dict": {
+    "create_table_sql": "CREATE TABLE public.scp_prod_guar_dict (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    ord bigint,\n    ident character varying(2000),\n    scp_comiss_size_str character varying(2000),\n    scp_payment_shedule_str character varying(2000),\n    value_comment character varying(2000),\n    com_val_proc numeric,\n    prod_guarant_dict_id bigint,\n    gov_prog_value bigint,\n    payment_schedule_id bigint,\n    new_com_val_proc numeric,\n    scp_gov_program_id bigint\n);",
+    "description": "СКП. Справочник: гарантии продуктов СКП",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "ord": "Порядок",
+      "ident": "Идентификатор",
+      "scp_comiss_size_str": "Размер комиссии (строка)",
+      "scp_payment_shedule_str": "Порядок выплаты",
+      "value_comment": "Комментарий к значению",
+      "com_val_proc": "Размер комиссии (%)",
+      "prod_guarant_dict_id": "Гарантия",
+      "gov_prog_value": "Тип значения по госпрограмме",
+      "payment_schedule_id": "Порядок выплаты",
+      "new_com_val_proc": "_Размер (%) предлагаемый",
+      "scp_gov_program_id": "Госпрограмма (справочные значения)"
+    },
+    "foreign_keys": [
+      {
+        "column": "scp_gov_program_id",
+        "references_table": "scp_gov_program_dict",
+        "references_column": "id"
+      },
+      {
+        "column": "prod_guarant_dict_id",
+        "references_table": "scp_prod_guarant_dict",
+        "references_column": "id"
+      }
+    ]
+  },
+  "scp_prod_guarant_dict": {
+    "create_table_sql": "CREATE TABLE public.scp_prod_guarant_dict (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    ord bigint,\n    ident character varying(2000),\n    guarantee_type_id bigint,\n    bank_val_proc numeric,\n    bank_val_sum numeric,\n    sum_from numeric,\n    sum_to numeric\n);",
+    "description": "СКП. Справочник: гарантии продуктов СКП",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "ord": "Порядок",
+      "ident": "Идентификатор",
+      "guarantee_type_id": "Вид гарантии",
+      "bank_val_proc": "Размер (руб)",
+      "bank_val_sum": "Размер (руб)",
+      "sum_from": "Сумма от (руб)",
+      "sum_to": "Сумма до (руб)"
+    },
+    "foreign_keys": []
+  },
+  "scp_project_ans": {
+    "create_table_sql": "CREATE TABLE public.scp_project_ans (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    req_link_id bigint,\n    question_link_id bigint,\n    voting_km_id bigint,\n    voting_fm_id bigint,\n    draft_decision_id bigint,\n    urm_undwrt_decision_id bigint,\n    decis_level_id bigint,\n    doc_num character varying(2000),\n    doc_data timestamp(6) without time zone,\n    is_under_3_years_exp smallint,\n    scp_loan_sign_id bigint,\n    loan_sign_st_ot_id bigint,\n    okpd2 character varying(2000),\n    curret_limit_gsl numeric,\n    new_limit_gsl numeric,\n    current_limit_borow numeric,\n    new_limit_borow numeric,\n    set_matrix_limit numeric,\n    real_estate_class_id bigint,\n    loan_type_id bigint,\n    amount_rub numeric,\n    credit_line_term numeric,\n    summ_tranche numeric,\n    tranche_term numeric,\n    monthly_contribution numeric,\n    payment_delay_months bigint,\n    amount_blanc_deal numeric,\n    blanc_deal_asmt_result bigint,\n    individual_repay_sched text,\n    rate_increase_blanc numeric,\n    repayment_type_id bigint,\n    susp_cond_prev_id bigint,\n    curator_head_id bigint,\n    resp_head_cm_id bigint,\n    credit_analyst_id bigint,\n    is_infinite_vkl smallint,\n    is_blanc_credit smallint,\n    exp_limit_credit_rub numeric,\n    refer_empl bigint,\n    spec_fa bigint,\n    attr_market_val numeric,\n    attr_fair_val numeric,\n    product_security numeric,\n    attr_collateral_val numeric,\n    collateral_monit bigint,\n    limit_confirmation bigint,\n    amdp_parent_product_id bigint,\n    scp_state_id bigint,\n    rm_ra_decis_level_id bigint,\n    voting_rm_id bigint,\n    plan_deal_date timestamp(6) without time zone,\n    is_active_pj smallint,\n    okved_activity_id bigint,\n    is_poci_active smallint,\n    mon_col_type_id bigint,\n    prod_sec numeric,\n    el_individual numeric,\n    clc_grade_id bigint,\n    resp_risk_manager_id bigint,\n    cancel_manage_desic character varying(2000),\n    cancel_manag_desic text,\n    undwrit_appl_id bigint,\n    is_refresh_state smallint,\n    industry_code_id bigint,\n    scp_subl_bor bigint,\n    client_type_id bigint,\n    gsl_comparison character varying(2000),\n    clc_zone_id bigint,\n    restruct_init_id bigint,\n    monit_viol_txt text,\n    analys_res_cl_txt text,\n    analys_res_cl_restr_id bigint,\n    deal_change_txt text,\n    changed_decision_num character varying(2000),\n    deal_change_restr_txt text,\n    scp_type_restruct_id bigint,\n    min_decis_level_id bigint,\n    modif_num_deals character varying(2000),\n    scp_matrix_type bigint,\n    is_need_agr_cd_co smallint,\n    state_id bigint,\n    is_old_visual_needed smallint,\n    change_initiator_id bigint,\n    scp_is_individual smallint,\n    lidm_cur_limit numeric,\n    lidm_cur_limit_new numeric,\n    scp_bg_owner_lidm bigint,\n    scp_chief_ca_id bigint,\n    total_looped_sum numeric,\n    gsl_compare_txt text,\n    limit_confirm_str character varying(2000),\n    proj_city_str character varying(2000),\n    is_primary_preparation smallint,\n    req_type_id bigint,\n    is_cov_bank_garant smallint,\n    memo_deal_log smallint,\n    ns_deal_cond_log smallint,\n    confirm_cred_limit_log smallint,\n    confirm_csd_log smallint,\n    limit_due_date timestamp(6) without time zone,\n    limit_review_date timestamp(6) without time zone,\n    credit_group_id bigint,\n    raroc_roe numeric,\n    weighted_margin numeric,\n    raroc_perc numeric,\n    is_risk_consideration smallint\n);",
+    "description": "СКП. Проект решения",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "req_link_id": "Ссылка на заявку",
+      "question_link_id": "Ссылка на вопрос",
+      "voting_km_id": "Голосующий КМ",
+      "voting_fm_id": "Голосующий ФМ",
+      "draft_decision_id": "Проект решения",
+      "urm_undwrt_decision_id": "Решение УРМ",
+      "decis_level_id": "Уровень принятия решения",
+      "doc_num": "Номер документа",
+      "doc_data": "Дата документа",
+      "is_under_3_years_exp": "Срок ведения бизнеса менее 3х лет",
+      "scp_loan_sign_id": "Признак ссуды для внесения в ИСУБД Новая Афина",
+      "loan_sign_st_ot_id": "Код сделки",
+      "okpd2": "ОКПД2",
+      "curret_limit_gsl": "Текущий лимит кредитования по ГСЛ (в валюте утверждаемого кредита)",
+      "new_limit_gsl": "Лимит кредитования по ГСЛ с учетом нового лимита",
+      "current_limit_borow": "Текущий установленный лимит по Заемщику  по продуктам в рамках льготного финансирования (ПП 422 и ПП 696)",
+      "new_limit_borow": "Лимит по Заемщику с учетом нового лимита  по продуктам в рамках льготного финансирования (ПП 422 и ПП 696)",
+      "set_matrix_limit": "Лимит кредитования",
+      "real_estate_class_id": "Классификация недвижимого имущества",
+      "loan_type_id": "_Форма предоставления",
+      "amount_rub": "Сумма (руб.) для реестра",
+      "credit_line_term": "_Срок кредитной линии (кредита) (мес.)",
+      "summ_tranche": "_Сумма транша",
+      "tranche_term": "_Срок транша (мес.)",
+      "monthly_contribution": "_Ежемесячный взнос",
+      "payment_delay_months": "_Отсрочка платежа (мес.)",
+      "amount_blanc_deal": "_Сумма бланкочасти рассчитанная по сделке исходя из указанного обеспечения",
+      "blanc_deal_asmt_result": "_Результат оценки допустимой бланко-части по сделке",
+      "individual_repay_sched": "_Индивидуальный график погашения",
+      "rate_increase_blanc": "_Увеличение ставки для бланкового кредитования",
+      "repayment_type_id": "_Форма погашения",
+      "susp_cond_prev_id": "_Выполнены ли отлагательные условия по ранее принятым решениям?",
+      "curator_head_id": "Куратор ГО",
+      "resp_head_cm_id": "Руководитель КМ",
+      "credit_analyst_id": "Кредитный аналитик",
+      "is_infinite_vkl": "_Наличие опции \"Вечная ВКЛ\"",
+      "is_blanc_credit": "_Бланковое кредитование",
+      "exp_limit_credit_rub": "Расчетный лимит кредитования (руб.)",
+      "refer_empl": "Сотрудник",
+      "spec_fa": "_Специалист",
+      "attr_market_val": "Рыночная стоимость",
+      "attr_fair_val": "Справедливая стоимость",
+      "product_security": "_Обеспеченность продукта (руб.)",
+      "attr_collateral_val": "Залоговая стоимость",
+      "collateral_monit": "_Периодичность мониторинга залога",
+      "limit_confirmation": "Подтверждение лимита",
+      "amdp_parent_product_id": "Ссылка на продукт РУМ",
+      "scp_state_id": "Итоговое решение",
+      "rm_ra_decis_level_id": "Уровень принятия решения РМ РА",
+      "voting_rm_id": "Риск-менеджер",
+      "plan_deal_date": "Плановая дата сделки",
+      "is_active_pj": "Экспертиза проф.су на выдачу запущена",
+      "okved_activity_id": "_Вид деятельности (по ОКВЭД)",
+      "is_poci_active": "POCI-актив",
+      "mon_col_type_id": "_Тип залога для мониторинга",
+      "prod_sec": "Обеспеченность продукта (%)",
+      "el_individual": "EL индивидуальный",
+      "clc_grade_id": "Посчитанный из АСПР грейд",
+      "resp_risk_manager_id": "Уполномоченный риск-менеджер",
+      "cancel_manage_desic": "Отменить Решение уполномоченных менеджеров №",
+      "cancel_manag_desic": "_Отменить Решение уполномоченных менеджеров №",
+      "undwrit_appl_id": "Заявка РМ РА",
+      "is_refresh_state": "Состояние Залоговых Заключений не пересчитывается",
+      "industry_code_id": "Код отрасли",
+      "scp_subl_bor": "Заемщик",
+      "client_type_id": "Тип клиента",
+      "gsl_comparison": "_Состав ГСЛ (для сравнения)",
+      "clc_zone_id": "Посчитанная из АСПР зона",
+      "restruct_init_id": "Инициатор реструктуризации",
+      "monit_viol_txt": "Нарушение мониторинга (ручной ввод)",
+      "analys_res_cl_txt": "Итоговый результат анализа клиента (ручной ввод)",
+      "analys_res_cl_restr_id": "Итоговый результат анализа клиента (для реструктуризации)",
+      "deal_change_txt": "Изменение сделки/условий (ручной ввод)",
+      "changed_decision_num": "Номера изменяемых решений",
+      "deal_change_restr_txt": "Изменения по реструктуризации (ручной ввод)",
+      "scp_type_restruct_id": "Тип реструктуризации",
+      "min_decis_level_id": "Минимальный уровень принятия решения",
+      "modif_num_deals": "Номера договоров",
+      "scp_matrix_type": "Тип матрицы",
+      "is_need_agr_cd_co": "Требуется согласование ДК ГО",
+      "state_id": "Состояние",
+      "is_old_visual_needed": "Нужно отобразить сокращенный визуал МРИ",
+      "change_initiator_id": "Инициатор изменений",
+      "scp_is_individual": "Индивидуальные ценовые условия",
+      "lidm_cur_limit": "Текущий лимит кредитования по ГСЛ в рамках продукта \"Покрытая банковская гарантия\"",
+      "lidm_cur_limit_new": "Текущий лимит кредитования по ГСЛ в рамках продукта \"Покрытая банковская гарантия\" (в валюте утверждаемого продукта) а также покрытые банковские гарантии",
+      "scp_bg_owner_lidm": "Владелец ЛСПР",
+      "scp_chief_ca_id": "Руководитель КА",
+      "total_looped_sum": "Сумма лимитов с учетом закольцованности лимитов",
+      "gsl_compare_txt": "Состав ГСЛ (для сравнения)",
+      "limit_confirm_str": "Подтверждение лимита (строка)",
+      "proj_city_str": "Город",
+      "is_primary_preparation": "Первичная подготовка ПР завершена",
+      "req_type_id": "Класс заявки",
+      "is_cov_bank_garant": "Покрытая Банковская гарантия",
+      "memo_deal_log": "Финансирование деятельности в НС",
+      "ns_deal_cond_log": "Более 50% и территориальная приближенность активов и (или) логистических путей Клиента (ГСЛ) составляет менее 50 км от ЛБС",
+      "confirm_cred_limit_log": "Подтвердить лимит кредитования",
+      "confirm_csd_log": "Внести изменения в условия кредитования и привести кредитно-обеспечительную документацию",
+      "limit_due_date": "Срок лимита",
+      "limit_review_date": "Дата пересмотра",
+      "credit_group_id": "Группа кредитоспособности",
+      "raroc_roe": "Прогнозный ROE",
+      "weighted_margin": "Средневзвешенная маржа",
+      "raroc_perc": "Прогнозный RAROC с учетом кросс-продаж",
+      "is_risk_consideration": "Отправлен на риски/голосование"
+    },
+    "foreign_keys": [
+      {
+        "column": "amdp_parent_product_id",
+        "references_table": "scp_amd_product",
+        "references_column": "id"
+      },
+      {
+        "column": "voting_km_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "req_link_id",
+        "references_table": "application_obj",
+        "references_column": "id"
+      },
+      {
+        "column": "curator_head_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "credit_analyst_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "voting_rm_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "spec_fa",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "voting_fm_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_subl_bor",
+        "references_table": "sys_company",
+        "references_column": "id"
+      },
+      {
+        "column": "state_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_state_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "loan_type_id",
+        "references_table": "type_loan",
+        "references_column": "id"
+      },
+      {
+        "column": "resp_risk_manager_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_bg_owner_lidm",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_chief_ca_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "resp_head_cm_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "refer_empl",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      }
+    ]
+  },
+  "scp_sec_check_res": {
+    "create_table_sql": "CREATE TABLE public.scp_sec_check_res (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    expertise_obj_id bigint,\n    sec_date_check timestamp(6) without time zone,\n    emp_id bigint,\n    tech_atr_bool smallint,\n    check_completed smallint,\n    is_hide_check_manual smallint,\n    scp_cl_role_str character varying(2000),\n    other_comment character varying(2000),\n    settle_accounts_comm character varying(2000),\n    family_status_comm character varying(2000),\n    credit_history_comm character varying(2000),\n    affil_client_str character varying(2000),\n    aspr_link_zone_id bigint,\n    aspr_zone_id bigint,\n    aspr_affil_res_id bigint,\n    aspr_route_id bigint,\n    bch_mem_res_id bigint,\n    aspr_cred_hist_comm character varying(2000),\n    affil_check_comm character varying(2000),\n    supp_check_res_id bigint,\n    sf_family_status_comm text,\n    sf_settle_accounts_comm text,\n    sf_credit_history_comm text,\n    sf_other_comment text,\n    sf_affil_client_str text,\n    sf_affil_check_comm text\n);",
+    "description": "СКП. Результаты проверок",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "expertise_obj_id": "Участник проверки",
+      "sec_date_check": "Дата проверки (итоговая)",
+      "emp_id": "Сотрудник СЭБ",
+      "tech_atr_bool": "Тех атр. отображение подсказки",
+      "check_completed": "Проверка произведена",
+      "is_hide_check_manual": "Скрыть ручные проверки",
+      "scp_cl_role_str": "_Проверяемые роли (строковый)",
+      "other_comment": "Прочее (комментарий)",
+      "settle_accounts_comm": "Сведения о расчетных счетах (комментарий)",
+      "family_status_comm": "Сведения о семейном положении (комментарий)",
+      "credit_history_comm": "Кредитная история (комментарий)",
+      "affil_client_str": "Список аффилированных лиц",
+      "aspr_link_zone_id": "Зона АСПР по связке",
+      "aspr_zone_id": "Зона по результатам АСПР",
+      "aspr_affil_res_id": "Результат проверки аффилированности",
+      "aspr_route_id": "Маршрутизация по результатам АСПР",
+      "bch_mem_res_id": "Результат проверки КИ участника",
+      "aspr_cred_hist_comm": "Комментарии к решению по КИ",
+      "affil_check_comm": "Проверка аффилированности",
+      "supp_check_res_id": "Результат проверки поставщика",
+      "sf_family_status_comm": "(ФС) Сведения о семейном положении",
+      "sf_settle_accounts_comm": "(ФС) Сведения о расчетных счетах",
+      "sf_credit_history_comm": "(ФС) Кредитная история",
+      "sf_other_comment": "(ФС) Прочее",
+      "sf_affil_client_str": "(ФС) Список аффилированных лиц",
+      "sf_affil_check_comm": "(ФС) Проверка аффилированности"
+    },
+    "foreign_keys": [
+      {
+        "column": "expertise_obj_id",
+        "references_table": "sys_object",
+        "references_column": "id"
+      },
+      {
+        "column": "emp_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      }
+    ]
+  },
+  "scp_sec_expertise": {
+    "create_table_sql": "CREATE TABLE public.scp_sec_expertise (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    afl_doc_num character varying(2000),\n    afl_doc_data timestamp without time zone,\n    afp_state_id bigint,\n    emp_id bigint,\n    sec_end_date timestamp(6) without time zone,\n    expertise_obj_id bigint,\n    risk_zone_id bigint,\n    is_appeal smallint,\n    is_special_inform smallint,\n    sec_recall_reason character varying(2000),\n    sec_date_check timestamp(6) without time zone,\n    is_ses_withdrawn smallint,\n    reg_resp_emp bigint,\n    scp_application_id bigint,\n    is_region_work smallint,\n    start_sec_date timestamp(6) without time zone,\n    dataminer_in_process smallint,\n    sf_app_obj_id bigint,\n    traf_lights_response_id bigint,\n    ident character varying(2000),\n    sf_exp_term_date timestamp(6) without time zone,\n    end_date timestamp(6) without time zone,\n    reason_revision_str character varying(2000),\n    reason_restart_str character varying(2000),\n    reason_cancel_str character varying(2000),\n    sec_exp_copy_id bigint,\n    deleg_region_id bigint,\n    is_company_state_top smallint,\n    app_obj_id bigint,\n    ct_sec_check_res_id bigint,\n    psb_office_id bigint,\n    csd_expertise_obj_id bigint,\n    print_form_date timestamp(6) without time zone,\n    deleg_emp_id bigint\n);",
+    "description": "СКП. Экспертиза СЭБ",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "afl_doc_num": "Номер документа",
+      "afl_doc_data": "Дата документа",
+      "afp_state_id": "Состояние",
+      "emp_id": "Ответственный менеджер",
+      "sec_end_date": "Срок действия экспертизы",
+      "expertise_obj_id": "Объект экспертизы",
+      "risk_zone_id": "Зона риска",
+      "is_appeal": "Апелляция по заявке",
+      "is_special_inform": "Особые сведения",
+      "sec_recall_reason": "Обоснование отзыва экспертизы СЭБ",
+      "sec_date_check": "Дата проверки СЭБ (итоговая)",
+      "is_ses_withdrawn": "КМ отозвал экспертизу",
+      "reg_resp_emp": "Ответственный РС",
+      "scp_application_id": "Заявка СКП",
+      "is_region_work": "В работе у регионов",
+      "start_sec_date": "Дата поступления заявки в СЭБ",
+      "dataminer_in_process": "Выполняется Dataminer",
+      "sf_app_obj_id": "Ссылка на заявку ФС",
+      "traf_lights_response_id": "Результат проверки Светофор",
+      "ident": "Сист. Идентификатор",
+      "sf_exp_term_date": "Срок действия",
+      "end_date": "Дата завершения экспертизы",
+      "reason_revision_str": "Причина доработки",
+      "reason_restart_str": "Причина перезапуска",
+      "reason_cancel_str": "Причина отмены",
+      "sec_exp_copy_id": "Ссылка на копируемую экспертизу",
+      "deleg_region_id": "Регион назначения",
+      "is_company_state_top": "Госкомпания/ТОП-600",
+      "app_obj_id": "Ссылка на заявку КТ",
+      "ct_sec_check_res_id": "Результаты проверки (КТ)",
+      "psb_office_id": "Офис делегирования",
+      "csd_expertise_obj_id": "Объект экспертизы (КОД)",
+      "print_form_date": "Дата СЭБ для вывода в ПФ",
+      "deleg_emp_id": "Сотрудник для делегирования"
+    },
+    "foreign_keys": [
+      {
+        "column": "afp_state_id",
+        "references_table": "sys_state",
+        "references_column": "id"
+      },
+      {
+        "column": "sec_exp_copy_id",
+        "references_table": "scp_sec_expertise",
+        "references_column": "id"
+      },
+      {
+        "column": "app_obj_id",
+        "references_table": "corp_tech_application",
+        "references_column": "id"
+      },
+      {
+        "column": "deleg_emp_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "psb_office_id",
+        "references_table": "offices_psb",
+        "references_column": "id"
+      },
+      {
+        "column": "expertise_obj_id",
+        "references_table": "application_obj",
+        "references_column": "id"
+      },
+      {
+        "column": "deleg_region_id",
+        "references_table": "dict_div_presence",
+        "references_column": "id"
+      },
+      {
+        "column": "reg_resp_emp",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "scp_application_id",
+        "references_table": "scp_application",
+        "references_column": "id"
+      },
+      {
+        "column": "emp_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      }
+    ]
+  },
+  "scp_techcred": {
+    "create_table_sql": "CREATE TABLE public.scp_techcred (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    ord bigint,\n    ident character varying(2000),\n    name__en character varying(2000)\n);",
+    "description": "СКП. Справочники: технология кредитования",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "ord": "Порядок",
+      "ident": "Идентификатор",
+      "name__en": "Name"
+    },
+    "foreign_keys": []
+  },
+  "sys_algorithm": {
+    "create_table_sql": "CREATE TABLE public.sys_algorithm (\n    id bigint NOT NULL,\n    name__en character varying(2000),\n    name__ru character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone NOT NULL,\n    type_id bigint NOT NULL,\n    status smallint NOT NULL,\n    org_id bigint NOT NULL,\n    user_id bigint NOT NULL,\n    amy_ident character varying(2000) NOT NULL,\n    amy_frml_text text,\n    amy_alg_type_id bigint NOT NULL,\n    amy_base_type_id bigint,\n    amy_sys_alg_not_replace_null smallint,\n    amy_compiled_code text,\n    created_emp_id bigint NOT NULL,\n    last_modified_user_id bigint NOT NULL,\n    last_modified_emp_id bigint NOT NULL,\n    last_modified_date timestamp without time zone NOT NULL,\n    is_system smallint,\n    amy_ver_num bigint,\n    amy_alg_name character varying(2000),\n    amy_use_null_if_src_empty smallint\n);",
+    "description": "РМ. Алгоритм",
+    "column_comments": {
+      "id": "Код",
+      "name__en": "Наименование версии",
+      "name__ru": "Наименование версии",
+      "name": "Наименование версии",
+      "create_date": "Дата создания",
+      "type_id": "Тип объекта",
+      "status": "Статус",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "amy_ident": "Сист. Идентификатор",
+      "amy_frml_text": "Формула",
+      "amy_alg_type_id": "Тип алгоритма",
+      "amy_base_type_id": "Базовый тип объектов",
+      "amy_sys_alg_not_replace_null": "Не заменять null на 0",
+      "amy_compiled_code": "Скомпилированный код",
+      "created_emp_id": "Сотрудник",
+      "last_modified_user_id": "Пользователь",
+      "last_modified_emp_id": "Сотрудник",
+      "last_modified_date": "Дата последнего изменения",
+      "is_system": "Системный объект",
+      "amy_ver_num": "Номер версии",
+      "amy_alg_name": "Наименование алгоритма",
+      "amy_use_null_if_src_empty": "Вернуть null"
+    },
+    "foreign_keys": [
+      {
+        "column": "amy_base_type_id",
+        "references_table": "sys_obj_type",
+        "references_column": "id"
+      }
+    ]
+  },
+  "sys_employee": {
+    "create_table_sql": "CREATE TABLE public.sys_employee (\n    id bigint NOT NULL,\n    name character varying(2000) NOT NULL,\n    type_id bigint NOT NULL,\n    org_id bigint NOT NULL,\n    status smallint NOT NULL,\n    create_date timestamp without time zone NOT NULL,\n    user_id bigint NOT NULL,\n    emp_org_id bigint NOT NULL,\n    name__en character varying(2000),\n    name__ru character varying(2000),\n    first_name character varying(2000),\n    second_name character varying(2000),\n    sur_name character varying(2000),\n    job_pos_id bigint,\n    email character varying(2000),\n    birthday timestamp without time zone,\n    phone character varying(100),\n    skype character varying(1024),\n    created_emp_id bigint NOT NULL,\n    last_modified_user_id bigint NOT NULL,\n    last_modified_emp_id bigint NOT NULL,\n    last_modified_date timestamp without time zone NOT NULL,\n    is_system smallint,\n    time_zone bigint,\n    sys_image bigint,\n    is_locked smallint,\n    workday_schedule_id bigint,\n    email_confirmed smallint,\n    phone_confirmed smallint,\n    ban_send_notifications smallint,\n    city_id bigint,\n    sex_id bigint,\n    locale_id bigint,\n    sur_name__ru character varying(2000),\n    sur_name__en character varying(2000),\n    first_name__ru character varying(2000),\n    first_name__en character varying(2000),\n    second_name__ru character varying(2000),\n    second_name__en character varying(2000),\n    ps_office bigint,\n    adress_ad character varying(2000),\n    pers_emp_number character varying(2000),\n    inner_emp_phone character varying(2000),\n    pers_opt_dmm_link bigint\n);",
+    "description": "Сотрудник",
+    "column_comments": {
+      "id": "Код",
+      "name": "Name",
+      "type_id": "Тип объекта",
+      "org_id": "Подразделение",
+      "status": "Status",
+      "create_date": "Create date",
+      "user_id": "Пользователь",
+      "emp_org_id": "Office of the employee",
+      "name__en": "Name",
+      "name__ru": "Name",
+      "first_name": "Name",
+      "second_name": "Middle name",
+      "sur_name": "Family name",
+      "job_pos_id": "Position",
+      "email": "E-MAIL",
+      "birthday": "Birthday",
+      "phone": "Phone",
+      "skype": "Skype",
+      "created_emp_id": "Сотрудник",
+      "last_modified_user_id": "Пользователь",
+      "last_modified_emp_id": "Сотрудник",
+      "last_modified_date": "Last modified date",
+      "is_system": "System object",
+      "time_zone": "Time zone",
+      "sys_image": "Photo",
+      "is_locked": "Lock a staff member",
+      "workday_schedule_id": "Working hours",
+      "email_confirmed": "EMAIL confirmed",
+      "phone_confirmed": "Phone number confirmed",
+      "ban_send_notifications": "Do not send notifications to email",
+      "city_id": "Locality",
+      "sex_id": "Sex",
+      "locale_id": "Locale",
+      "sur_name__ru": "Family name",
+      "sur_name__en": "Family name",
+      "first_name__ru": "Name",
+      "first_name__en": "Name",
+      "second_name__ru": "Middle name",
+      "second_name__en": "Middle name",
+      "ps_office": "ОФИС ПСБ",
+      "adress_ad": "Расположение объекта в AD",
+      "pers_emp_number": "Табельный номер сотрудника",
+      "inner_emp_phone": "Внутренний номер сотрудника",
+      "pers_opt_dmm_link": "Персональная настройка модуля обновлений"
+    },
+    "foreign_keys": [
+      {
+        "column": "sys_image",
+        "references_table": "fs_file",
+        "references_column": "id"
+      },
+      {
+        "column": "ps_office",
+        "references_table": "offices_psb",
+        "references_column": "id"
+      }
+    ]
+  },
+  "sys_company": {
+    "create_table_sql": "CREATE TABLE public.sys_company (\n    id bigint NOT NULL,\n    name character varying(2000) NOT NULL,\n    short_name character varying(2000),\n    inn character varying(20),\n    type_id bigint NOT NULL,\n    org_id bigint NOT NULL,\n    status smallint NOT NULL,\n    create_date timestamp without time zone NOT NULL,\n    user_id bigint NOT NULL,\n    name__en character varying(2000),\n    name__ru character varying(2000),\n    attr_email character varying(2000),\n    attr_web_site character varying(2000),\n    created_emp_id bigint NOT NULL,\n    last_modified_user_id bigint NOT NULL,\n    last_modified_emp_id bigint NOT NULL,\n    last_modified_date timestamp without time zone NOT NULL,\n    is_system smallint,\n    attr_reg_country character varying(2000),\n    contact_phone character varying(2000),\n    main_okved bigint,\n    business_segment bigint,\n    comp_reg_date timestamp(6) without time zone,\n    group_company_link bigint,\n    company_record_date timestamp(6) without time zone,\n    company_registrator character varying(2000),\n    company_tax_authority character varying(2000),\n    crmd_client_id character varying(2000),\n    act_addr_city character varying(2000),\n    act_addr_street character varying(2000),\n    reg_addr_street character varying(2000),\n    reg_addr_city character varying(2000),\n    attr_attr_abs character varying(2000),\n    tax_authority_reg character varying(2000),\n    tax_authority_account character varying(2000),\n    customer_type_id bigint,\n    sign_of_sme smallint,\n    date_of_registration timestamp(6) without time zone,\n    newly_founded smallint,\n    offices_psb_id bigint,\n    sign_of_bankruptcy smallint,\n    stage_of_bankruptcy bigint,\n    granting_consent smallint,\n    date_of_consent timestamp(6) without time zone,\n    fo_okved bigint,\n    busines_segment_id bigint,\n    d_storage_balance_txt character varying(2000),\n    d_storage_finrep_txt character varying(2000),\n    is_rko smallint,\n    afina_segment_id bigint,\n    neg_comment character varying(2000),\n    neg_status smallint,\n    attr_launch_neg_etl smallint\n);",
+    "description": "Компания/контрагент",
+    "column_comments": {
+      "id": "Код",
+      "name": "Name",
+      "short_name": "Short name",
+      "inn": "TIN",
+      "type_id": "Тип объекта",
+      "org_id": "Подразделение",
+      "status": "Status",
+      "create_date": "Create date",
+      "user_id": "Пользователь",
+      "name__en": "Name",
+      "name__ru": "Name",
+      "attr_email": "Email",
+      "attr_web_site": "Website",
+      "created_emp_id": "Сотрудник",
+      "last_modified_user_id": "Пользователь",
+      "last_modified_emp_id": "Сотрудник",
+      "last_modified_date": "Last modified date",
+      "is_system": "System object",
+      "attr_reg_country": "Адрес регистрации: страна",
+      "contact_phone": "Phone",
+      "main_okved": "Basic OKVED code",
+      "business_segment": "Business segment",
+      "comp_reg_date": "Registration date",
+      "group_company_link": "Group of companies",
+      "company_record_date": "Tax registration date",
+      "company_registrator": "Registrar",
+      "company_tax_authority": "Tax authority",
+      "crmd_client_id": "Код контрагента CRMD",
+      "act_addr_city": "Фактический адрес: город",
+      "act_addr_street": "Фактический адрес: улица",
+      "reg_addr_street": "Адрес регистрации: улица",
+      "reg_addr_city": "Адрес регистрации: город",
+      "attr_attr_abs": "Идентификатор АБС",
+      "tax_authority_reg": "Налоговый орган",
+      "tax_authority_account": "Налоговый орган",
+      "customer_type_id": "Тип клиента",
+      "sign_of_sme": "Признак МСП",
+      "date_of_registration": "_Дата регистрации ЕГРЮЛ",
+      "newly_founded": "Вновь созданное?",
+      "offices_psb_id": "Офисы",
+      "sign_of_bankruptcy": "Признак банкротства",
+      "stage_of_bankruptcy": "Стадия банкротства",
+      "granting_consent": "Согласие предоставлено",
+      "date_of_consent": "Дата согласия",
+      "fo_okved": "ОКВЭД из отчётности",
+      "busines_segment_id": "Сегмент по размеру бизнеса",
+      "d_storage_balance_txt": "Атрибут для хранения дат (виджет баланса)",
+      "d_storage_finrep_txt": "Атрибут для хранения дат (виджет ОФР)",
+      "is_rko": "Наличие открытого расчетного счета",
+      "afina_segment_id": "Сегмент по размеру бизнеса (Н. Афина)",
+      "neg_comment": "Комментарий к признаку негатива",
+      "neg_status": "Статус признака негатива",
+      "attr_launch_neg_etl": "Признак запуска интеграции по негативу"
+    },
+    "foreign_keys": [
+      {
+        "column": "business_segment",
+        "references_table": "business_segment",
+        "references_column": "id"
+      },
+      {
+        "column": "offices_psb_id",
+        "references_table": "offices_psb",
+        "references_column": "id"
+      }
+    ]
+  },
+  "sys_obj_resp": {
+    "create_table_sql": "CREATE TABLE public.sys_obj_resp (\n    id bigint NOT NULL,\n    name__en character varying(2000),\n    name__ru character varying(2000),\n    name character varying(2000) NOT NULL,\n    create_date timestamp without time zone NOT NULL,\n    type_id bigint NOT NULL,\n    status smallint NOT NULL,\n    org_id bigint NOT NULL,\n    user_id bigint NOT NULL,\n    afe_emp_id bigint NOT NULL,\n    afe_obj_id bigint NOT NULL,\n    afe_subject_id bigint NOT NULL,\n    created_emp_id bigint NOT NULL,\n    last_modified_user_id bigint NOT NULL,\n    last_modified_emp_id bigint NOT NULL,\n    last_modified_date timestamp without time zone NOT NULL,\n    is_system smallint,\n    afe_ext_obj_id bigint,\n    afe_resp_comment text,\n    afe_short_name character varying(2000),\n    afe_start_stamp timestamp without time zone,\n    afe_end_stamp timestamp without time zone,\n    afe_current_resp bigint,\n    afe_manage_emp bigint\n);",
+    "description": "Ответственные сотрудники",
+    "column_comments": {
+      "id": "Сист. Код",
+      "name__en": "Сист. Наименование",
+      "name__ru": "Сист. Наименование",
+      "name": "Сист. Наименование",
+      "create_date": "Сист. Дата создания",
+      "type_id": "Сист. Тип объекта",
+      "status": "Сист. Статус",
+      "org_id": "Сист. Подразделение",
+      "user_id": "Сист. Пользователь",
+      "afe_emp_id": "Сист. Сотрудник",
+      "afe_obj_id": "Объект мониторинга",
+      "afe_subject_id": "Сист. Субъект безопасности",
+      "created_emp_id": "Сист. Сотрудник",
+      "last_modified_user_id": "Сист. Пользователь",
+      "last_modified_emp_id": "Сист. Сотрудник",
+      "last_modified_date": "Сист. Дата последнего изменения",
+      "is_system": "Сист. Системный объект",
+      "afe_ext_obj_id": "Дополнительный объект",
+      "afe_resp_comment": "Комментарий",
+      "afe_short_name": "Краткое наименование"
+    },
+    "foreign_keys": [
+      {
+        "column": "afe_emp_id",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "afe_manage_emp",
+        "references_table": "sys_employee",
+        "references_column": "id"
+      },
+      {
+        "column": "afe_ext_obj_id",
+        "references_table": "sys_object",
+        "references_column": "id"
+      },
+      {
+        "column": "afe_obj_id",
+        "references_table": "sys_object",
+        "references_column": "id"
+      },
+      {
+        "column": "afe_current_resp",
+        "references_table": "sys_obj_resp",
+        "references_column": "id"
+      }
+    ]
+  },
+  "sys_state": {
+    "create_table_sql": "CREATE TABLE public.sys_state (\n    id bigint NOT NULL,\n    name character varying(2000) NOT NULL,\n    create_date timestamp without time zone NOT NULL,\n    type_id bigint NOT NULL,\n    status smallint NOT NULL,\n    org_id bigint NOT NULL,\n    user_id bigint NOT NULL,\n    afr_ident character varying(2000) NOT NULL,\n    afr_ord bigint NOT NULL,\n    afr_note character varying(2000),\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    created_emp_id bigint NOT NULL,\n    last_modified_user_id bigint NOT NULL,\n    last_modified_emp_id bigint NOT NULL,\n    last_modified_date timestamp without time zone NOT NULL,\n    is_system smallint\n);",
+    "description": "Состояние объекта",
+    "column_comments": {
+      "id": "Сист. Код",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "afr_ident": "Identifier",
+      "afr_ord": "Order",
+      "afr_note": "Description",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "created_emp_id": "Сотрудник",
+      "last_modified_user_id": "Пользователь",
+      "last_modified_emp_id": "Сотрудник",
+      "last_modified_date": "Last modified date",
+      "is_system": "System object"
+    },
+    "foreign_keys": []
+  },
+  "tbs_type": {
+    "create_table_sql": "CREATE TABLE public.tbs_type (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    ord bigint,\n    identif character varying(2000),\n    acc_subconto_type_id bigint,\n    name__en character varying(2000)\n);",
+    "description": "Тип ОСВ",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "ord": "Порядок",
+      "identif": "Идентификатор",
+      "acc_subconto_type_id": "Сокращенное название",
+      "name__en": "Name"
+    },
+    "foreign_keys": []
+  },
+  "type_loan": {
+    "create_table_sql": "CREATE TABLE public.type_loan (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    prod_type_upp_lev_id bigint,\n    ord bigint,\n    ident character varying(2000),\n    rel_submis_form smallint,\n    seq_prod_number bigint,\n    name__en character varying(2000)\n);",
+    "description": "Справочник: вид кредита",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "prod_type_upp_lev_id": "Не использовать! Форма продукта_верхнеуровневая",
+      "ord": "Порядок",
+      "ident": "Сист. Идентификатор",
+      "rel_submis_form": "Актуальность формы предоставления",
+      "seq_prod_number": "Порядковый номер (для нумерации субпродуктов)",
+      "name__en": "Name"
+    },
+    "foreign_keys": []
+  },
+  "yaig_client_gen_agr": {
+    "create_table_sql": "CREATE TABLE public.yaig_client_gen_agr (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    yaig_client_princip_id bigint,\n    yaig_gen_agr_id bigint,\n    yaig_gen_agr_sum numeric,\n    yaig_date_close timestamp(6) without time zone,\n    yaig_date_open timestamp(6) without time zone,\n    yaig_gen_agr_num character varying(2000),\n    yaig_unused_limit numeric,\n    yaig_gen_agr_type_id bigint,\n    yaig_cur_id bigint,\n    yaig_client_link bigint,\n    yaig_base_code bigint\n);",
+    "description": "УАиГ. Генеральное соглашение клиента",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "yaig_client_princip_id": "УАиГ клиент",
+      "yaig_gen_agr_id": "ID генерального соглашения",
+      "yaig_gen_agr_sum": "Сумма генерального соглашения",
+      "yaig_date_close": "Дата истечения",
+      "yaig_date_open": "Дата подписания",
+      "yaig_gen_agr_num": "Номер генерального соглашения",
+      "yaig_unused_limit": "Сумма неиспользованного лимита",
+      "yaig_gen_agr_type_id": "Тип генерального соглашения",
+      "yaig_cur_id": "Валюта генерального соглашения",
+      "yaig_client_link": "Ссылка на клиента",
+      "yaig_base_code": "Код базы НА"
+    },
+    "foreign_keys": [
+      {
+        "column": "yaig_client_link",
+        "references_table": "sys_company",
+        "references_column": "id"
+      }
+    ]
+  },
+  "yaig_client_guarantee": {
+    "create_table_sql": "CREATE TABLE public.yaig_client_guarantee (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    yaig_client_princip_id bigint,\n    yaig_product_id bigint,\n    yaig_guar_summ numeric,\n    yaig_manager_name character varying(2000),\n    yaig_risk_group bigint,\n    yaig_manager_code bigint,\n    yaig_quality_categ bigint,\n    yaig_guar_type_id bigint,\n    yaig_prnt_gen_agr_id bigint,\n    yaig_cur_id bigint,\n    yaig_client_link bigint,\n    yaig_date_close timestamp(6) without time zone,\n    yaig_date_open timestamp(6) without time zone,\n    yaig_guar_num character varying(2000),\n    yaig_guarantee_id bigint,\n    yaig_sum_commis numeric,\n    yaig_manager_code_str character varying(2000),\n    yaig_guar_disclosure timestamp(6) without time zone,\n    yaig_guar_payments_bool smallint,\n    yaig_guar_payment bigint,\n    contr_group_id bigint,\n    aggr_protocol_num character varying(2000),\n    appl_documentum_num character varying(2000),\n    yaig_base_code bigint\n);",
+    "description": "УАиГ. Гарантия клиента",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "yaig_client_princip_id": "УАиГ клиент",
+      "yaig_product_id": "Продукт",
+      "yaig_guar_summ": "Сумма гарантии",
+      "yaig_manager_name": "Менеджер клиента",
+      "yaig_risk_group": "Группа риска",
+      "yaig_manager_code": "Табельный номер клиентского менеджера",
+      "yaig_quality_categ": "Категория качества",
+      "yaig_guar_type_id": "Тип гарантии",
+      "yaig_prnt_gen_agr_id": "Генеральное соглашение",
+      "yaig_cur_id": "Валюта гарантии",
+      "yaig_client_link": "Ссылка на клиента",
+      "yaig_date_close": "Дата истечения гарантии",
+      "yaig_date_open": "Дата открытия гарантии",
+      "yaig_guar_num": "Номер гарантии",
+      "yaig_guarantee_id": "ID гарантии",
+      "yaig_sum_commis": "Сумма комиссий",
+      "yaig_manager_code_str": "Табельный номер клиентского менеджера (Строка)",
+      "yaig_guar_disclosure": "Дата раскрытия гарантии",
+      "yaig_guar_payments_bool": "Признак раскрытия гарантии",
+      "yaig_guar_payment": "(Число) Признак раскрытия гарантии",
+      "contr_group_id": "Контрактная группа",
+      "aggr_protocol_num": "Номер протокола",
+      "appl_documentum_num": "Номер заявки в Documentum",
+      "yaig_base_code": "Код базы НА"
+    },
+    "foreign_keys": [
+      {
+        "column": "yaig_prnt_gen_agr_id",
+        "references_table": "yaig_client_gen_agr",
+        "references_column": "id"
+      },
+      {
+        "column": "yaig_client_link",
+        "references_table": "sys_company",
+        "references_column": "id"
+      },
+      {
+        "column": "yaig_product_id",
+        "references_table": "yaig_product_dict",
+        "references_column": "id"
+      }
+    ]
+  },
+  "yaig_product_dict": {
+    "create_table_sql": "CREATE TABLE public.yaig_product_dict (\n    id bigint NOT NULL,\n    name__ru character varying(2000),\n    name__en character varying(2000),\n    name character varying(2000),\n    create_date timestamp without time zone,\n    type_id bigint,\n    status smallint,\n    org_id bigint,\n    user_id bigint,\n    last_modified_date timestamp without time zone,\n    last_modified_user_id bigint,\n    created_emp_id bigint,\n    last_modified_emp_id bigint,\n    is_system smallint,\n    ident character varying(2000)\n);",
+    "description": "Справочник: УАиГ продукт",
+    "column_comments": {
+      "id": "ID",
+      "name__ru": "Name",
+      "name__en": "Name",
+      "name": "Name",
+      "create_date": "Create date",
+      "type_id": "Тип объекта",
+      "status": "Status",
+      "org_id": "Подразделение",
+      "user_id": "Пользователь",
+      "last_modified_date": "Last modified date",
+      "last_modified_user_id": "Пользователь",
+      "created_emp_id": "Сотрудник",
+      "last_modified_emp_id": "Сотрудник",
+      "is_system": "System object",
+      "ident": "Сист. Идентификатор"
+    },
+    "foreign_keys": []
+  }
+}
