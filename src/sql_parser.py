@@ -1,7 +1,7 @@
 import re
 import json
 
-from constants import PATTERN_MAP
+from constants import BASEDIR, PATTERN_MAP
 
 def parse_sql_complete(sql_file_path):
     """Извлекает COMMENT ON TABLE, COMMENT ON COLUMN и FOREIGN KEY из SQL-дампа"""
@@ -54,7 +54,7 @@ def parse_sql_complete(sql_file_path):
     
     return tables
 
-tables = parse_sql_complete("scripts/data_model.sql")
+tables = parse_sql_complete(BASEDIR / "scripts/data_model.sql")
 
-with open("docs/tables_complete.json", "w", encoding="utf-8") as f:
+with open(BASEDIR / "docs/tables_complete.json", "w", encoding="utf-8") as f:
     json.dump(tables, f, ensure_ascii=False, indent=2)

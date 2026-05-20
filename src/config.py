@@ -33,7 +33,7 @@ class PostgresConfig(CustomBaseSettings):
 
 
 class OllamaModelConfig(CustomBaseSettings):
-    MODEL_NAME: str = "hf.co/jesse-r-s-hines/sqlcoder-7b-2-Q4_K_M-GGUF"
+    MODEL_NAME: str = "qwen2.5-coder:7b"
     MODEL_HOST: str = "localhost"
     MODEL_PORT: str = "11434"
 

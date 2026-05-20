@@ -1,6 +1,10 @@
 from typing import Any
 
+from ollama import Client
 from auditor.schemas import AuditResult
+from config import conf
+
+ollama_client = Client(host=f"{conf.ollama_conf.model_dsn}")
 
 
 class SQLGenerator:
@@ -12,6 +16,9 @@ class SQLGenerator:
         self.db_schema = db_schema or {}
         self.kwargs = kwargs
 
+        self.ollama_client = Client(host=f"{conf.ollama_conf.model_dsn}")
+        self.model_name = conf.ollama_conf.MODEL_NAME
+
     def generate(
         self,
         task_description: str,
@@ -20,4 +27,21 @@ class SQLGenerator:
         iteration: int = 1,
     ) -> str:
         """Input: task_description/sql_history/audit_feedback/iteration. Output: SQL string."""
-        raise NotImplementedError("Implement SQLGenerator.generate()")
+        
+        prompt = f"""### Task
+            Generate a SQL query to answer [QUESTION]{task_description}[/QUESTION]
+
+            ### Database Schema
+            The query will run on a database with the following schema:
+            {self.db_schema}
+
+            ### Answer
+            Given the database schema, here is the SQL query that answers [QUESTION]{task_description}[/QUESTION]
+            [SQL]"""
+
+        response = ollama_client.chat(
+            model=self.model_name,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        
+        return response["message"]["content"]

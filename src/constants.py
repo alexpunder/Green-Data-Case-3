@@ -1,3 +1,8 @@
+from pathlib import Path
+
+
+BASEDIR = Path(__file__).resolve().parent.parent
+
 PATTERN_MAP = {
     "create_ddl": r"(CREATE TABLE (?:public\.)?(\w+)\s*\(.*?\);)",
     "comment_on_table": r"COMMENT ON TABLE (?:public\.)?(\w+) IS '([^']+)'",
@@ -7,3 +12,7 @@ PATTERN_MAP = {
         r"REFERENCES (?:public\.)?(\w+)\(([^)]+)\)"
     ),
 }
+
+EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-large"
+
+VECTOR_DB_COLLECTION_NAME = "case_3_collection"

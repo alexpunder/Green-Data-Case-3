@@ -7,6 +7,7 @@ from auditor.schemas import AuditResult
 from auditor.auditor import SecurityAuditor
 from generator.generator import SQLGenerator
 
+from vector_db import search_tables
 # from helpers import result_formatter
 
 
@@ -66,10 +67,9 @@ class SQLSecuritySystem:
             current_sql = self.generator.generate(
                 task_description=task_description,
                 iteration=iteration,
-                previous_sql=current_sql,
                 audit_feedback=audit_feedback,
             )
-
+            
             audit_result = self.auditor.audit(
                 sql_query=current_sql,
                 db_schema=self.generator.db_schema,
@@ -151,22 +151,32 @@ if __name__ == "__main__":
         st.session_state.messages.append({"role": "user", "content": prompt})
         
         # TODO: реализовать получение информации о связях в БД
-        schema = ...
+        schema = search_tables(query=prompt)
+        
+        print(f"{schema=}")
+
+        ddl_parts = []
+        for table in schema:
+            ddl_parts.append(table["create_table_sql"])
+            if table.get("description"):
+                ddl_parts.append(f"-- {table["description"]}")
+        
+        schema_ddl = "\n\n".join(ddl_parts)
 
         # TODO
         # 1. Получение prompt для передачи в модель
         # 2. Здесь происходит переход на Генератор-Аудитор
         # 3. Возвращается одобренный SQL-запрос
 
-        # result = run_sql_security_pipeline(
-        #     task_description=prompt,
-        #     db_schema=schema,
-        # )
+        result = run_sql_security_pipeline(
+            task_description=prompt,
+            db_schema=schema_ddl,
+        )
 
         # TODO: реализовать форматтер из датакласса в текст
         # res_to_text: str = result_formatter(result)
         
-        res_to_text = f"Echo: {prompt}"
+        res_to_text = f"Ответ: {result}"
         with st.chat_message("assistant"):
             st.markdown(res_to_text)
 
