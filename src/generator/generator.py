@@ -1,10 +1,9 @@
+import re
 from typing import Any
 
 from ollama import Client
 from auditor.schemas import AuditResult
 from config import conf
-
-ollama_client = Client(host=f"{conf.ollama_conf.model_dsn}")
 
 
 class SQLGenerator:
@@ -16,32 +15,48 @@ class SQLGenerator:
         self.db_schema = db_schema or {}
         self.kwargs = kwargs
 
-        self.ollama_client = Client(host=f"{conf.ollama_conf.model_dsn}")
-        self.model_name = conf.ollama_conf.MODEL_NAME
-
     def generate(
         self,
         task_description: str,
-        sql_history: list[str] | None = None,
+        sql_history: list[str],
         audit_feedback: AuditResult | None = None,
         iteration: int = 1,
     ) -> str:
         """Input: task_description/sql_history/audit_feedback/iteration. Output: SQL string."""
         
-        prompt = f"""### Task
-            Generate a SQL query to answer [QUESTION]{task_description}[/QUESTION]
+        ollama_client = Client(host=f"{conf.ollama_conf.model_dsn}")
+        
+        prompt = f"""Ты — генератор SQL запросов для PostgreSQL.
 
-            ### Database Schema
-            The query will run on a database with the following schema:
+            Схема базы данных:
             {self.db_schema}
 
-            ### Answer
-            Given the database schema, here is the SQL query that answers [QUESTION]{task_description}[/QUESTION]
-            [SQL]"""
+            {f"Замечания аудитора (исправь их): {audit_feedback}" if audit_feedback else ""}
+
+            Задача: {task_description}
+
+            Правила:
+            1. Используй только таблицы и колонки из схемы выше
+            2. Не выдумывай несуществующие таблицы
+            3. Возвращай ТОЛЬКО SQL запрос, без пояснений
+            4. Завершай запрос точкой с запятой
+            5. Не используй markdown-разметку (```sql)
+
+            SQL запрос:"""
 
         response = ollama_client.chat(
-            model=self.model_name,
-            messages=[{"role": "user", "content": prompt}]
+            model=conf.ollama_conf.MODEL_NAME,
+            messages=[{"role": "user", "content": prompt}],
+            options={
+                "temperature": 0,
+                "num_predict": 512,
+            },
         )
         
-        return response["message"]["content"]
+        content = response["message"]["content"].strip()
+        content = re.sub(r"^```sql\n?", "", content)
+        content = re.sub(r"\n?```$", "", content)
+        
+        sql_history.append((iteration, content))
+
+        return content

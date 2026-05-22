@@ -4,26 +4,39 @@ from dataclasses import dataclass
 @dataclass
 class Vulnerability:
     """Найденная уязвимость."""
+    vuln_class: str
+    risk_score: float
+    description: str
+    recommendation: str
 
-    vuln_class: str  # Ключ из справочника VULN_CLASSES
-    risk_score: float  # Оценка риска от 0.0 до 10.0
-    description: str  # Человекочитаемое пояснение
-    recommendation: str  # Конкретный совет по исправлению
-    line_hint: int = (
-        ""  # Необязательно: позиция в исходном SQL, где найдена проблема
-    )
+    @property
+    def to_dict(self):
+        return {
+            "vuln_class": self.vuln_class,
+            "risk_score": self.risk_score,
+            "description": self.description,
+            "recommendation": self.recommendation,
+        }
 
 
 @dataclass
 class AuditResult:
     """Результат проверки SQL."""
+    approved: bool
+    feedback: str
+    vulnerabilities: list[Vulnerability]
+    overall_risk_score: float
+    summary: str
 
-    approved: bool  # True — запрос прошёл проверку
-    feedback: str  # Вердикт для генератора
-    vulnerabilities: list[
-        Vulnerability
-    ]  # Список найденных уязвимостей (пусто если approved=True)
-    overall_risk_score: (
-        float  # Итоговый риск: 0.0 (безопасно) … 10.0 (критично)
-    )
-    summary: str  # Краткий вердикт для пользователя
+    @property
+    def to_dict(self):
+        return {
+            "approved": self.approved,
+            "feedback": self.feedback,
+            "vulnerabilities": [
+                vulnerability.to_dict
+                for vulnerability in self.vulnerabilities
+            ],
+            "overall_risk_score": self.overall_risk_score,
+            "summary": self.summary,
+        }

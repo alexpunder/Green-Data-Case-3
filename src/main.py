@@ -1,6 +1,7 @@
 from datetime import datetime
 from dataclasses import dataclass, field
 from typing import Any
+from pprint import pprint
 
 import streamlit as st
 from auditor.schemas import AuditResult
@@ -8,7 +9,6 @@ from auditor.auditor import SecurityAuditor
 from generator.generator import SQLGenerator
 
 from vector_db import search_tables
-# from helpers import result_formatter
 
 
 @dataclass
@@ -22,20 +22,41 @@ class IterationLog:
     revision_notes: str = (
         ""  # Что именно было исправлено по сравнению с предыдущей итерацией
     )
+    
+    @property
+    def to_dict(self):
+        return {
+            "timestamp": self.timestamp,
+            "iteration": self.iteration,
+            "sql_query": self.sql_query,
+            "audit_result": self.audit_result.to_dict,
+            "revision_notes": self.revision_notes,
+        }
 
 
 @dataclass
 class SystemResult:
     """Финальный результат системы."""
+    final_sql: str
+    approved: bool
+    iterations_used: int
+    iterations_log: list[IterationLog]
+    audit_log: str
+    metadata: dict[str, Any] = field(default_factory=dict)
 
-    final_sql: str  # Итоговый SQL-запрос
-    approved: bool  # Одобрен ли финальный запрос
-    iterations_used: int  # Сколько итераций потребовалось
-    iterations_log: list[IterationLog]  # Полный лог всех итераций
-    audit_log: str  # Человекочитаемый отчёт для аналитика
-    metadata: dict[str, Any] = field(
-        default_factory=dict
-    )  # Любые доп. данные команды
+    @property
+    def to_dict(self):
+        return {
+            "final_sql": self.final_sql,
+            "approved": self.approved,
+            "iterations_used": self.iterations_used,
+            "iterations_log": [
+                iteration_log.to_dict
+                for iteration_log in self.iterations_log
+            ],
+            "audit_log": self.audit_log,
+            "metadata": self.metadata,
+        }
 
 
 class SQLSecuritySystem:
@@ -54,25 +75,76 @@ class SQLSecuritySystem:
         self.max_iterations = max_iterations
 
     def _build_audit_log(self, iterations_log: list[IterationLog]) -> str:
-        # TODO: реализовать логирование аудита
-        raise NotImplementedError
+        """Формирует человекочитаемый лог аудита"""
+        lines = []
+        lines.append("=" * 40)
+        lines.append("📋 АУДИТ БЕЗОПАСНОСТИ SQL")
+        lines.append("=" * 40)
+        lines.append(f"Всего итераций: {len(iterations_log)}")
+        lines.append("")
+        
+        for log in iterations_log:
+            lines.append(f"\n{'─' * 40}")
+            lines.append(f"🔁 ИТЕРАЦИЯ {log.iteration}")
+            lines.append(f"{'─' * 40}")
+            
+            sql_preview = log.sql_query[:300]
+            if len(log.sql_query) > 300:
+                sql_preview += "..."
+            lines.append(f"\n📝 SQL запрос:\n{sql_preview}")
+            
+            audit = log.audit_result
+            status = "✅ ОДОБРЕНО" if audit.approved else "❌ ОТКЛОНЕНО"
+            lines.append(f"\n🔒 Результат: {status}")
+            lines.append(f"📊 Риск: {audit.overall_risk_score:.1f}/10.0")
+            
+            if audit.summary:
+                lines.append(f"📌 Вердикт: {audit.summary}")
+            
+            if audit.vulnerabilities:
+                lines.append("\n⚠️ НАЙДЕННЫЕ ПРОБЛЕМЫ:")
+                for v in audit.vulnerabilities:
+                    lines.append(f"  • {v.vuln_class} (риск: {v.risk_score}/10)")
+                    lines.append(f"    {v.description[:150]}")
+                    if v.recommendation:
+                        lines.append(f"    💡 {v.recommendation[:150]}")
+            
+            if log.revision_notes and log.revision_notes != "Первая генерация":
+                lines.append(f"\n📤 Feedback генератору: {log.revision_notes}")
+            
+            lines.append("")
+        
+        lines.append("=" * 40)
+        final_approved = iterations_log[-1].audit_result.approved if iterations_log else False
+        
+        if final_approved:
+            lines.append("✅ ИТОГОВЫЙ РЕЗУЛЬТАТ: SQL ОДОБРЕН")
+            lines.append(f"   Финальный SQL:\n{iterations_log[-1].sql_query}")
+        else:
+            lines.append("❌ ИТОГОВЫЙ РЕЗУЛЬТАТ: SQL НЕ ОДОБРЕН")
+            lines.append(f"   Причина: {iterations_log[-1].audit_result.summary if iterations_log else 'Нет данных'}")
+        
+        lines.append("=" * 40)
+        
+        return "\n".join(lines)
 
     def run(self, task_description: str) -> SystemResult:
         """Input: task_description. Output: SystemResult with final SQL, approval flag and iteration log."""
         iterations_log: list[IterationLog] = []
         current_sql: str | None = None
         audit_feedback: str | None = None
+        sql_history: list[str] = []
 
         for iteration in range(1, self.max_iterations + 1):
             current_sql = self.generator.generate(
                 task_description=task_description,
+                sql_history=sql_history,
                 iteration=iteration,
                 audit_feedback=audit_feedback,
             )
             
             audit_result = self.auditor.audit(
                 sql_query=current_sql,
-                db_schema=self.generator.db_schema,
             )
 
             iter_log = IterationLog(
@@ -129,7 +201,8 @@ def run_sql_security_pipeline(
     generator = SQLGenerator(
         db_schema=db_schema or {}, **(generator_kwargs or {})
     )
-    auditor = SecurityAuditor(**(auditor_kwargs or {}))
+    auditor = SecurityAuditor(
+        db_schema=db_schema or {}, **(auditor_kwargs or {}))
     system = SQLSecuritySystem(
         generator=generator, auditor=auditor, max_iterations=max_iterations
     )
@@ -150,11 +223,8 @@ if __name__ == "__main__":
         st.chat_message("user").markdown(prompt)
         st.session_state.messages.append({"role": "user", "content": prompt})
         
-        # TODO: реализовать получение информации о связях в БД
         schema = search_tables(query=prompt)
         
-        print(f"{schema=}")
-
         ddl_parts = []
         for table in schema:
             ddl_parts.append(table["create_table_sql"])
@@ -163,20 +233,16 @@ if __name__ == "__main__":
         
         schema_ddl = "\n\n".join(ddl_parts)
 
-        # TODO
-        # 1. Получение prompt для передачи в модель
-        # 2. Здесь происходит переход на Генератор-Аудитор
-        # 3. Возвращается одобренный SQL-запрос
-
         result = run_sql_security_pipeline(
             task_description=prompt,
             db_schema=schema_ddl,
         )
-
-        # TODO: реализовать форматтер из датакласса в текст
-        # res_to_text: str = result_formatter(result)
         
-        res_to_text = f"Ответ: {result}"
+        res_to_text = (
+            f"{"Одобрен\n" if result.approved else "Внимание! Скрипт не прошел проверку аудитором\n"}"
+            f"Полученный SQL-скрипт:\n{result.final_sql}\n\n"
+            f"\nЧеловекочитаемый лог итераций:\n{result.audit_log}\n"
+        )
         with st.chat_message("assistant"):
             st.markdown(res_to_text)
 
