@@ -23,9 +23,9 @@ class SQLGenerator:
         iteration: int = 1,
     ) -> str:
         """Input: task_description/sql_history/audit_feedback/iteration. Output: SQL string."""
-        
+
         ollama_client = Client(host=f"{conf.ollama_conf.model_dsn}")
-        
+
         prompt = f"""Ты — генератор SQL запросов для PostgreSQL.
 
             Схема базы данных:
@@ -52,11 +52,11 @@ class SQLGenerator:
                 "num_predict": 512,
             },
         )
-        
+
         content = response["message"]["content"].strip()
         content = re.sub(r"^```sql\n?", "", content)
         content = re.sub(r"\n?```$", "", content)
-        
+
         sql_history.append((iteration, content))
 
         return content
