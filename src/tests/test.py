@@ -1,8 +1,8 @@
 import json
 from typing import Any
 
-from main import SQLparser, run_sql_security_pipeline
 from constants import BASEDIR
+from main import SQLparser, run_sql_security_pipeline
 from vector_db import search_tables
 
 sql_parser = SQLparser()
@@ -72,7 +72,7 @@ total_accuracy = (sum(safe_examples_res) + sum(vuln_examples_res)) / (
 
 print("РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ")
 print("=" * 50)
-print(f"  Accuracy: {safe_accuracy*100:.2f}%")
-print(f"  Accuracy: {vuln_accuracy*100:.2f}%")
-print(f"Total Execution Accuracy: {total_accuracy*100:.2f}%")
+print(f"  Accuracy: {safe_accuracy * 100:.2f}%")
+print(f"  Accuracy: {vuln_accuracy * 100:.2f}%")
+print(f"Total Execution Accuracy: {total_accuracy * 100:.2f}%")
 print("=" * 50)

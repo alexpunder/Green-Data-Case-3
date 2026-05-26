@@ -2,8 +2,9 @@ import json
 import re
 from typing import Any
 
-from auditor.schemas import AuditResult, Vulnerability
 from ollama import Client
+
+from auditor.schemas import AuditResult, Vulnerability
 from config import conf
 
 

@@ -1,13 +1,13 @@
-from datetime import datetime
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Any
 
 import streamlit as st
-from pglast import parse_sql
-from auditor.schemas import AuditResult
-from auditor.auditor import SecurityAuditor
-from generator.generator import SQLGenerator
 
+from auditor.auditor import SecurityAuditor
+from auditor.schemas import AuditResult
+from generator.generator import SQLGenerator
+from sql_parser import sql_parser
 from vector_db import search_tables
 
 
@@ -57,29 +57,6 @@ class SystemResult:
         }
 
 
-class SQLparser:
-    def get_ast_root(self, sql: str):
-        """Разбирает SQL и возвращает корневой узел AST."""
-        if not sql:
-            return None
-
-        try:
-            return parse_sql(sql)[0].stmt
-        except Exception as e:
-            print(f"Ошибка парсинга SQL: {e}")
-            return None
-
-    def compare_sql(self, generated: str, expected: str) -> bool:
-        """Сравнивает два SQL запроса через их AST."""
-        ast_gen = self.get_ast_root(generated)
-        ast_exp = self.get_ast_root(expected)
-
-        if ast_gen is None or ast_exp is None:
-            return generated.strip() == expected.strip()
-
-        return ast_gen == ast_exp
-
-
 class SQLSecuritySystem:
     """Оркестрирует цикл генерация -> аудит -> исправление."""
 
@@ -93,8 +70,8 @@ class SQLSecuritySystem:
     ) -> None:
         self.generator = generator
         self.auditor = auditor
-        self.sql_parser = SQLparser()
         self.max_iterations = max_iterations
+        self.sql_parser = sql_parser
 
     def build_audit_log(self, iterations_log: list[IterationLog]) -> str:
         """Формирует человекочитаемый лог аудита"""

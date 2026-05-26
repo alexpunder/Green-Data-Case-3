@@ -2,7 +2,7 @@ import json
 
 from qdrant_client import QdrantClient, models
 
-from constants import VECTOR_DB_COLLECTION_NAME, EMBEDDING_MODEL_NAME, BASEDIR
+from constants import BASEDIR, EMBEDDING_MODEL_NAME, VECTOR_DB_COLLECTION_NAME
 
 client = QdrantClient(url="http://localhost:6333")
 

@@ -2,6 +2,7 @@ import re
 from typing import Any
 
 from ollama import Client
+
 from auditor.schemas import AuditResult
 from config import conf
 
