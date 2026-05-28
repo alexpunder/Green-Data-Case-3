@@ -36,10 +36,13 @@ class OllamaModelConfig(CustomBaseSettings):
     MODEL_NAME: str = "qwen2.5-coder:7b"
     MODEL_HOST: str = "localhost"
     MODEL_PORT: str = "11434"
+    MODEL_VERSION: str = "v1"
 
     @property
     def model_dsn(self) -> str:
-        return f"http://{self.MODEL_HOST}:{self.MODEL_PORT}"
+        return (
+            f"http://{self.MODEL_HOST}:{self.MODEL_PORT}/{self.MODEL_VERSION}"
+        )
 
 
 class Config(CustomBaseSettings):

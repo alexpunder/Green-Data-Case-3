@@ -1,7 +1,7 @@
 import re
 from typing import Any
 
-from ollama import Client
+from openai import OpenAI
 
 from auditor.schemas import AuditResult
 from config import conf
@@ -22,10 +22,13 @@ class SQLGenerator:
         sql_history: list[str],
         audit_feedback: AuditResult | None = None,
         iteration: int = 1,
-    ) -> str:
+    ) -> tuple[str, int]:
         """Input: task_description/sql_history/audit_feedback/iteration. Output: SQL string."""
 
-        ollama_client = Client(host=f"{conf.ollama_conf.model_dsn}")
+        client = OpenAI(
+            base_url=conf.ollama_conf.model_dsn,
+            api_key="ollama",
+        )
 
         prompt = f"""Ты — генератор SQL запросов для PostgreSQL.
 
@@ -47,19 +50,18 @@ class SQLGenerator:
 
             SQL запрос:"""
 
-        response = ollama_client.chat(
+        response = client.chat.completions.create(
             model=conf.ollama_conf.MODEL_NAME,
             messages=[{"role": "user", "content": prompt}],
-            options={
-                "temperature": 0,
-                "num_predict": 512,
-            },
+            temperature=0.0,
         )
 
-        content = response["message"]["content"].strip()
+        tokens_used = response.usage.total_tokens
+
+        content = response.choices[0].message.content.strip()
         content = re.sub(r"^```sql\n?", "", content)
         content = re.sub(r"\n?```$", "", content)
 
         sql_history.append((iteration, content))
 
-        return content
+        return content, tokens_used
