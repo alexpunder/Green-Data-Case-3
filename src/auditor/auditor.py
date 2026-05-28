@@ -2,7 +2,6 @@ import json
 import re
 from typing import Any
 
-from ollama import Client
 from openai import OpenAI
 
 from auditor.schemas import AuditResult, Vulnerability
@@ -80,11 +79,9 @@ class SecurityAuditor:
     def audit(self, sql_query: str) -> AuditResult:
         """Input: sql_query/db_schema. Output: AuditResult with vulnerabilities, risk and approval."""
 
-        # ollama_client = Client(host=f"{conf.ollama_conf.model_dsn}")
-        
         client = OpenAI(
-            base_url=conf.ollama_conf.model_dsn,  # если используется localhost
-            api_key="ollama"  # не требуется для локального
+            base_url=conf.ollama_conf.model_dsn,
+            api_key="ollama",
         )
 
         prompt = f"""Ты — Security Auditor для SQL-запросов PostgreSQL.

@@ -1,7 +1,6 @@
 import re
 from typing import Any
 
-from ollama import Client
 from openai import OpenAI
 
 from auditor.schemas import AuditResult

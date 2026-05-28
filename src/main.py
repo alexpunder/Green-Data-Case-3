@@ -73,7 +73,12 @@ class SQLSecuritySystem:
         self.max_iterations = max_iterations
         self.sql_parser = sql_parser
 
-    def build_audit_log(self, iterations_log: list[IterationLog], total_tokens: int, timer: float) -> str:
+    def build_audit_log(
+        self,
+        iterations_log: list[IterationLog],
+        total_tokens: int,
+        timer: float,
+    ) -> str:
         """Формирует человекочитаемый лог аудита"""
         lines = []
         lines.append("=" * 40)
@@ -81,9 +86,13 @@ class SQLSecuritySystem:
         lines.append("=" * 40)
         lines.append(f"Всего итераций:         {len(iterations_log)}")
         lines.append(f"Всего токенов:          {total_tokens:,}")
-        lines.append(f"Среднее токенов:        {total_tokens / len(iterations_log):.0f}")
+        lines.append(
+            f"Среднее токенов:        {total_tokens / len(iterations_log):.0f}"
+        )
         lines.append(f"Общее время:            {timer:.2f} сек.")
-        lines.append(f"Среднее время/итерация: {timer / len(iterations_log):.2f} сек.")
+        lines.append(
+            f"Среднее время/итерация: {timer / len(iterations_log):.2f} сек."
+        )
         lines.append("")
 
         for log in iterations_log:
@@ -142,7 +151,7 @@ class SQLSecuritySystem:
     def run(self, task_description: str) -> SystemResult:
         """Input: task_description. Output: SystemResult with final SQL, approval flag and iteration log."""
         start_time = perf_counter()
-        
+
         iterations_log: list[IterationLog] = []
         current_sql: str | None = None
         audit_feedback: str | None = None
@@ -166,9 +175,8 @@ class SQLSecuritySystem:
                 repeat_count += 1
 
                 if repeat_count >= 2:
-                    
                     end_time = perf_counter()
-                    
+
                     return SystemResult(
                         final_sql=current_sql,
                         approved=False,
@@ -211,9 +219,8 @@ class SQLSecuritySystem:
             iterations_log.append(iter_log)
 
             if audit_result.approved:
-                
                 end_time = perf_counter()
-                
+
                 return SystemResult(
                     final_sql=current_sql,
                     approved=True,

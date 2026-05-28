@@ -8,7 +8,9 @@ from vector_db import search_tables
 
 sql_parser = SQLparser()
 
-with open(BASEDIR / "src/tests/requests_sample.json", "r", encoding="utf-8") as f:
+with open(
+    BASEDIR / "src/tests/requests_sample.json", "r", encoding="utf-8"
+) as f:
     data = json.load(f)
 
 safe_query_examples: list[dict[str, Any]] = data.get("safe_examples")
@@ -38,7 +40,7 @@ for i, example in enumerate(safe_query_examples):
     equal_res = sql_parser.compare_sql(pred_sql, true_sql)
 
     safe_examples_res.append(equal_res)
-    
+
     print(
         f"Итерация номер #{i}.\n"
         f"Ген. запрос: \n{pred_sql}\n"

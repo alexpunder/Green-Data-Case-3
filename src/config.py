@@ -40,7 +40,9 @@ class OllamaModelConfig(CustomBaseSettings):
 
     @property
     def model_dsn(self) -> str:
-        return f"http://{self.MODEL_HOST}:{self.MODEL_PORT}/{self.MODEL_VERSION}"
+        return (
+            f"http://{self.MODEL_HOST}:{self.MODEL_PORT}/{self.MODEL_VERSION}"
+        )
 
 
 class Config(CustomBaseSettings):
