@@ -3,6 +3,7 @@ import re
 from typing import Any
 
 from ollama import Client
+from openai import OpenAI
 
 from auditor.schemas import AuditResult, Vulnerability
 from config import conf
@@ -79,7 +80,12 @@ class SecurityAuditor:
     def audit(self, sql_query: str) -> AuditResult:
         """Input: sql_query/db_schema. Output: AuditResult with vulnerabilities, risk and approval."""
 
-        ollama_client = Client(host=f"{conf.ollama_conf.model_dsn}")
+        # ollama_client = Client(host=f"{conf.ollama_conf.model_dsn}")
+        
+        client = OpenAI(
+            base_url=conf.ollama_conf.model_dsn,  # если используется localhost
+            api_key="ollama"  # не требуется для локального
+        )
 
         prompt = f"""Ты — Security Auditor для SQL-запросов PostgreSQL.
 
@@ -118,14 +124,14 @@ class SecurityAuditor:
             Если уязвимостей нет, верни "vulnerabilities": [] и "is_safe": true.
             Не добавляй пояснения вне JSON."""
 
-        response = ollama_client.chat(
+        response = client.chat.completions.create(
             model=conf.ollama_conf.MODEL_NAME,
             messages=[{"role": "user", "content": prompt}],
-            options={"temperature": 0.1},
+            temperature=0.1,
         )
 
         vulns, overall_risk, summary = self._parse_llm_response(
-            response["message"]["content"]
+            response.choices[0].message.content.strip()
         )
 
         approved = len(vulns) == 0 and overall_risk < self.RISK_THRESHOLD
@@ -142,4 +148,5 @@ class SecurityAuditor:
             vulnerabilities=vulns,
             overall_risk_score=overall_risk,
             summary=summary,
+            tokens_used=response.usage.total_tokens,
         )

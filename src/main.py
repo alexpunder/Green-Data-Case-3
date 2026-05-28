@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
+from time import perf_counter
 from typing import Any
 
 from auditor.auditor import SecurityAuditor
@@ -38,6 +39,7 @@ class SystemResult:
     iterations_used: int
     iterations_log: list[IterationLog]
     audit_log: str
+    total_tokens_used: int
     metadata: dict[str, Any] = field(default_factory=dict)
 
     @property
@@ -50,6 +52,7 @@ class SystemResult:
                 iteration_log.to_dict for iteration_log in self.iterations_log
             ],
             "audit_log": self.audit_log,
+            "total_tokens_used": self.total_tokens_used,
             "metadata": self.metadata,
         }
 
@@ -70,19 +73,23 @@ class SQLSecuritySystem:
         self.max_iterations = max_iterations
         self.sql_parser = sql_parser
 
-    def build_audit_log(self, iterations_log: list[IterationLog]) -> str:
+    def build_audit_log(self, iterations_log: list[IterationLog], total_tokens: int, timer: float) -> str:
         """Формирует человекочитаемый лог аудита"""
         lines = []
-        lines.append("=" * 20)
+        lines.append("=" * 40)
         lines.append("Аудит безопасности SQL")
-        lines.append("=" * 20)
-        lines.append(f"Всего итераций: {len(iterations_log)}")
+        lines.append("=" * 40)
+        lines.append(f"Всего итераций:         {len(iterations_log)}")
+        lines.append(f"Всего токенов:          {total_tokens:,}")
+        lines.append(f"Среднее токенов:        {total_tokens / len(iterations_log):.0f}")
+        lines.append(f"Общее время:            {timer:.2f} сек.")
+        lines.append(f"Среднее время/итерация: {timer / len(iterations_log):.2f} сек.")
         lines.append("")
 
         for log in iterations_log:
-            lines.append(f"\n{'─' * 20}")
+            lines.append(f"\n{'─' * 40}")
             lines.append(f"Итерация #{log.iteration}")
-            lines.append(f"{'─' * 20}")
+            lines.append(f"{'─' * 40}")
 
             sql_preview = log.sql_query[:300]
             if len(log.sql_query) > 300:
@@ -112,7 +119,7 @@ class SQLSecuritySystem:
 
             lines.append("")
 
-        lines.append("=" * 20)
+        lines.append("=" * 40)
         final_approved = (
             iterations_log[-1].audit_result.approved
             if iterations_log
@@ -128,39 +135,51 @@ class SQLSecuritySystem:
                 f"   Причина: {iterations_log[-1].audit_result.summary if iterations_log else 'Нет данных'}"
             )
 
-        lines.append("=" * 20)
+        lines.append("=" * 40)
 
         return "\n".join(lines)
 
     def run(self, task_description: str) -> SystemResult:
         """Input: task_description. Output: SystemResult with final SQL, approval flag and iteration log."""
+        start_time = perf_counter()
+        
         iterations_log: list[IterationLog] = []
         current_sql: str | None = None
         audit_feedback: str | None = None
         sql_history: list[str] = []
+        total_tokens_used: int = 0
 
         prev_sql = None
         repeat_count = 0
         warning_prompt = ""
 
         for iteration in range(1, self.max_iterations + 1):
-            current_sql = self.generator.generate(
+            current_sql, tokens_used = self.generator.generate(
                 task_description=task_description,
                 sql_history=sql_history,
                 iteration=iteration,
                 audit_feedback=audit_feedback,
             )
+            total_tokens_used += tokens_used
 
             if prev_sql and self.sql_parser.compare_sql(prev_sql, current_sql):
                 repeat_count += 1
 
                 if repeat_count >= 2:
+                    
+                    end_time = perf_counter()
+                    
                     return SystemResult(
                         final_sql=current_sql,
                         approved=False,
                         iterations_used=iteration,
                         iterations_log=iterations_log,
-                        audit_log=self.build_audit_log(iterations_log),
+                        audit_log=self.build_audit_log(
+                            iterations_log,
+                            total_tokens_used,
+                            end_time - start_time,
+                        ),
+                        total_tokens_used=total_tokens_used,
                         metadata={
                             "warning": "Генератор повторяет один и тот же SQL без исправлений"
                         },
@@ -180,6 +199,7 @@ class SQLSecuritySystem:
             audit_result = self.auditor.audit(
                 sql_query=current_sql,
             )
+            total_tokens_used += audit_result.tokens_used
 
             iter_log = IterationLog(
                 timestamp=datetime.now(),
@@ -191,26 +211,39 @@ class SQLSecuritySystem:
             iterations_log.append(iter_log)
 
             if audit_result.approved:
+                
+                end_time = perf_counter()
+                
                 return SystemResult(
                     final_sql=current_sql,
                     approved=True,
                     iterations_used=iteration,
                     iterations_log=iterations_log,
-                    audit_log=self.build_audit_log(iterations_log),
+                    audit_log=self.build_audit_log(
+                        iterations_log,
+                        total_tokens_used,
+                        end_time - start_time,
+                    ),
+                    total_tokens_used=total_tokens_used,
                     metadata={},
                 )
 
             audit_feedback = warning_prompt + audit_result.feedback
+
+        end_time = perf_counter()
 
         return SystemResult(
             final_sql=current_sql,
             approved=False,
             iterations_used=iteration,
             iterations_log=iterations_log,
-            audit_log=self.build_audit_log(iterations_log),
-            metadata={
-                "warning": "Достигнут лимит итераций",
-            },
+            audit_log=self.build_audit_log(
+                iterations_log,
+                total_tokens_used,
+                end_time - start_time,
+            ),
+            total_tokens_used=total_tokens_used,
+            metadata={"warning": "Достигнут лимит итераций"},
         )
 
 
@@ -242,57 +275,3 @@ def run_sql_security_pipeline(
         generator=generator, auditor=auditor, max_iterations=max_iterations
     )
     return system.run(task_description=task_description)
-
-
-# if __name__ == "__main__":
-#     st.title("GreeData: Text-to-SQL")
-
-#     if "messages" not in st.session_state:
-#         st.session_state.messages = []
-
-#     for message in st.session_state.messages:
-#         with st.chat_message(message["role"]):
-#             st.markdown(message["content"])
-
-#     if prompt := st.chat_input("Введите интересующий Вас запрос"):
-#         st.chat_message("user").markdown(prompt)
-#         st.session_state.messages.append({"role": "user", "content": prompt})
-
-#         schema = search_tables(query=prompt)
-
-#         ddl_parts = []
-#         for table in schema:
-#             ddl_parts.append(table["create_table_sql"])
-#             if table.get("description"):
-#                 ddl_parts.append(f"-- {table['description']}")
-
-#         schema_ddl = "\n\n".join(ddl_parts)
-
-#         result = run_sql_security_pipeline(
-#             task_description=prompt,
-#             db_schema=schema_ddl,
-#         )
-
-#         res_to_text = (
-#             f"{'Одобрен\n' if result.approved else 'Внимание! Скрипт не прошел проверку аудитором\n'}"
-#             f"Полученный SQL-скрипт:\n{result.final_sql}\n\n"
-#             f"\nЧеловекочитаемый лог итераций:\n{result.audit_log}\n"
-#         )
-        
-#         total_sql = sql_parser.format_sql(result.final_sql)
-        
-#         with st.chat_message("assistant"):
-#             if result.approved:
-#                 st.success("✅ SQL ОДОБРЕН")
-#             else:
-#                 st.error("⚠️ ВНИМАНИЕ! Скрипт не прошел проверку аудитором")
-            
-#             with st.expander("Сгенерированный SQL", expanded=True):
-#                 st.code(total_sql, language="sql")
-            
-#             with st.expander("Лог аудита (подробно)", expanded=False):
-#                 st.text(result.audit_log)
-
-#         st.session_state.messages.append(
-#             {"role": "assistant", "content": res_to_text}
-#         )

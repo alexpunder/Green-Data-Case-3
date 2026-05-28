@@ -29,6 +29,7 @@ class AuditResult:
     vulnerabilities: list[Vulnerability]
     overall_risk_score: float
     summary: str
+    tokens_used: int
 
     @property
     def to_dict(self):
@@ -40,4 +41,5 @@ class AuditResult:
             ],
             "overall_risk_score": self.overall_risk_score,
             "summary": self.summary,
+            "tokens_used": self.tokens_used,
         }
