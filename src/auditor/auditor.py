@@ -2,8 +2,9 @@ import json
 import re
 from typing import Any
 
-from auditor.schemas import AuditResult, Vulnerability
 from ollama import Client
+
+from auditor.schemas import AuditResult, Vulnerability
 from config import conf
 
 
@@ -20,8 +21,6 @@ class SecurityAuditor:
         "SQL_INJ_TIME": "Time-based blind Injection",
         "PRIV_ESCALATE": "Privilege Escalation через EXECUTE",
         "PLPGSQL_UNSAFE": "PL/pgSQL: небезопасный EXECUTE",
-        
-        # добавлено несколько правил
         "DDL_DROP_TABLE": "DROP TABLE — удаление таблицы (катастрофическая операция)",
         "DDL_TRUNCATE": "TRUNCATE — очистка таблицы без возможности восстановления",
         "DDL_ALTER": "ALTER TABLE — изменение структуры таблицы",
@@ -29,7 +28,9 @@ class SecurityAuditor:
     }
     RISK_THRESHOLD = 4.0
 
-    def __init__(self, db_schema: dict[str, Any] | None = None, **kwargs: Any) -> None:
+    def __init__(
+        self, db_schema: dict[str, Any] | None = None, **kwargs: Any
+    ) -> None:
         self.db_schema = db_schema or {}
         self.kwargs = kwargs
 
@@ -40,7 +41,9 @@ class SecurityAuditor:
             vult_points += f"{iter}. {key}: {value}\n"
         return vult_points
 
-    def _parse_llm_response(self, response_text: str) -> tuple[list[Vulnerability], float, str]:
+    def _parse_llm_response(
+        self, response_text: str
+    ) -> tuple[list[Vulnerability], float, str]:
         """Парсит JSON ответ от LLM в структуры данных"""
         try:
             cleaned = re.sub(r"^```json\n?", "", response_text)
@@ -55,10 +58,10 @@ class SecurityAuditor:
                 "critical": 9.0,
                 "high": 7.0,
                 "medium": 5.0,
-                "low": 2.0
+                "low": 2.0,
             }
             risk_score = severity_map.get(v.get("severity", "low"), 2.0)
-            
+
             vulnerabilities.append(
                 Vulnerability(
                     vuln_class=v.get("type", "UNKNOWN"),
@@ -70,16 +73,14 @@ class SecurityAuditor:
 
         overall_risk = data.get("risk_score", 0) / 10
         summary = data.get("summary", "")
-        
+
         return vulnerabilities, overall_risk, summary
 
-    def audit(
-        self, sql_query: str
-    ) -> AuditResult:
+    def audit(self, sql_query: str) -> AuditResult:
         """Input: sql_query/db_schema. Output: AuditResult with vulnerabilities, risk and approval."""
 
         ollama_client = Client(host=f"{conf.ollama_conf.model_dsn}")
-        
+
         prompt = f"""Ты — Security Auditor для SQL-запросов PostgreSQL.
 
             Проверь следующий SQL-запрос на наличие уязвимостей:
@@ -122,19 +123,23 @@ class SecurityAuditor:
             messages=[{"role": "user", "content": prompt}],
             options={"temperature": 0.1},
         )
-        
-        vulns, overall_risk, summary = self._parse_llm_response(response["message"]["content"])
-        
+
+        vulns, overall_risk, summary = self._parse_llm_response(
+            response["message"]["content"]
+        )
+
         approved = len(vulns) == 0 and overall_risk < self.RISK_THRESHOLD
-        
+
         feedback = ""
         if not approved:
-            feedback = f"Найдены проблемы: {', '.join([v.vuln_class for v in vulns])}"
+            feedback = (
+                f"Найдены проблемы: {', '.join([v.vuln_class for v in vulns])}"
+            )
 
         return AuditResult(
             approved=approved,
             feedback=feedback,
             vulnerabilities=vulns,
             overall_risk_score=overall_risk,
-            summary=summary
+            summary=summary,
         )

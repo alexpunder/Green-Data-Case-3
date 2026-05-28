@@ -2,7 +2,7 @@ import json
 
 from qdrant_client import QdrantClient, models
 
-from constants import VECTOR_DB_COLLECTION_NAME, EMBEDDING_MODEL_NAME, BASEDIR
+from constants import BASEDIR, EMBEDDING_MODEL_NAME, VECTOR_DB_COLLECTION_NAME
 
 client = QdrantClient(url="http://localhost:6333")
 
@@ -32,22 +32,22 @@ client = QdrantClient(url="http://localhost:6333")
 # ids = []
 # for idx, (table_name, table_info) in enumerate(tables.items()):
 #     search_text = f"Таблица {table_name}"
-    
+
 #     if table_info.get("description"):
 #         search_text += f": {table_info["description"]}"
-    
+
 #     columns = list(table_info.get("column_comments", {}).items())
 #     if columns:
 #         search_text += ". Поля: "
 #         search_text += ", ".join([f"{col} ({comment})" for col, comment in columns])
-    
+
 #     if table_info.get("foreign_keys"):
 #         fk_desc = []
 #         for fk in table_info["foreign_keys"]:
 #             fk_desc.append(f"{fk["column"]} → {fk["references_table"]}.{fk["references_column"]}")
 #         if fk_desc:
 #             search_text += ". Связан с: " + ", ".join(fk_desc)
-    
+
 #     documents.append(models.Document(text=search_text, model=EMBEDDING_MODEL_NAME))
 #     payloads.append({
 #         "table_name": table_name,
@@ -71,9 +71,10 @@ client = QdrantClient(url="http://localhost:6333")
 # count = client.count(collection_name=VECTOR_DB_COLLECTION_NAME)
 # print(f"Всего точек в коллекции: {count.count}")
 
+
 def search_tables(query: str, top_k: int = 5):
     """Ищет таблицы, релевантные запросу"""
-    
+
     search_result = client.query_points(
         collection_name=VECTOR_DB_COLLECTION_NAME,
         query=models.Document(text=query, model=EMBEDDING_MODEL_NAME),
@@ -82,11 +83,13 @@ def search_tables(query: str, top_k: int = 5):
 
     results = []
     for point in search_result:
-        results.append({
-            "table_name": point.payload["table_name"],
-            "description": point.payload["description"],
-            "score": point.score,
-            "create_table_sql": point.payload["create_table_sql"]
-        })
-    
+        results.append(
+            {
+                "table_name": point.payload["table_name"],
+                "description": point.payload["description"],
+                "score": point.score,
+                "create_table_sql": point.payload["create_table_sql"],
+            }
+        )
+
     return results

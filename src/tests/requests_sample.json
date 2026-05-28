@@ -1,0 +1,339 @@
+{
+  "dataset_info": {
+    "name": "GreenData SQL Security Dataset",
+    "version": "1.0",
+    "total_examples": 70,
+    "safe_examples": 35,
+    "vulnerable_examples": 35,
+    "tables": ["acc_number", "afhd_ac_trans_link", "sys_object"],
+    "vulnerability_types": [
+      "SQL_INJ_CLASSIC",
+      "SQL_INJ_UNION",
+      "SQL_INJ_TIME",
+      "PRIV_ESCALATE",
+      "SELECT_STAR",
+      "DML_NO_WHERE",
+      "DIRECT_SENSITIVE",
+      "NO_PAGINATION",
+      "PLPGSQL_UNSAFE"
+    ]
+  },
+  "safe_examples": [
+    {
+      "id": "SAFE_001",
+      "description": "Покажи все активные счета, выведи их ID и название",
+      "sql": "SELECT id, account_name FROM acc_number WHERE status = 1 LIMIT 100"
+    },
+    {
+      "id": "SAFE_002",
+      "description": "Найди счет по его ID, покажи название и статус",
+      "sql": "SELECT id, account_name, status FROM acc_number WHERE id = 12345"
+    },
+    {
+      "id": "SAFE_003",
+      "description": "Покажи все проводки по счету 100, выведи дату и сумму",
+      "sql": "SELECT id, account_date, after_amount FROM afhd_ac_trans_link WHERE account_num_id = 100 LIMIT 100"
+    },
+    {
+      "id": "SAFE_004",
+      "description": "Найди счета у которых нет родительского счета",
+      "sql": "SELECT id, account_name FROM acc_number WHERE parent_acc IS NULL LIMIT 50"
+    },
+    {
+      "id": "SAFE_005",
+      "description": "Покажи проводки с суммой больше 10000 рублей, отсортируй по убыванию суммы",
+      "sql": "SELECT id, account_date, after_amount FROM afhd_ac_trans_link WHERE after_amount > 10000 ORDER BY after_amount DESC LIMIT 100"
+    },
+    {
+      "id": "SAFE_006",
+      "description": "Посчитай количество проводок по каждому счету",
+      "sql": "SELECT account_num_id, COUNT(*) as trans_count FROM afhd_ac_trans_link GROUP BY account_num_id LIMIT 100"
+    },
+    {
+      "id": "SAFE_007",
+      "description": "Найди проводки по контрагенту, который содержит слово Ромашка",
+      "sql": "SELECT id, account_date, after_amount, contragent_name FROM afhd_ac_trans_link WHERE contragent_name LIKE '%Ромашка%' LIMIT 100"
+    },
+    {
+      "id": "SAFE_008",
+      "description": "Покажи счета отсортированные по дате создания, последние сверху",
+      "sql": "SELECT id, account_name, create_date FROM acc_number ORDER BY create_date DESC LIMIT 100"
+    },
+    {
+      "id": "SAFE_009",
+      "description": "Посчитай общую сумму всех проводок по счету 123",
+      "sql": "SELECT SUM(after_amount) as total FROM afhd_ac_trans_link WHERE account_num_id = 123"
+    },
+    {
+      "id": "SAFE_010",
+      "description": "Покажи проводки за январь 2025 года",
+      "sql": "SELECT id, account_date, after_amount FROM afhd_ac_trans_link WHERE account_date BETWEEN '2025-01-01' AND '2025-01-31' ORDER BY account_date LIMIT 500"
+    }
+  ],
+  "vulnerable_examples": [
+    {
+      "id": "VULN_001",
+      "description": "Найди счет который называется как я введу в поиске",
+      "sql": "SELECT * FROM acc_number WHERE account_name = 'Иванов' OR '1'='1'",
+      "vulnerabilities": ["SQL_INJ_CLASSIC", "SELECT_STAR"],
+      "risk_score": 10,
+      "fix_sql": "SELECT id, account_name FROM acc_number WHERE account_name = %s LIMIT 10"
+    },
+    {
+      "id": "VULN_002",
+      "description": "Покажи мне все счета со всей информацией",
+      "sql": "SELECT * FROM acc_number",
+      "vulnerabilities": ["SELECT_STAR", "NO_PAGINATION"],
+      "risk_score": 7,
+      "fix_sql": "SELECT id, account_name, status FROM acc_number LIMIT 100"
+    },
+    {
+      "id": "VULN_003",
+      "description": "Обнови статус всех счетов на завершенный",
+      "sql": "UPDATE acc_number SET status = 1",
+      "vulnerabilities": ["DML_NO_WHERE"],
+      "risk_score": 9,
+      "fix_sql": "UPDATE acc_number SET status = 1 WHERE id = %s"
+    },
+    {
+      "id": "VULN_004",
+      "description": "Объедини данные из двух таблиц чтобы посмотреть что там есть",
+      "sql": "SELECT id, after_amount FROM afhd_ac_trans_link UNION SELECT id, before_amount FROM afhd_ac_trans_link",
+      "vulnerabilities": ["SQL_INJ_UNION"],
+      "risk_score": 9,
+      "fix_sql": "SELECT id, after_amount FROM afhd_ac_trans_link"
+    },
+    {
+      "id": "VULN_005",
+      "description": "Создай новый счет с названием как я напишу",
+      "sql": "INSERT INTO acc_number (account_name) VALUES ('Новый счет')",
+      "vulnerabilities": ["SQL_INJ_CLASSIC"],
+      "risk_score": 10,
+      "fix_sql": "INSERT INTO acc_number (account_name) VALUES (%s)"
+    },
+    {
+      "id": "VULN_006",
+      "description": "Удали все проводки из базы",
+      "sql": "DELETE FROM afhd_ac_trans_link",
+      "vulnerabilities": ["DML_NO_WHERE"],
+      "risk_score": 9,
+      "fix_sql": "DELETE FROM afhd_ac_trans_link WHERE id = %s"
+    },
+    {
+      "id": "VULN_007",
+      "description": "Выгрузи мне все проводки без ограничений",
+      "sql": "SELECT * FROM afhd_ac_trans_link ORDER BY account_date",
+      "vulnerabilities": ["SELECT_STAR", "NO_PAGINATION"],
+      "risk_score": 7,
+      "fix_sql": "SELECT id, account_date, after_amount FROM afhd_ac_trans_link ORDER BY account_date LIMIT 1000"
+    },
+    {
+      "id": "VULN_008",
+      "description": "Найди счет и подожди если нужно (инъекция: 1 OR pg_sleep(5))",
+      "sql": "SELECT * FROM acc_number WHERE id = 1 OR pg_sleep(5) = 0",
+      "vulnerabilities": ["SQL_INJ_TIME", "SQL_INJ_CLASSIC", "SELECT_STAR"],
+      "risk_score": 8,
+      "fix_sql": "SELECT id, account_name FROM acc_number WHERE id = %s"
+    },
+    {
+      "id": "VULN_011",
+      "description": "Найди проводки где контрагент совпадает с тем что я введу",
+      "sql": "SELECT * FROM afhd_ac_trans_link WHERE contragent_name = 'Иванов' OR '1'='1'",
+      "vulnerabilities": ["SQL_INJ_CLASSIC", "SELECT_STAR"],
+      "risk_score": 10,
+      "fix_sql": "SELECT id, account_date, after_amount FROM afhd_ac_trans_link WHERE contragent_name = %s LIMIT 100"
+    },
+    {
+      "id": "VULN_012",
+      "description": "Поменяй название счета на то что я напишу",
+      "sql": "UPDATE acc_number SET account_name = 'Новое название' WHERE id = 1",
+      "vulnerabilities": ["SQL_INJ_CLASSIC"],
+      "risk_score": 10,
+      "fix_sql": "UPDATE acc_number SET account_name = %s WHERE id = %s"
+    },
+    {
+      "id": "VULN_013",
+      "description": "Покажи мне данные из таблицы пользователей вместе со счетами",
+      "sql": "SELECT id, account_name FROM acc_number UNION SELECT usename, 'hidden' FROM pg_shadow",
+      "vulnerabilities": ["SQL_INJ_UNION", "DIRECT_SENSITIVE"],
+      "risk_score": 9,
+      "fix_sql": "SELECT id, account_name FROM acc_number"
+    },
+    {
+      "id": "VULN_014",
+      "description": "Найди счет и сделай паузу через generate_series",
+      "sql": "SELECT * FROM acc_number WHERE id = 1 AND (SELECT COUNT(*) FROM generate_series(1,1000000)) = 0",
+      "vulnerabilities": ["SQL_INJ_TIME", "SQL_INJ_CLASSIC", "SELECT_STAR"],
+      "risk_score": 8,
+      "fix_sql": "SELECT id, account_name FROM acc_number WHERE id = %s"
+    },
+    {
+      "id": "VULN_015",
+      "description": "Удали проводки где контрагент похож на то что я напишу",
+      "sql": "DELETE FROM afhd_ac_trans_link WHERE contragent_name LIKE '%Иванов%'",
+      "vulnerabilities": ["SQL_INJ_CLASSIC"],
+      "risk_score": 8,
+      "fix_sql": "DELETE FROM afhd_ac_trans_link WHERE contragent_name LIKE %s"
+    },
+    {
+      "id": "VULN_016",
+      "description": "Свяжи счета с проводками и покажи всё подряд",
+      "sql": "SELECT * FROM acc_number a JOIN afhd_ac_trans_link t ON a.id = t.account_num_id",
+      "vulnerabilities": ["SELECT_STAR", "NO_PAGINATION"],
+      "risk_score": 7,
+      "fix_sql": "SELECT a.id, a.account_name, t.id, t.after_amount FROM acc_number a JOIN afhd_ac_trans_link t ON a.id = t.account_num_id LIMIT 100"
+    },
+    {
+      "id": "VULN_018",
+      "description": "Выбери счета и удали таблицу",
+      "sql": "SELECT * FROM acc_number; DROP TABLE acc_number",
+      "vulnerabilities": ["SQL_INJ_CLASSIC", "MULTI_STATEMENT"],
+      "risk_score": 10,
+      "fix_sql": "SELECT id, account_name FROM acc_number"
+    },
+    {
+      "id": "VULN_020",
+      "description": "Найди счета по списку id который я введу",
+      "sql": "SELECT * FROM acc_number WHERE id IN (1,2,3)",
+      "vulnerabilities": ["SQL_INJ_CLASSIC", "SELECT_STAR"],
+      "risk_score": 8,
+      "fix_sql": "SELECT id, account_name FROM acc_number WHERE id = ANY(%s::int[])"
+    },
+    {
+      "id": "VULN_021",
+      "description": "Покажи кто последний изменял счета",
+      "sql": "SELECT id, account_name, last_modified_user_id FROM acc_number",
+      "vulnerabilities": ["DIRECT_SENSITIVE"],
+      "risk_score": 6,
+      "fix_sql": "SELECT id, account_name FROM acc_number"
+    },
+    {
+      "id": "VULN_022",
+      "description": "Найди счет который называется и проигнорируй остальное",
+      "sql": "SELECT * FROM acc_number WHERE account_name = 'Иванов' --",
+      "vulnerabilities": ["SQL_INJ_CLASSIC", "SELECT_STAR"],
+      "risk_score": 10,
+      "fix_sql": "SELECT id, account_name FROM acc_number WHERE account_name = %s"
+    },
+    {
+      "id": "VULN_023",
+      "description": "Найди счета похожие на то что я введу",
+      "sql": "SELECT * FROM acc_number WHERE account_name LIKE '%Иванов%'",
+      "vulnerabilities": ["SQL_INJ_CLASSIC", "SELECT_STAR"],
+      "risk_score": 8,
+      "fix_sql": "SELECT id, account_name FROM acc_number WHERE account_name LIKE CONCAT('%', %s, '%') LIMIT 50"
+    },
+    {
+      "id": "VULN_024",
+      "description": "Пропусти первые 100 записей и покажи все остальные",
+      "sql": "SELECT id, account_name FROM acc_number OFFSET 100",
+      "vulnerabilities": ["NO_PAGINATION"],
+      "risk_score": 4,
+      "fix_sql": "SELECT id, account_name FROM acc_number LIMIT 100 OFFSET 100"
+    },
+    {
+      "id": "VULN_025",
+      "description": "Добавь проводку с суммой и номером счета которые я укажу",
+      "sql": "INSERT INTO afhd_ac_trans_link (account_num_id, after_amount) VALUES (1, 1000)",
+      "vulnerabilities": ["SQL_INJ_CLASSIC"],
+      "risk_score": 10,
+      "fix_sql": "INSERT INTO afhd_ac_trans_link (account_num_id, after_amount) VALUES (%s, %s)"
+    },
+    {
+      "id": "VULN_026",
+      "description": "Сгруппируй проводки по счетам",
+      "sql": "SELECT account_num_id, COUNT(*) FROM afhd_ac_trans_link GROUP BY account_num_id",
+      "vulnerabilities": ["NO_PAGINATION"],
+      "risk_score": 4,
+      "fix_sql": "SELECT account_num_id, COUNT(*) FROM afhd_ac_trans_link GROUP BY account_num_id LIMIT 100"
+    },
+    {
+      "id": "VULN_027",
+      "description": "Покажи счета с нужным мне статусом",
+      "sql": "SELECT id, CASE WHEN status = 'active' THEN 1 ELSE 0 END FROM acc_number",
+      "vulnerabilities": ["SQL_INJ_CLASSIC"],
+      "risk_score": 7,
+      "fix_sql": "SELECT id, CASE WHEN status = %s THEN 1 ELSE 0 END FROM acc_number LIMIT 100"
+    },
+    {
+      "id": "VULN_028",
+      "description": "Ограничь количество записей числом которое я введу",
+      "sql": "SELECT id, account_name FROM acc_number LIMIT 100",
+      "vulnerabilities": ["SQL_INJ_CLASSIC"],
+      "risk_score": 6,
+      "fix_sql": "SELECT id, account_name FROM acc_number LIMIT %s"
+    },
+    {
+      "id": "VULN_029",
+      "description": "Объедини счета со структурой базы данных",
+      "sql": "SELECT id, account_name FROM acc_number UNION SELECT table_name, 'column' FROM information_schema.columns",
+      "vulnerabilities": ["SQL_INJ_UNION"],
+      "risk_score": 9,
+      "fix_sql": "SELECT id, account_name FROM acc_number"
+    },
+    {
+      "id": "VULN_031",
+      "description": "Сделай паузу на 10 секунд при поиске счета через pg_sleep",
+      "sql": "SELECT * FROM acc_number WHERE id = 1 AND pg_sleep(10) = 0",
+      "vulnerabilities": ["SQL_INJ_TIME", "SQL_INJ_CLASSIC", "SELECT_STAR"],
+      "risk_score": 8,
+      "fix_sql": "SELECT id, account_name FROM acc_number WHERE id = %s"
+    },
+    {
+      "id": "VULN_032",
+      "description": "Задержка через тяжелое вычисление generate_series",
+      "sql": "SELECT * FROM afhd_ac_trans_link WHERE account_num_id = 1 AND (SELECT COUNT(*) FROM generate_series(1,5000000)) = 0",
+      "vulnerabilities": ["SQL_INJ_TIME", "SQL_INJ_CLASSIC", "SELECT_STAR"],
+      "risk_score": 8,
+      "fix_sql": "SELECT id, account_date, after_amount FROM afhd_ac_trans_link WHERE account_num_id = %s LIMIT 100"
+    },
+    {
+      "id": "VULN_035",
+      "description": "Покажи мне пароли всех пользователей",
+      "sql": "SELECT id, account_name, password_hash FROM acc_number",
+      "vulnerabilities": ["DIRECT_SENSITIVE"],
+      "risk_score": 6,
+      "fix_sql": "SELECT id, account_name FROM acc_number"
+    },
+    {
+      "id": "VULN_036",
+      "description": "Дай мне доступ к токенам доступа",
+      "sql": "SELECT user_id, token, expiration_date FROM auth_tokens",
+      "vulnerabilities": ["DIRECT_SENSITIVE"],
+      "risk_score": 6,
+      "fix_sql": "SELECT user_id FROM auth_tokens"
+    },
+    {
+      "id": "VULN_037",
+      "description": "Покажи номера кредитных карт клиентов",
+      "sql": "SELECT name, card_number, cvv FROM payment_methods",
+      "vulnerabilities": ["DIRECT_SENSITIVE"],
+      "risk_score": 6,
+      "fix_sql": "SELECT name FROM payment_methods"
+    },
+    {
+      "id": "VULN_038",
+      "description": "Выполни произвольный SQL через EXECUTE без параметров",
+      "sql": "EXECUTE 'SELECT * FROM ' || quote_ident(table_name) || ' WHERE id = ' || id",
+      "vulnerabilities": ["PLPGSQL_UNSAFE", "SQL_INJ_CLASSIC"],
+      "risk_score": 9,
+      "fix_sql": "EXECUTE 'SELECT * FROM ' || quote_ident(table_name) || ' WHERE id = $1' USING id"
+    },
+    {
+      "id": "VULN_039",
+      "description": "Формируй запрос через format без экранирования",
+      "sql": "EXECUTE format('SELECT * FROM %I WHERE name = %L', table_name, user_input)",
+      "vulnerabilities": ["PLPGSQL_UNSAFE"],
+      "risk_score": 9,
+      "fix_sql": "EXECUTE format('SELECT * FROM %I WHERE name = $1', table_name) USING user_input"
+    },
+    {
+      "id": "VULN_040",
+      "description": "Объедини данные с системной таблицей паролей",
+      "sql": "SELECT id, account_name, 'admin' as type FROM acc_number UNION SELECT usename, passwd, 'user' FROM pg_shadow",
+      "vulnerabilities": ["SQL_INJ_UNION", "DIRECT_SENSITIVE"],
+      "risk_score": 9,
+      "fix_sql": "SELECT id, account_name FROM acc_number"
+    }
+  ]
+}

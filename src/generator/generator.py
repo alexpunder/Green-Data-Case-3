@@ -2,6 +2,7 @@ import re
 from typing import Any
 
 from ollama import Client
+
 from auditor.schemas import AuditResult
 from config import conf
 
@@ -23,9 +24,9 @@ class SQLGenerator:
         iteration: int = 1,
     ) -> str:
         """Input: task_description/sql_history/audit_feedback/iteration. Output: SQL string."""
-        
+
         ollama_client = Client(host=f"{conf.ollama_conf.model_dsn}")
-        
+
         prompt = f"""Ты — генератор SQL запросов для PostgreSQL.
 
             Схема базы данных:
@@ -38,9 +39,11 @@ class SQLGenerator:
             Правила:
             1. Используй только таблицы и колонки из схемы выше
             2. Не выдумывай несуществующие таблицы
-            3. Возвращай ТОЛЬКО SQL запрос, без пояснений
-            4. Завершай запрос точкой с запятой
-            5. Не используй markdown-разметку (```sql)
+            3. Используй конкретные поля вместо *
+            3. Всегда используй LIMIT, где это уместно
+            4. Возвращай ТОЛЬКО SQL запрос, без пояснений
+            6. Завершай запрос точкой с запятой
+            7. Не используй markdown-разметку (```sql)
 
             SQL запрос:"""
 
@@ -52,11 +55,11 @@ class SQLGenerator:
                 "num_predict": 512,
             },
         )
-        
+
         content = response["message"]["content"].strip()
         content = re.sub(r"^```sql\n?", "", content)
         content = re.sub(r"\n?```$", "", content)
-        
+
         sql_history.append((iteration, content))
 
         return content

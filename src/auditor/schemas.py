@@ -4,6 +4,7 @@ from dataclasses import dataclass
 @dataclass
 class Vulnerability:
     """Найденная уязвимость."""
+
     vuln_class: str
     risk_score: float
     description: str
@@ -22,6 +23,7 @@ class Vulnerability:
 @dataclass
 class AuditResult:
     """Результат проверки SQL."""
+
     approved: bool
     feedback: str
     vulnerabilities: list[Vulnerability]
@@ -34,8 +36,7 @@ class AuditResult:
             "approved": self.approved,
             "feedback": self.feedback,
             "vulnerabilities": [
-                vulnerability.to_dict
-                for vulnerability in self.vulnerabilities
+                vulnerability.to_dict for vulnerability in self.vulnerabilities
             ],
             "overall_risk_score": self.overall_risk_score,
             "summary": self.summary,
