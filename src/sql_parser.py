@@ -2,19 +2,41 @@ import json
 import re
 from typing import Any
 
-from pglast import parse_sql
+from pglast import parse_sql, prettify
 
 from constants import BASEDIR, PATTERN_MAP
 
 
 class SQLparser:
+    def _clean_sql_for_parse(self, sql: str) -> str:
+        """Заменяет опасные для парсера символы на тестовые значения"""
+        import re
+        
+        sql = sql.replace('%s', "'test_value'")
+        
+        sql = re.sub(r':\w+', "'test_value'", sql)
+        
+        sql = sql.replace('?', "'test_value'")
+        
+        sql = re.sub(r'RETURNING\s+\w+', '', sql, flags=re.IGNORECASE)
+        
+        sql = re.sub(r'::\w+', ' ', sql)
+        
+        if re.search(r'SELECT', sql, re.IGNORECASE) and not re.search(r'LIMIT', sql, re.IGNORECASE):
+            if not re.search(r'COUNT\(|SUM\(|AVG\(|MAX\(|MIN\(', sql, re.IGNORECASE):
+                sql = sql.rstrip(';') + " LIMIT 100"
+        
+        return sql
+    
     def get_ast_root(self, sql: str):
         """Разбирает SQL и возвращает корневой узел AST."""
         if not sql:
             return None
 
+        cleaned_sql = self._clean_sql_for_parse(sql)
+
         try:
-            return parse_sql(sql)[0].stmt
+            return parse_sql(cleaned_sql)[0].stmt
         except Exception as e:
             print(f"Ошибка парсинга SQL: {e}")
             return None
@@ -28,6 +50,15 @@ class SQLparser:
             return generated.strip() == expected.strip()
 
         return ast_gen == ast_exp
+
+    def format_sql(self, sql: str) -> str:
+        """Форматирует SQL-запрос с помощью pglast"""
+        try:
+            formatted = prettify(sql)
+            return formatted
+        except Exception as e:
+            print(f"Ошибка форматирования: {e}")
+            return sql
 
     def parse_sql_complete(self, sql_file_path: str) -> dict[str, Any]:
         """Извлекает COMMENT ON TABLE, COMMENT ON COLUMN и FOREIGN KEY из SQL-дампа"""

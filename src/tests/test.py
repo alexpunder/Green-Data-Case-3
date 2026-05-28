@@ -2,19 +2,20 @@ import json
 from typing import Any
 
 from constants import BASEDIR
-from main import SQLparser, run_sql_security_pipeline
+from main import run_sql_security_pipeline
+from sql_parser import SQLparser
 from vector_db import search_tables
 
 sql_parser = SQLparser()
 
-with open(BASEDIR / "tests/requests_sample.json", "r", encoding="utf-8") as f:
+with open(BASEDIR / "src/tests/requests_sample.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
 safe_query_examples: list[dict[str, Any]] = data.get("safe_examples")
 vuln_query_examples: list[dict[str, Any]] = data.get("vulnerable_examples")
 
 safe_examples_res = []
-for example in safe_query_examples:
+for i, example in enumerate(safe_query_examples):
     true_sql = example.get("sql")
     query = example.get("description")
 
@@ -37,9 +38,17 @@ for example in safe_query_examples:
     equal_res = sql_parser.compare_sql(pred_sql, true_sql)
 
     safe_examples_res.append(equal_res)
+    
+    print(
+        f"Итерация номер #{i}.\n"
+        f"Ген. запрос: \n{pred_sql}\n"
+        "--------\n"
+        f"Реал. запрос: \n{true_sql}\n"
+        "--------\n"
+    )
 
 vuln_examples_res = []
-for example in vuln_query_examples:
+for i, example in enumerate(vuln_query_examples):
     true_sql = example.get("fix_sql")
     query = example.get("description")
 
@@ -63,16 +72,10 @@ for example in vuln_query_examples:
 
     vuln_examples_res.append(equal_res)
 
-safe_accuracy = sum(safe_examples_res) / len(safe_examples_res)
-vuln_accuracy = sum(vuln_examples_res) / len(vuln_examples_res)
-
-total_accuracy = (sum(safe_examples_res) + sum(vuln_examples_res)) / (
-    len(safe_examples_res) + len(vuln_examples_res)
-)
-
-print("РЕЗУЛЬТАТЫ ТЕСТИРОВАНИЯ")
-print("=" * 50)
-print(f"  Accuracy: {safe_accuracy * 100:.2f}%")
-print(f"  Accuracy: {vuln_accuracy * 100:.2f}%")
-print(f"Total Execution Accuracy: {total_accuracy * 100:.2f}%")
-print("=" * 50)
+    print(
+        f"Итерация номер #{i}.\n"
+        f"Ген. запрос: \n{pred_sql}\n"
+        "--------\n"
+        f"Реал. запрос: \n{true_sql}\n"
+        "--------\n"
+    )

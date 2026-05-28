@@ -21,7 +21,6 @@ class SecurityAuditor:
         "SQL_INJ_TIME": "Time-based blind Injection",
         "PRIV_ESCALATE": "Privilege Escalation через EXECUTE",
         "PLPGSQL_UNSAFE": "PL/pgSQL: небезопасный EXECUTE",
-        # добавлено несколько правил
         "DDL_DROP_TABLE": "DROP TABLE — удаление таблицы (катастрофическая операция)",
         "DDL_TRUNCATE": "TRUNCATE — очистка таблицы без возможности восстановления",
         "DDL_ALTER": "ALTER TABLE — изменение структуры таблицы",

@@ -2,13 +2,10 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-import streamlit as st
-
 from auditor.auditor import SecurityAuditor
 from auditor.schemas import AuditResult
 from generator.generator import SQLGenerator
 from sql_parser import sql_parser
-from vector_db import search_tables
 
 
 @dataclass
@@ -247,43 +244,55 @@ def run_sql_security_pipeline(
     return system.run(task_description=task_description)
 
 
-if __name__ == "__main__":
-    st.title("GreeData: Text-to-SQL")
+# if __name__ == "__main__":
+#     st.title("GreeData: Text-to-SQL")
 
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+#     if "messages" not in st.session_state:
+#         st.session_state.messages = []
 
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+#     for message in st.session_state.messages:
+#         with st.chat_message(message["role"]):
+#             st.markdown(message["content"])
 
-    if prompt := st.chat_input("Введите интересующий Вас запрос"):
-        st.chat_message("user").markdown(prompt)
-        st.session_state.messages.append({"role": "user", "content": prompt})
+#     if prompt := st.chat_input("Введите интересующий Вас запрос"):
+#         st.chat_message("user").markdown(prompt)
+#         st.session_state.messages.append({"role": "user", "content": prompt})
 
-        schema = search_tables(query=prompt)
+#         schema = search_tables(query=prompt)
 
-        ddl_parts = []
-        for table in schema:
-            ddl_parts.append(table["create_table_sql"])
-            if table.get("description"):
-                ddl_parts.append(f"-- {table['description']}")
+#         ddl_parts = []
+#         for table in schema:
+#             ddl_parts.append(table["create_table_sql"])
+#             if table.get("description"):
+#                 ddl_parts.append(f"-- {table['description']}")
 
-        schema_ddl = "\n\n".join(ddl_parts)
+#         schema_ddl = "\n\n".join(ddl_parts)
 
-        result = run_sql_security_pipeline(
-            task_description=prompt,
-            db_schema=schema_ddl,
-        )
+#         result = run_sql_security_pipeline(
+#             task_description=prompt,
+#             db_schema=schema_ddl,
+#         )
 
-        res_to_text = (
-            f"{'Одобрен\n' if result.approved else 'Внимание! Скрипт не прошел проверку аудитором\n'}"
-            f"Полученный SQL-скрипт:\n{result.final_sql}\n\n"
-            f"\nЧеловекочитаемый лог итераций:\n{result.audit_log}\n"
-        )
-        with st.chat_message("assistant"):
-            st.markdown(res_to_text)
+#         res_to_text = (
+#             f"{'Одобрен\n' if result.approved else 'Внимание! Скрипт не прошел проверку аудитором\n'}"
+#             f"Полученный SQL-скрипт:\n{result.final_sql}\n\n"
+#             f"\nЧеловекочитаемый лог итераций:\n{result.audit_log}\n"
+#         )
+        
+#         total_sql = sql_parser.format_sql(result.final_sql)
+        
+#         with st.chat_message("assistant"):
+#             if result.approved:
+#                 st.success("✅ SQL ОДОБРЕН")
+#             else:
+#                 st.error("⚠️ ВНИМАНИЕ! Скрипт не прошел проверку аудитором")
+            
+#             with st.expander("Сгенерированный SQL", expanded=True):
+#                 st.code(total_sql, language="sql")
+            
+#             with st.expander("Лог аудита (подробно)", expanded=False):
+#                 st.text(result.audit_log)
 
-        st.session_state.messages.append(
-            {"role": "assistant", "content": res_to_text}
-        )
+#         st.session_state.messages.append(
+#             {"role": "assistant", "content": res_to_text}
+#         )
