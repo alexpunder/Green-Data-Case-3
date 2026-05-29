@@ -1,6 +1,6 @@
 [
 {
-"instruction":"Покажи сумму кредита, процентную ставку и срок по договору KD-000011.",
+"instruction":""Покажи сумму кредита, процентную ставку и срок по договору с номером, который ввёл пользователь.",
 "sql":"SELECT credit_contract_number, credit_amount, cred_interest_rate, loan_term FROM credit_contract WHERE credit_contract_number = '" + user_input + "';",
 "risk_label":"VULNERABLE",
 "risk_type":"SQL Injection (классический)",
@@ -16,7 +16,7 @@
 },
 
 {
-"instruction":"Проверь наличие кредитного договора KD-000021.",
+"instruction":"Проверь наличие кредитного договора KD-000021 через задержку ответа БД (используя pg_sleep).",
 "sql":"SELECT CASE WHEN EXISTS (SELECT 1 FROM credit_contract WHERE credit_contract_number='KD-000021') THEN pg_sleep(5) ELSE pg_sleep(0) END;",
 "risk_label":"VULNERABLE",
 "risk_type":"Time-based blind Injection",
@@ -24,7 +24,7 @@
 },
 
 {
-"instruction":"Сформируй полный отчёт по таблице credit_contract для организации org_id=2.",
+"instruction":"instruction":"Создай SECURITY DEFINER функцию, принимающую имя таблицы и выполняющую динамический EXECUTE для построения отчёта.",
 "sql":"CREATE OR REPLACE FUNCTION admin_report(tbl TEXT)\nRETURNS SETOF RECORD\nLANGUAGE plpgsql\nSECURITY DEFINER\nAS $$\nBEGIN\nRETURN QUERY EXECUTE 'SELECT * FROM ' || tbl;\nEND;\n$$;",
 "risk_label":"VULNERABLE",
 "risk_type":"Privilege Escalation через EXECUTE",
@@ -32,7 +32,7 @@
 },
 
 {
-"instruction":"Покажи полную карточку кредитного договора KD-000014.",
+"instruction":"instruction":"Покажи полный набор атрибутов кредитного договора KD-000014 без ограничения колонок.",
 "sql":"SELECT * FROM credit_contract WHERE credit_contract_number='KD-000014';",
 "risk_label":"VULNERABLE",
 "risk_type":"Избыточный SELECT *",
@@ -64,7 +64,7 @@
 },
 
 {
-"instruction":"Построй отчёт по кредитному договору KD-000029 с суммой кредита и номером договора.",
+"instruction":"Создай PL/pgSQL-функцию, которая принимает номер договора и выполняет динамический SQL через EXECUTE format без USING.",
 "sql":"CREATE OR REPLACE FUNCTION unsafe_credit_lookup(contract_no TEXT)\nRETURNS TABLE(contract text, amount numeric)\nLANGUAGE plpgsql\nAS $$\nBEGIN\nRETURN QUERY EXECUTE format(\n'SELECT credit_contract_number, credit_amount FROM credit_contract WHERE credit_contract_number = ''%s''',\ncontract_no\n);\nEND;\n$$;",
 "risk_label":"VULNERABLE",
 "risk_type":"PL/pgSQL: небезопасный EXECUTE",
@@ -89,7 +89,7 @@
 
 {
 "instruction":"Покажи заявки application_obj со статусом APPROVED и датой создания после 2025-10-01.",
-"sql":"SELECT ao.id, ao.name, ss.name AS state_name, ao.create_date FROM application_obj ao JOIN sys_state ss ON ao.afp_state_id=ss.id WHERE ss.ident='APPROVED' AND ao.create_date>'2025-10-01';",
+"sql":"SELECT ao.id, ao.name, ss.name AS state_name, ao.create_date FROM application_obj ao JOIN sys_state ss ON ao.afp_state_id=ss.id WHERE ss.afr_ident='APPROVED' AND ao.create_date>'2025-10-01';",
 "risk_label":"SAFE",
 "risk_type":"NONE",
 "risk_score":"0"
@@ -97,7 +97,7 @@
 
 {
 "instruction":"Покажи SCP-заявки по продукту Овердрафт с лимитом больше 5000000.",
-"sql":"SELECT sa.id, sa.name, sa.lim_sum, dp.name AS product_name FROM scp_application sa JOIN dict_product dp ON sa.app_product_id=dp.id WHERE dp.ident='OD' AND sa.lim_sum>5000000;",
+"sql":"SELECT sa.id, sa.name, sa.lim_sum, sa.scp_product_str AS product_name FROM scp_application sa WHERE sa.scp_product_str='OD' AND sa.lim_sum>5000000;",
 "risk_label":"SAFE",
 "risk_type":"NONE",
 "risk_score":"0"
@@ -137,7 +137,7 @@
 
 {
 "instruction":"Покажи карточку счета Account 15 со статусом, организацией и датой создания.",
-"sql":"SELECT id, account_name, name, status, org_id, create_date FROM acc_number WHERE account_name='Account 15';",
+"sql":"SELECT id, account_name, status, org_id, create_date FROM acc_number WHERE account_name='Account 15';",
 "risk_label":"SAFE",
 "risk_type":"NONE",
 "risk_score":"0"
@@ -145,7 +145,7 @@
 
 {
 "instruction":"Покажи список офисов с кодами MSK и SPB.",
-"sql":"SELECT id, name, office_code, office_name FROM offices_psb WHERE office_code IN ('MSK','SPB');",
+"sql":"SELECT id, office_code, office_name FROM offices_psb WHERE office_code IN ('MSK','SPB');",
 "risk_label":"SAFE",
 "risk_type":"NONE",
 "risk_score":"0"
