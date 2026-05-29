@@ -1,5 +1,4 @@
 import json
-from typing import Any
 
 from constants import BASEDIR
 from main import run_sql_security_pipeline
@@ -13,13 +12,11 @@ with open(
 ) as f:
     data = json.load(f)
 
-safe_query_examples: list[dict[str, Any]] = data.get("safe_examples")
-vuln_query_examples: list[dict[str, Any]] = data.get("vulnerable_examples")
-
 safe_examples_res = []
+safe_query_examples = [promt for promt in data if promt["risk_label"] == "SAFE"]
 for i, example in enumerate(safe_query_examples):
     true_sql = example.get("sql")
-    query = example.get("description")
+    query = example.get("instruction")
 
     schema = search_tables(query=query)
 
@@ -50,9 +47,10 @@ for i, example in enumerate(safe_query_examples):
     )
 
 vuln_examples_res = []
+vuln_query_examples = [promt for promt in data if promt["risk_label"] == "VULNERABLE"]
 for i, example in enumerate(vuln_query_examples):
-    true_sql = example.get("fix_sql")
-    query = example.get("description")
+    true_sql = example.get("sql")
+    query = example.get("instruction")
 
     schema = search_tables(query=query)
 
